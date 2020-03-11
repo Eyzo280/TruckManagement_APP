@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:truckmanagement_app/widgets/userPage/chief_acc/models/truckDriver.dart';
-import 'package:truckmanagement_app/widgets/userPage/chief_acc/pages/chief_look_trucker.dart';
+import 'package:truckmanagement_app/widgets/userPage/chief_acc/pages/chiefLookTrucker/main_chief_look_trucker.dart';
 
 class ChiefMain extends StatefulWidget {
   final Function userLogout;
@@ -15,8 +15,12 @@ class ChiefMain extends StatefulWidget {
   List<TruckDriver> listDriversTrucks = [
     TruckDriver(
       id: '1',
-      nameDriver: 'Stasiek',
+      nameDriver: 'Stasiek W',
       salary: 5000.00,
+      earned: 3000,
+      paid: 2500,
+      distanceTraveled: 12000,
+      statusDriver: false,
       costDriver: 1500.00,
       numberPhone: '52341413',
       dateOfEmplotment: DateTime.now(),
@@ -24,8 +28,12 @@ class ChiefMain extends StatefulWidget {
     ),
     TruckDriver(
       id: '2',
-      nameDriver: 'Waldek',
-      salary: 5000.00,
+      nameDriver: 'Waldek S',
+      salary: 7500.00,
+      earned: 12000,
+      paid: 9300,
+      distanceTraveled: 300000,
+      statusDriver: true,
       costDriver: 1500.00,
       numberPhone: '52341413',
       dateOfEmplotment: DateTime.now(),
@@ -63,7 +71,7 @@ class _ChiefMainState extends State<ChiefMain> {
   void openChiefLookTrucker(BuildContext ctx) {
     Navigator.of(ctx).push(
       MaterialPageRoute(builder: (_) {
-        return ChiefLookTrucker();
+        return ChiefLookTrucker(listDriversTrucks: widget.listDriversTrucks,); // wysyla liste listDriversTrucks i otwiera ChiefLookTrucker
       }),
     );
   }
