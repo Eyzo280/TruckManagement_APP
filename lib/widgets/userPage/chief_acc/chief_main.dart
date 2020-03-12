@@ -71,7 +71,7 @@ class _ChiefMainState extends State<ChiefMain> {
   void openChiefLookTrucker(BuildContext ctx) {
     Navigator.of(ctx).push(
       MaterialPageRoute(builder: (_) {
-        return ChiefLookTrucker(listDriversTrucks: widget.listDriversTrucks,); // wysyla liste listDriversTrucks i otwiera ChiefLookTrucker
+        return MainChiefLookTrucker(listDriversTrucks: widget.listDriversTrucks,); // wysyla liste listDriversTrucks i otwiera ChiefLookTrucker
       }),
     );
   }

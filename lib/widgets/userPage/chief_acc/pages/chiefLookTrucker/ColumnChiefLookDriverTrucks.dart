@@ -1,10 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:truckmanagement_app/widgets/userPage/chief_acc/models/truckDriver.dart';
+import 'package:truckmanagement_app/widgets/userPage/chief_acc/pages/chiefLookTrucker/fullLookDriverTruck.dart';
 
 class ColumnChiefLookDriverTrucks extends StatelessWidget {
   final List<TruckDriver> listDriversTrucks;
 
   ColumnChiefLookDriverTrucks(this.listDriversTrucks);
+
+  void openFullLookDriverTruck(BuildContext ctx) {
+    Navigator.of(ctx).push(
+      MaterialPageRoute(builder: (_) {
+        return FullLookDriverTruck();
+      }),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,8 +74,11 @@ class ColumnChiefLookDriverTrucks extends StatelessWidget {
                   ),
                 ],
               ),
-              trailing:
-                  IconButton(icon: Icon(Icons.folder_open), onPressed: () {}),
+              trailing: IconButton(
+                  icon: Icon(Icons.folder_open),
+                  onPressed: () {
+                    openFullLookDriverTruck(ctx);
+                  }),
             ),
           ),
         );

@@ -2,17 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:truckmanagement_app/widgets/userPage/chief_acc/models/truckDriver.dart';
 import 'package:truckmanagement_app/widgets/userPage/chief_acc/pages/chiefLookTrucker/ColumnChiefLookDriverTrucks.dart';
 import 'package:truckmanagement_app/widgets/userPage/chief_acc/pages/chiefLookTrucker/TextFieldCreateNewTrucker.dart';
+import 'package:truckmanagement_app/widgets/userPage/chief_acc/pages/chiefLookTrucker/top_body_ChiefLookDriverTrucks.dart';
 
-class ChiefLookTrucker extends StatefulWidget {
+class MainChiefLookTrucker extends StatefulWidget {
   final List<TruckDriver> listDriversTrucks;
 
-  ChiefLookTrucker({this.listDriversTrucks});
+  MainChiefLookTrucker({this.listDriversTrucks});
 
   @override
   _ChiefLookTruckerState createState() => _ChiefLookTruckerState();
 }
 
-class _ChiefLookTruckerState extends State<ChiefLookTrucker> {
+class _ChiefLookTruckerState extends State<MainChiefLookTrucker> {
   // Funkcja, pokazujaca Widget TextFieldCreateNewTrucker
   void showCreatorNewDriverTruck(BuildContext ctx) {
     showModalBottomSheet(
@@ -125,71 +126,7 @@ class _ChiefLookTruckerState extends State<ChiefLookTrucker> {
       ),
       body: Column(
         children: <Widget>[
-          Container(
-            padding: EdgeInsets.all(5),
-            height: 100,
-            width: double.infinity,
-            child: Row(
-              children: <Widget>[
-                Flexible(
-                  flex: 1,
-                  fit: FlexFit.tight,
-                  child: Card(
-                    elevation: 3,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Text('Wolnych:'),
-                        Text('${listToTopBody[0]['Wolnych']}'),
-                      ],
-                    ),
-                  ),
-                ),
-                Flexible(
-                  flex: 1,
-                  fit: FlexFit.tight,
-                  child: Card(
-                    elevation: 3,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Text('W trasie:'),
-                        Text('${listToTopBody[0]['W trasie']}'),
-                      ],
-                    ),
-                  ),
-                ),
-                Flexible(
-                  flex: 1,
-                  fit: FlexFit.tight,
-                  child: Card(
-                    elevation: 3,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Text('Najlepszy:'),
-                        Text('${listToTopBody[0]['Najlepszy']}'),
-                      ],
-                    ),
-                  ),
-                ),
-                Flexible(
-                  flex: 1,
-                  fit: FlexFit.tight,
-                  child: Card(
-                    elevation: 3,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Text('Nalezne:'),
-                        Text('${listToTopBody[0]['Nalezne']} zl'),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
+          TopBodyChiefLookDriverTrucks(listToTopBody),
           Container(
             height: 250,
             child: ColumnChiefLookDriverTrucks(widget.listDriversTrucks),
