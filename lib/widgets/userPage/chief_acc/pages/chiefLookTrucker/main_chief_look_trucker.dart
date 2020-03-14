@@ -25,10 +25,11 @@ class _ChiefLookTruckerState extends State<MainChiefLookTrucker> {
 
   // Dodaje nowego Kierowce w firmie
   void addNewDriverTruck(
-      _namedriver, _salary, _dateOfEmplotment, _payday, _numberPhone) {
+      _firstNameDriver, _lastNameDriver, _salary, _dateOfEmplotment, _payday, _numberPhone) {
     final newdriver = TruckDriver(
         id: DateTime.now().toString(), // Tymczasowo
-        nameDriver: _namedriver,
+        firstNameDriver: _firstNameDriver,
+        lastNameDriver: _lastNameDriver,
         salary: double.parse(_salary),
         earned: 0,
         paid: 0,
@@ -54,7 +55,7 @@ class _ChiefLookTruckerState extends State<MainChiefLookTrucker> {
         due = widget.listDriversTrucks[index].earned -
             widget.listDriversTrucks[index].paid;
         return {
-          'NameDriver': widget.listDriversTrucks[index].nameDriver,
+          'NameDriver': widget.listDriversTrucks[index].firstNameDriver + ' ' + widget.listDriversTrucks[index].lastNameDriver,
           'DueDriver': due
         };
       },

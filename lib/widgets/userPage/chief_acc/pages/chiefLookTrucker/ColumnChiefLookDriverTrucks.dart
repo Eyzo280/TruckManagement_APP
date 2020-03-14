@@ -7,10 +7,10 @@ class ColumnChiefLookDriverTrucks extends StatelessWidget {
 
   ColumnChiefLookDriverTrucks(this.listDriversTrucks);
 
-  void openFullLookDriverTruck(BuildContext ctx) {
+  void openFullLookDriverTruck(BuildContext ctx, indexDriver) {
     Navigator.of(ctx).push(
       MaterialPageRoute(builder: (_) {
-        return FullLookDriverTruck();
+        return FullLookDriverTruck(listDriversTrucks, indexDriver);
       }),
     );
   }
@@ -54,7 +54,7 @@ class ColumnChiefLookDriverTrucks extends StatelessWidget {
                     flex: 1,
                     fit: FlexFit.tight,
                     child: Text(
-                      listDriversTrucks[index].nameDriver,
+                      listDriversTrucks[index].firstNameDriver + ' ' + listDriversTrucks[index].lastNameDriver,
                       style: TextStyle(fontSize: 13),
                     ),
                   ),
@@ -77,7 +77,7 @@ class ColumnChiefLookDriverTrucks extends StatelessWidget {
               trailing: IconButton(
                   icon: Icon(Icons.folder_open),
                   onPressed: () {
-                    openFullLookDriverTruck(ctx);
+                    openFullLookDriverTruck(ctx, index);
                   }),
             ),
           ),

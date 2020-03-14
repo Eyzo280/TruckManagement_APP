@@ -15,7 +15,8 @@ class ChiefMain extends StatefulWidget {
   List<TruckDriver> listDriversTrucks = [
     TruckDriver(
       id: '1',
-      nameDriver: 'Stasiek W',
+      firstNameDriver: 'Stasiek',
+      lastNameDriver: 'W',
       salary: 5000.00,
       earned: 3000,
       paid: 2500,
@@ -28,7 +29,8 @@ class ChiefMain extends StatefulWidget {
     ),
     TruckDriver(
       id: '2',
-      nameDriver: 'Waldek S',
+      firstNameDriver: 'Waldek',
+      lastNameDriver: 'S',
       salary: 7500.00,
       earned: 12000,
       paid: 9300,

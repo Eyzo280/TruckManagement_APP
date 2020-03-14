@@ -13,7 +13,9 @@ class TextFieldCreateNewTrucker extends StatefulWidget {
 
 class _TextFieldCreateNewTruckerState extends State<TextFieldCreateNewTrucker> {
   // Wartosci NewDriver
-  final _namedriver = TextEditingController();
+  final _firstNameDriver = TextEditingController();
+
+  final _lastNameDriver = TextEditingController();
 
   final _salary = TextEditingController();
 
@@ -55,7 +57,7 @@ class _TextFieldCreateNewTruckerState extends State<TextFieldCreateNewTrucker> {
   }
 
   void _submitData({bool activehints}) {
-    if (_namedriver.text.isEmpty ||
+    if (_firstNameDriver.text.isEmpty || _lastNameDriver.text.isEmpty ||
         _salary.text.isEmpty ||
         _dateOfEmplotment == null ||
         _payday == null ||
@@ -71,7 +73,7 @@ class _TextFieldCreateNewTruckerState extends State<TextFieldCreateNewTrucker> {
 
     print('Dodawanie DriverTruck 1/2');
 
-    widget.addDriverTruck(_namedriver.text, _salary.text, _dateOfEmplotment,
+    widget.addDriverTruck(_firstNameDriver.text, _lastNameDriver.text, _salary.text, _dateOfEmplotment,
         _payday, _numberPhone.text);
 
     Navigator.of(context).pop();
@@ -89,14 +91,35 @@ class _TextFieldCreateNewTruckerState extends State<TextFieldCreateNewTrucker> {
               Flexible(
                 flex: 1,
                 fit: FlexFit.tight,
-                child: Text('Imie nazwisko:'),
+                child: Text('Imie:'),
               ),
               Flexible(
                 flex: 3,
                 fit: FlexFit.tight,
                 child: Center(
                     child: TextField(
-                  controller: _namedriver,
+                  controller: _firstNameDriver,
+                  keyboardType: TextInputType.text,
+                  onSubmitted: (_) {
+                    _submitData();
+                  },
+                )),
+              ),
+            ],
+          ),
+          Row(
+            children: <Widget>[
+              Flexible(
+                flex: 1,
+                fit: FlexFit.tight,
+                child: Text('Nazwisko:'),
+              ),
+              Flexible(
+                flex: 3,
+                fit: FlexFit.tight,
+                child: Center(
+                    child: TextField(
+                  controller: _lastNameDriver,
                   keyboardType: TextInputType.text,
                   onSubmitted: (_) {
                     _submitData();

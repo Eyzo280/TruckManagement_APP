@@ -2,7 +2,8 @@ import 'package:flutter/foundation.dart';
 
 class TruckDriver {
   final String id; // powinno byc normalne ale to dopiero w Bazie danych sie zrobi
-  final String nameDriver; // imie i nazwisko
+  final String firstNameDriver; // imie
+  final String lastNameDriver; // nazwisko
   final double salary; // pensja
   final int earned; // Zarobione pieniadze od dnia zaczecia pracy
   final int paid; // Zaplacone pieniadze
@@ -15,7 +16,8 @@ class TruckDriver {
 
   TruckDriver({
     @required this.id,
-    @required this.nameDriver,
+    @required this.firstNameDriver,
+    @required this.lastNameDriver,
     @required this.salary,
     @required this.earned,
     @required this.paid,

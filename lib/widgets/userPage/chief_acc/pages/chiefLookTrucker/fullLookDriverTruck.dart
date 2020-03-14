@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:truckmanagement_app/widgets/userPage/chief_acc/models/truckDriver.dart';
+import 'package:intl/intl.dart';
 
 class FullLookDriverTruck extends StatelessWidget {
+  final List<TruckDriver> listDriversTrucks;
+  final int indexDriver;
+
+  FullLookDriverTruck(this.listDriversTrucks, this.indexDriver);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -10,14 +17,16 @@ class FullLookDriverTruck extends StatelessWidget {
         ),
         actions: <Widget>[
           Container(
-              margin: EdgeInsets.only(right: 15),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text('Status:'),
-                  Text('W Trasie'),
-                ],
-              ),
+            margin: EdgeInsets.only(right: 15),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text('Status:'),
+                listDriversTrucks[indexDriver].statusDriver == true
+                    ? Text('W Trasie')
+                    : Text('Wolne'),
+              ],
+            ),
           ),
         ],
       ),
@@ -53,9 +62,12 @@ class FullLookDriverTruck extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Text('Imie:'),
-                          Text('Nazwisko:'),
-                          Text('Data Zatrudnienia:'),
+                          Text(
+                              'Imie: ${listDriversTrucks[indexDriver].firstNameDriver}'),
+                          Text(
+                              'Nazwisko: ${listDriversTrucks[indexDriver].lastNameDriver}'),
+                          Text(
+                              'Data Zatrudnienia: ${DateFormat('dd-MM-yyy').format(listDriversTrucks[indexDriver].dateOfEmplotment)}'),
                         ],
                       ),
                     ),
@@ -69,7 +81,8 @@ class FullLookDriverTruck extends StatelessWidget {
             fit: FlexFit.tight,
             child: Column(
               children: <Widget>[
-                Text('Przejechane Km'),
+                Text(
+                    'Przejechane Km: ${listDriversTrucks[indexDriver].distanceTraveled}'),
                 Container(
                   margin: EdgeInsets.all(5),
                   width: double.infinity,
