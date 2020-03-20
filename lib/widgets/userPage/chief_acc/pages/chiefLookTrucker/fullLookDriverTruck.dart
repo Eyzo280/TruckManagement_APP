@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:truckmanagement_app/widgets/userPage/chief_acc/models/truckDriver.dart';
 import 'package:intl/intl.dart';
 
 class FullLookDriverTruck extends StatelessWidget {
-  final List<TruckDriver> listDriversTrucks;
+  final List listDriversTrucks;
   final int indexDriver;
 
   FullLookDriverTruck(this.listDriversTrucks, this.indexDriver);

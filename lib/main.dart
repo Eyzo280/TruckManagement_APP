@@ -1,11 +1,15 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:truckmanagement_app/services/auth.dart';
+import 'package:truckmanagement_app/widgets/Authenticate/authenticate.dart';
 import 'package:truckmanagement_app/widgets/error_page/error_page.dart';
-import 'package:truckmanagement_app/widgets/loginPage/logging_page.dart';
 import 'package:truckmanagement_app/widgets/userPage/chief_acc/chief_main.dart';
 import 'package:truckmanagement_app/widgets/userPage/forwarder_acc/forwarder_main.dart';
 import 'package:truckmanagement_app/widgets/userPage/trucker_acc/trucker_main.dart';
+import 'package:provider/provider.dart';
+import 'package:truckmanagement_app/models/user.dart';
+import 'package:truckmanagement_app/widgets/wrapper.dart';
 
 void main() => runApp(MyApp());
 
@@ -123,18 +127,11 @@ class _MyHomePageState extends State<MyHomePage> {
   //-----------------------------
   @override
   Widget build(BuildContext context) {
-    return (statusLoginUser == true
-        ? _type_acc == 'Chief'
-            ? ChiefMain(
-                userLogout: logout,
-                userLogin: _login,
-                userPassword: _password,
-              )
-            : _type_acc == 'Trucker'
-                ? TruckerMain()
-                : _type_acc == 'Forwarder'
-                    ? ForwarderMain()
-                    : ErrorPage() // jezeli w jakis sposob funkcja nie zatrzyma logowania to wyskoczy ta strona
-        : LoggingPage(dropdownValue, changeLanguage, logging));
+    return StreamProvider<User>.value(
+      value: AuthService().user,
+      child: MaterialApp(
+        home: Wrapper(),
+      ),
+    );
   }
 }

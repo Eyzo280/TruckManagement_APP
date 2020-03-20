@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:truckmanagement_app/services/auth.dart';
 
-class LoggingPage extends StatelessWidget {
+class LoggingPage extends StatefulWidget {
   final String _dropDownValueLanguage;
   final Function _change_Language_function;
   final Function _start_logging;
@@ -8,8 +9,20 @@ class LoggingPage extends StatelessWidget {
   LoggingPage(this._dropDownValueLanguage, this._change_Language_function,
       this._start_logging);
 
+  @override
+  _LoggingPageState createState() => _LoggingPageState();
+}
+
+class _LoggingPageState extends State<LoggingPage> {
   final _value_login = TextEditingController();
+
   final _value_password = TextEditingController();
+
+  // System Logowania
+
+  final AuthService _auth = AuthService();
+
+  //
 
   Widget _loginAndPasswordFields() {
     return Column(
@@ -28,7 +41,7 @@ class LoggingPage extends StatelessWidget {
           child: TextField(
             controller: _value_login,
             onSubmitted: (_) {
-              _start_logging(_value_login, _value_password);
+              widget._start_logging(_value_login, _value_password);
             },
             style: TextStyle(color: Colors.white),
             decoration: InputDecoration(
@@ -52,7 +65,7 @@ class LoggingPage extends StatelessWidget {
           child: TextField(
             controller: _value_password,
             onSubmitted: (_) {
-              _start_logging(_value_login, _value_password);
+              widget._start_logging(_value_login, _value_password);
             },
             style: TextStyle(
               color: Colors.white,
@@ -74,8 +87,17 @@ class LoggingPage extends StatelessWidget {
     return Container(
       width: 250,
       child: RaisedButton(
-        onPressed: () {
-          _start_logging(_value_login, _value_password);
+        onPressed: () async {
+         // widget._start_logging(_value_login, _value_password);
+          dynamic result = await _auth.signInAnon();
+
+          if (result == null) {
+            print('Problem z logowaniem');
+          }else {
+            print('Zalogowano poprawnie');
+            print(result.uid);
+          }
+
         },
         child: Text('Zaloguj'),
         shape: RoundedRectangleBorder(
@@ -110,7 +132,7 @@ class LoggingPage extends StatelessWidget {
                   children: <Widget>[
                     DropdownButton<String>(
                       // przyklad ze strony fluttera
-                      value: _dropDownValueLanguage,
+                      value: widget._dropDownValueLanguage,
                       icon: Icon(Icons.arrow_downward),
                       iconSize: 24,
                       elevation: 16,
@@ -120,7 +142,7 @@ class LoggingPage extends StatelessWidget {
                         color: Colors.greenAccent,
                       ),
                       onChanged: (String newValue) {
-                        _change_Language_function(newValue);
+                        widget._change_Language_function(newValue);
                       },
                       items: <String>['PL', 'EN']
                           .map<DropdownMenuItem<String>>((String value) {
