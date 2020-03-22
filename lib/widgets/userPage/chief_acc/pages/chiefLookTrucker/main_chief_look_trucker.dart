@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:truckmanagement_app/models/user.dart';
 import 'package:truckmanagement_app/widgets/userPage/chief_acc/models/chief_Employees.dart';
-
 import 'package:truckmanagement_app/widgets/userPage/chief_acc/pages/chiefLookTrucker/ColumnChiefLookDriverTrucks.dart';
-import 'package:truckmanagement_app/widgets/userPage/chief_acc/pages/chiefLookTrucker/TextFieldCreateNewTrucker.dart';
 import 'package:truckmanagement_app/widgets/userPage/chief_acc/pages/chiefLookTrucker/top_body_ChiefLookDriverTrucks.dart';
 import 'package:truckmanagement_app/widgets/userPage/chief_acc/services_ChiefEmployees/database_ChiefEmployees.dart';
 
@@ -57,9 +55,7 @@ class _ChiefLookTruckerState extends State<MainChiefLookTrucker> {
   Widget build(BuildContext context) {
     final user = Provider.of<User>(context);
   
-      return StreamProvider<List<TruckDriver>>.value(
-        value: Database_ChiefEmployees(uid: user.uid).getDataEmployees,
-        child: Scaffold(
+      return Scaffold(
       appBar: AppBar(
         title: Center(
           child: Text('Kierowcy'),
@@ -86,7 +82,7 @@ class _ChiefLookTruckerState extends State<MainChiefLookTrucker> {
           ),
         ],
       ),
-    ),
+    
       )
       ;
   }

@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:truckmanagement_app/widgets/userPage/chief_acc/models/chief_Employees.dart';
-import 'package:intl/intl.dart';
 
 class Database_ChiefEmployees {
   final String uid;
@@ -9,13 +8,13 @@ class Database_ChiefEmployees {
   Database_ChiefEmployees({
     @required this.uid});
 
-  final CollectionReference user = Firestore.instance.collection('Users');
+  final CollectionReference user = Firestore.instance.collection('Chiefs');
 
   // Dane ChiefEmployees
-  List<TruckDriver> _getDataChiefEmoloyees(QuerySnapshot snapshot) {
+  List<FullTruckDriverData> _getFullDataChiefEmoloyees(QuerySnapshot snapshot) {
     return snapshot.documents.map((doc){
       
-      return TruckDriver(
+      return FullTruckDriverData(
         firstNameDriver: doc.data['firstNameDriver'] ?? null,
         lastNameDriver: doc.data['lastNameDriver'] ?? null,
         salary: doc.data['salary'] ?? null,
@@ -32,8 +31,30 @@ class Database_ChiefEmployees {
       }).toList();
   }
 
-  Stream<List<TruckDriver>> get getDataEmployees {
+  Stream<List<FullTruckDriverData>> get getFullDataEmployees {
 
-    return user.document(uid).collection('DriverTrucks').snapshots().map(_getDataChiefEmoloyees);
+    return user.document(uid).collection('DriverTrucks').snapshots().map(_getFullDataChiefEmoloyees);
+  }
+
+  // Dane ChiefEmployees
+  List<BaseTruckDriverData> _getBaseDataChiefEmoloyees(QuerySnapshot snapshot) {
+    return snapshot.documents.map((doc){
+      
+      return BaseTruckDriverData(
+        firstNameDriver: doc.data['firstNameDriver'] ?? null,
+        lastNameDriver: doc.data['lastNameDriver'] ?? null,
+        salary: doc.data['salary'] ?? null,
+        earned: doc.data['earned'] ?? null,
+        paid: doc.data['paid'] ?? null,
+        distanceTraveled: double.parse(doc.data['distanceTraveled'].toString()) ?? null,
+        statusDriver: doc.data['statusDriver'] ?? null,
+
+      );
+      }).toList();
+  }
+
+  Stream<List<BaseTruckDriverData>> get getBaseDataEmployees {
+
+    return user.document(uid).collection('DriverTrucks').snapshots().map(_getBaseDataChiefEmoloyees);
   }
 }

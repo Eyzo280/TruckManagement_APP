@@ -8,7 +8,7 @@ class TopBodyChiefLookDriverTrucks extends StatefulWidget {
 }
 
 class _TopBodyChiefLookDriverTrucksState extends State<TopBodyChiefLookDriverTrucks> {
-  List<TruckDriver> listDriverTrucks = [];
+  List<BaseTruckDriverData> listDriverTrucks = [];
 
   // Nalezne kierowcy kazdego z osobna
   List<Map<String, Object>> get listDueDrivers {
@@ -72,7 +72,7 @@ class _TopBodyChiefLookDriverTrucksState extends State<TopBodyChiefLookDriverTru
 
   @override
   Widget build(BuildContext context) {
-    final listDriverTuck = Provider.of<List<TruckDriver>>(context);
+    final listDriverTuck = Provider.of<List<BaseTruckDriverData>>(context);
     listDriverTrucks = listDriverTuck;
 
     return Container(

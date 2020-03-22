@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:truckmanagement_app/models/user.dart';
 import 'package:truckmanagement_app/widgets/error_page/error_page.dart';
 import 'package:truckmanagement_app/widgets/userPage/chief_acc/chief_mainBazaDanych.dart';

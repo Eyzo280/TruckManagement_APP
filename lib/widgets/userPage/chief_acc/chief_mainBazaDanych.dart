@@ -2,15 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:truckmanagement_app/services/auth.dart';
 import 'package:truckmanagement_app/models/user.dart';
+import 'package:truckmanagement_app/widgets/userPage/chief_acc/models/chief_Employees.dart';
 import 'package:truckmanagement_app/widgets/userPage/chief_acc/pages/chiefLookTrucker/main_chief_look_trucker.dart';
+import 'package:truckmanagement_app/widgets/userPage/chief_acc/services_ChiefEmployees/database_ChiefEmployees.dart';
 
 class ChiefMainBazaDanych extends StatelessWidget {
   final AuthService _auth = AuthService();
 
-  void openChiefLookTrucker(BuildContext ctx) {
+  void openChiefLookTrucker(BuildContext ctx, user) {
     Navigator.of(ctx).push(
       MaterialPageRoute(builder: (_) {
-        return MainChiefLookTrucker(); // wysyla liste listDriversTrucks i otwiera ChiefLookTrucker
+        return StreamProvider<List<BaseTruckDriverData>>.value(
+          value: Database_ChiefEmployees(uid: user.uid).getBaseDataEmployees,
+          child: MainChiefLookTrucker()); // wysyla liste listDriversTrucks i otwiera ChiefLookTrucker
       }),
     );
   }
@@ -152,7 +156,7 @@ class ChiefMainBazaDanych extends StatelessWidget {
                                 child: FlatButton(
                                   padding: EdgeInsets.all(0),
                                   onPressed: () {
-                                    openChiefLookTrucker(context);
+                                    openChiefLookTrucker(context, user);
                                     print('Podglad Kierowcow Firmy');
                                   },
                                   child: Container(
@@ -236,7 +240,7 @@ class ChiefMainBazaDanych extends StatelessWidget {
                                 child: FlatButton(
                                   padding: EdgeInsets.all(0),
                                   onPressed: () {
-                                    openChiefLookTrucker(context);
+                                    
                                     print('Podglad Spedytorow Firmy');
                                   },
                                   child: Container(
@@ -320,7 +324,7 @@ class ChiefMainBazaDanych extends StatelessWidget {
                                 child: FlatButton(
                                   padding: EdgeInsets.all(0),
                                   onPressed: () {
-                                    openChiefLookTrucker(context);
+                                    
                                     print('Podglad Ciezarowek');
                                   },
                                   child: Container(
@@ -404,7 +408,7 @@ class ChiefMainBazaDanych extends StatelessWidget {
                                 child: FlatButton(
                                   padding: EdgeInsets.all(0),
                                   onPressed: () {
-                                    openChiefLookTrucker(context);
+                                    
                                     print('Podglad Kursow');
                                   },
                                   child: Container(

@@ -9,8 +9,8 @@ class User {
 
 class UserData {
   final String uid; // identyfikator
-  final String firstName; // Imie szefa
-  final String lastName; // Nazwisko szefa
+  final String firstName; // Imie Uzytkownika
+  final String lastName; // Nazwisko Uzytkownika
   final String nameCompany; // NazwaFirmy
   final String typeUser; // Typ konta uzytkownika
 
