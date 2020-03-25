@@ -2,29 +2,48 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:truckmanagement_app/services/auth.dart';
 import 'package:truckmanagement_app/models/user.dart';
-import 'package:truckmanagement_app/widgets/userPage/chief_acc/models/chief_Employees.dart';
-import 'package:truckmanagement_app/widgets/userPage/chief_acc/pages/chiefLookTrucker/main_chief_look_trucker.dart';
-import 'package:truckmanagement_app/widgets/userPage/chief_acc/services_ChiefEmployees/database_ChiefEmployees.dart';
+import 'package:truckmanagement_app/services/database.dart';
+import 'package:truckmanagement_app/widgets/userPage/chief_acc/chief_select_page.dart';
+import 'package:truckmanagement_app/widgets/userPage/chief_acc/models/company_Employees.dart';
+import 'package:truckmanagement_app/widgets/userPage/chief_acc/pages/company/main_company_look_trucker.dart';
+import 'package:truckmanagement_app/widgets/userPage/chief_acc/services_company/database_company.dart';
 
-class ChiefMainBazaDanych extends StatelessWidget {
+class CompanyMain extends StatelessWidget {
   final AuthService _auth = AuthService();
 
   void openChiefLookTrucker(BuildContext ctx, user) {
     Navigator.of(ctx).push(
       MaterialPageRoute(builder: (_) {
         return StreamProvider<List<BaseTruckDriverData>>.value(
-          value: Database_ChiefEmployees(uid: user.uid).getBaseDataEmployees,
-          child: MainChiefLookTrucker()); // wysyla liste listDriversTrucks i otwiera ChiefLookTrucker
+            value:
+                Database_CompanyEmployees(uid: user.uid).getBaseDataEmployees,
+            child:
+                MainCompanyLookTrucker()); // wysyla liste listDriversTrucks i otwiera ChiefLookTrucker
       }),
     );
   }
 
+  void openSelectPage(BuildContext ctx, companyUid) {
+    Navigator.pushReplacement(ctx, MaterialPageRoute(
+      builder: (ctx) {
+        String method(String str) {
+          return str.substring(0, str.length - 2);
+        } // Teraz problemem jest ze gdyby ktos mial ponad 9 firm to bedzie odejmowac tylko dwie koncowe litery i bedzie blad
+
+        return StreamProvider<List<ChiefUidCompanys>>.value(
+          value: DatabaseService(uid: method(companyUid)).getUidCompanys,
+          child: ChiefSelectPage(),
+        );
+      },
+    ));
+  }
+
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<User>(context);
+    final companyData = Provider.of<CompanyData>(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Glowny Panel - ${user.displayName}'),
+        title: Text('Panel Firmy - ${companyData.nameCompany}'),
         actions: <Widget>[
           Container(
             margin: EdgeInsets.only(right: 30),
@@ -36,6 +55,47 @@ class ChiefMainBazaDanych extends StatelessWidget {
             ),
           ),
         ],
+      ),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            DrawerHeader(
+              decoration: BoxDecoration(
+                color: Colors.blue,
+              ),
+              child: Text(
+                'Zarzadzanie',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 24,
+                ),
+              ),
+            ),
+            ListTile(
+              leading: Icon(Icons.chrome_reader_mode),
+              title: Text('Zmien Zarzadzanie'),
+              onTap: () {
+                openSelectPage(context, companyData.uidCompany);
+                print('Zmien Zarzadzanie');
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.notifications),
+              title: Text('Zaproszenia'),
+              onTap: () {
+                print('Zaproszenia');
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.settings),
+              title: Text('Settings'),
+              onTap: () {
+                print('Settings');
+              },
+            ),
+          ],
+        ),
       ),
       body: Container(
         child: Column(
@@ -156,7 +216,8 @@ class ChiefMainBazaDanych extends StatelessWidget {
                                 child: FlatButton(
                                   padding: EdgeInsets.all(0),
                                   onPressed: () {
-                                    openChiefLookTrucker(context, user);
+                                    openChiefLookTrucker(
+                                        context, companyData.uidCompany);
                                     print('Podglad Kierowcow Firmy');
                                   },
                                   child: Container(
@@ -240,7 +301,6 @@ class ChiefMainBazaDanych extends StatelessWidget {
                                 child: FlatButton(
                                   padding: EdgeInsets.all(0),
                                   onPressed: () {
-                                    
                                     print('Podglad Spedytorow Firmy');
                                   },
                                   child: Container(
@@ -324,7 +384,6 @@ class ChiefMainBazaDanych extends StatelessWidget {
                                 child: FlatButton(
                                   padding: EdgeInsets.all(0),
                                   onPressed: () {
-                                    
                                     print('Podglad Ciezarowek');
                                   },
                                   child: Container(
@@ -408,7 +467,6 @@ class ChiefMainBazaDanych extends StatelessWidget {
                                 child: FlatButton(
                                   padding: EdgeInsets.all(0),
                                   onPressed: () {
-                                    
                                     print('Podglad Kursow');
                                   },
                                   child: Container(

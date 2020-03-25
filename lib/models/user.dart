@@ -1,10 +1,10 @@
-class User {
+import 'package:flutter/cupertino.dart';
 
+class User {
   final String uid; // uid od logujacego sie uzytkownika
   final String displayName; // name uzytkownika
 
   User({this.uid, this.displayName});
-
 }
 
 class UserData {
@@ -14,6 +14,20 @@ class UserData {
   final String nameCompany; // NazwaFirmy
   final String typeUser; // Typ konta uzytkownika
 
-  UserData({this.uid, this.firstName, this.lastName, this.nameCompany, this.typeUser});
+  UserData(
+      {@required this.uid,
+      @required this.firstName,
+      @required this.lastName,
+      this.nameCompany,
+      @required this.typeUser});
+}
 
+class ChiefUidCompanys {
+  final String uidCompanys; // identyfikatory firm
+  final String nameCompany; // identyfikatory firm
+
+  ChiefUidCompanys({
+    @required this.uidCompanys,
+    @required this.nameCompany,
+  });
 }

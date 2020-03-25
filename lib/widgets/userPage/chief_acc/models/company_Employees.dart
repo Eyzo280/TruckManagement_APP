@@ -49,3 +49,19 @@ class BaseTruckDriverData {
     @required this.statusDriver,
   });
 }
+
+class CompanyData {
+  final String uidCompany; // uid Select Company
+  final bool advertisement; // ogloszenie
+  final String nameCompany; // nazwa firmy
+  final int employees; // ilosc pracownikow
+  final DateTime yearEstablishmentCompany; // rok zalozenia firmy
+
+  CompanyData({
+    @required this.uidCompany,
+    @required this.advertisement,
+    @required this.nameCompany,
+    @required this.employees,
+    @required this.yearEstablishmentCompany,
+  });
+}

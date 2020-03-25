@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:truckmanagement_app/models/user.dart';
-import 'package:truckmanagement_app/widgets/userPage/chief_acc/models/chief_Employees.dart';
-import 'package:truckmanagement_app/widgets/userPage/chief_acc/pages/chiefLookTrucker/fullLookDriverTruck.dart';
-import 'package:truckmanagement_app/widgets/userPage/chief_acc/services_ChiefEmployees/database_ChiefEmployees.dart';
+import 'package:truckmanagement_app/widgets/userPage/chief_acc/models/company_Employees.dart';
+import 'package:truckmanagement_app/widgets/userPage/chief_acc/pages/company/fullLookDriverTruck.dart';
+import 'package:truckmanagement_app/widgets/userPage/chief_acc/services_company/database_company.dart';
 
-class ColumnChiefLookDriverTrucks extends StatelessWidget {
+class ColumnCompanyLookDriverTrucks extends StatelessWidget {
   void openFullLookDriverTruck(BuildContext ctx, user, index) {
     Navigator.of(ctx).push(MaterialPageRoute(builder: (_) {
       return StreamProvider<List<FullTruckDriverData>>.value(
-        value: Database_ChiefEmployees(uid: user.uid).getFullDataEmployees,
+        value: Database_CompanyEmployees(uid: user.uid).getFullDataEmployees,
         child: FullLookDriverTruck(index));
     }));
   }

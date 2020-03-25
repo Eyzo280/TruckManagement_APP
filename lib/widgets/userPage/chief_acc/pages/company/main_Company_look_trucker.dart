@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:truckmanagement_app/models/user.dart';
-import 'package:truckmanagement_app/widgets/userPage/chief_acc/models/chief_Employees.dart';
-import 'package:truckmanagement_app/widgets/userPage/chief_acc/pages/chiefLookTrucker/ColumnChiefLookDriverTrucks.dart';
-import 'package:truckmanagement_app/widgets/userPage/chief_acc/pages/chiefLookTrucker/top_body_ChiefLookDriverTrucks.dart';
-import 'package:truckmanagement_app/widgets/userPage/chief_acc/services_ChiefEmployees/database_ChiefEmployees.dart';
+import 'package:truckmanagement_app/widgets/userPage/chief_acc/pages/company/ColumnCompanyLookDriverTrucks.dart';
+import 'package:truckmanagement_app/widgets/userPage/chief_acc/pages/company/top_body_CompanyLookDriverTrucks.dart';
 
-class MainChiefLookTrucker extends StatefulWidget {
+class MainCompanyLookTrucker extends StatefulWidget {
 
   @override
-  _ChiefLookTruckerState createState() => _ChiefLookTruckerState();
+  _CompanyLookTruckerState createState() => _CompanyLookTruckerState();
 }
 
-class _ChiefLookTruckerState extends State<MainChiefLookTrucker> {
+class _CompanyLookTruckerState extends State<MainCompanyLookTrucker> {
 /*
   // Funkcja, pokazujaca Widget TextFieldCreateNewTrucker
   void showCreatorNewDriverTruck(BuildContext ctx) {
@@ -75,10 +73,10 @@ class _ChiefLookTruckerState extends State<MainChiefLookTrucker> {
       ),
       body: Column(
         children: <Widget>[
-          TopBodyChiefLookDriverTrucks(),
+          TopBodyCompanyLookDriverTrucks(),
           Container(
             height: 250,
-            child: ColumnChiefLookDriverTrucks(),
+            child: ColumnCompanyLookDriverTrucks(),
           ),
         ],
       ),

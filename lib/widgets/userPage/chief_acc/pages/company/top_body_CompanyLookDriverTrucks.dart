@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:truckmanagement_app/widgets/userPage/chief_acc/models/chief_Employees.dart';
+import 'package:truckmanagement_app/widgets/userPage/chief_acc/models/company_Employees.dart';
 
-class TopBodyChiefLookDriverTrucks extends StatefulWidget {
+class TopBodyCompanyLookDriverTrucks extends StatefulWidget {
   @override
-  _TopBodyChiefLookDriverTrucksState createState() => _TopBodyChiefLookDriverTrucksState();
+  _TopBodyCompanyLookDriverTrucksState createState() => _TopBodyCompanyLookDriverTrucksState();
 }
 
-class _TopBodyChiefLookDriverTrucksState extends State<TopBodyChiefLookDriverTrucks> {
+class _TopBodyCompanyLookDriverTrucksState extends State<TopBodyCompanyLookDriverTrucks> {
   List<BaseTruckDriverData> listDriverTrucks = [];
 
   // Nalezne kierowcy kazdego z osobna

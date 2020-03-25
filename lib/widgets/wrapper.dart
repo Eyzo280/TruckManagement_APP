@@ -4,7 +4,7 @@ import 'package:truckmanagement_app/models/user.dart';
 import 'package:truckmanagement_app/services/database.dart';
 import 'package:truckmanagement_app/widgets/Authenticate/authenticate.dart';
 import 'package:truckmanagement_app/widgets/shared/loading.dart';
-import 'package:truckmanagement_app/widgets/userPage/select_page.dart';
+import 'package:truckmanagement_app/widgets/userPage/select_user.dart';
 
 class Wrapper extends StatelessWidget {
   @override
@@ -19,7 +19,7 @@ class Wrapper extends StatelessWidget {
         stream: DatabaseService(uid: user.uid).userData,
         builder: (context, snapshot){
           if (snapshot.hasData) {
-            return SelectPage(snapshot.data);
+            return SelectUser(snapshot.data);
           }else {
             return Loading();
           }

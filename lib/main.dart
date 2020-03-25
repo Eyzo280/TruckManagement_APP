@@ -1,12 +1,5 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:truckmanagement_app/services/auth.dart';
-import 'package:truckmanagement_app/widgets/Authenticate/authenticate.dart';
-import 'package:truckmanagement_app/widgets/error_page/error_page.dart';
-import 'package:truckmanagement_app/widgets/userPage/chief_acc/chief_main.dart';
-import 'package:truckmanagement_app/widgets/userPage/forwarder_acc/forwarder_main.dart';
-import 'package:truckmanagement_app/widgets/userPage/trucker_acc/trucker_main.dart';
 import 'package:provider/provider.dart';
 import 'package:truckmanagement_app/models/user.dart';
 import 'package:truckmanagement_app/widgets/wrapper.dart';
@@ -45,86 +38,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  List user_list_type = ['Chief', 'Trucker', 'Forwarder'];
-
-  //---------------------------- Funkcja zmiany jezyka
-  String dropdownValue = 'PL';
-
-  void changeLanguage(newValue) {
-    setState(() {
-      dropdownValue = newValue;
-    });
-  }
-
-  //-----------------------------
-  //----------------------------- funkcja Logowania
-  bool
-      statusLoginUser; // W przyszlosci ma oznaczac czy uzytkownik jest zalogowany czy nie
-  String _login = '';
-  String _password = '';
-  String _type_acc = '';
-
-  void logging(_login, _password) {
-    _login = _login.text;
-    _password = _password.text;
-
-    if (_login.isEmpty || _password.isEmpty) {
-      return;
-    }
-
-    setState(() {
-      _type_acc = 'Chief'; // W przyszlosci ma pobierac typ konta z bazy danych
-
-      // Sprawdzenie czy dany typ konta istnieje
-      for (var i = 0; i < user_list_type.length; i++) {
-        if (_type_acc != user_list_type[i]) {
-          if (i == user_list_type.length - 1) {
-            _login = '';
-            _password = '';
-            _type_acc = '';
-
-            print(
-                'Uzytkownik z konta: Login: ${_login}, Password: ${_password}, probowal zalogowac sie z nieistniejacym typem konta');
-            return;
-          }
-        } else {
-          statusLoginUser = true;
-
-          print(
-              'Zalogowano na Login: ${_login}, Password: ${_password}, Type_acc: ${_type_acc}');
-          return;
-        }
-      }
-    });
-  }
-
-  //-----------------------------
-
-  //----------------------------- Wylogowanie Uzytkownika
-  void logout() {
-    setState(() {
-      statusLoginUser = null;
-      _login = '';
-      _password = '';
-      _type_acc = '';
-      if (statusLoginUser == null &&
-          _login == '' &&
-          _password == '' &&
-          _type_acc == '') {
-        // aby sprawdzilo czy napewno usunely sie dane logowania
-        print('Wylogowano poprawnie (2/2)');
-        return;
-      } else {
-        statusLoginUser = null;
-        _login = '';
-        _password = '';
-        _type_acc = '';
-        print('Wylogowano poprawnie (2/2)');
-      }
-    });
-  }
-
-  //-----------------------------
   @override
   Widget build(BuildContext context) {
     return StreamProvider<User>.value(

@@ -2,14 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:truckmanagement_app/models/user.dart';
 import 'package:truckmanagement_app/services/auth.dart';
+import 'package:truckmanagement_app/widgets/userPage/trucker_acc/models/trucker.dart';
+import 'package:truckmanagement_app/widgets/userPage/trucker_acc/services_Trucker/database_Trucker.dart';
 import 'package:truckmanagement_app/widgets/userPage/trucker_acc/trucker_search_company.dart';
 
 class TruckerMain extends StatelessWidget {
   final AuthService _auth = AuthService();
 
-  void openSearchCompany(BuildContext ctx) {
+  void openSearchCompany(BuildContext ctx, user) {
     Navigator.of(ctx).push(MaterialPageRoute(builder: (_) {
-      return TruckerSearchCompany(); // trzeba dac wysylanie id kierowcy
+      return StreamProvider<List<BaseSearchCompany>>.value(
+        value: DataBase_Trucker(uid: user.uid).getBaseSearchCompany,
+        child: TruckerSearchCompany()); // trzeba dac wysylanie id kierowcy
     }));
   }
 
@@ -51,7 +55,7 @@ class TruckerMain extends StatelessWidget {
               leading: Icon(Icons.add_box),
               title: Text('Szukaj Firmy'),
               onTap: () {
-                openSearchCompany(context);
+                openSearchCompany(context, user);
               },
             ),
             ListTile(
