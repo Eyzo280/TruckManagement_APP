@@ -6,23 +6,24 @@ import 'package:truckmanagement_app/services/database.dart';
 import 'package:truckmanagement_app/widgets/userPage/chief_acc/chief_select_page.dart';
 import 'package:truckmanagement_app/widgets/userPage/chief_acc/models/company_Employees.dart';
 import 'package:truckmanagement_app/widgets/userPage/chief_acc/pages/company/main_company_look_trucker.dart';
-import 'package:truckmanagement_app/widgets/userPage/chief_acc/services_company/database_company.dart';
+import 'package:truckmanagement_app/widgets/userPage/chief_acc/services/database_company.dart';
 
 class CompanyMain extends StatelessWidget {
   final AuthService _auth = AuthService();
 
-  void openChiefLookTrucker(BuildContext ctx, user) {
+  void openChiefLookTrucker(BuildContext ctx, String company) {
     Navigator.of(ctx).push(
       MaterialPageRoute(builder: (_) {
         return StreamProvider<List<BaseTruckDriverData>>.value(
             value:
-                Database_CompanyEmployees(uid: user.uid).getBaseDataEmployees,
+                Database_CompanyEmployees(uid: company).getBaseDataEmployees,
             child:
-                MainCompanyLookTrucker()); // wysyla liste listDriversTrucks i otwiera ChiefLookTrucker
+                MainCompanyLookTrucker(company)); // wysyla companyuid i otwiera ChiefLookTrucker
       }),
     );
   }
 
+  // Powrot do wyboru firmy
   void openSelectPage(BuildContext ctx, companyUid) {
     Navigator.pushReplacement(ctx, MaterialPageRoute(
       builder: (ctx) {

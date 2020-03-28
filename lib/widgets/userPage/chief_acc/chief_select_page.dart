@@ -5,7 +5,7 @@ import 'package:truckmanagement_app/services/auth.dart';
 import 'package:truckmanagement_app/widgets/userPage/chief_acc/Chief_main_page.dart';
 import 'package:truckmanagement_app/widgets/userPage/chief_acc/Company_main.dart';
 import 'package:truckmanagement_app/widgets/userPage/chief_acc/models/company_Employees.dart';
-import 'package:truckmanagement_app/widgets/userPage/chief_acc/services_company/database_company.dart';
+import 'package:truckmanagement_app/widgets/userPage/chief_acc/services/database_company.dart';
 
 class ChiefSelectPage extends StatelessWidget {
   final AuthService _auth = AuthService();
@@ -15,7 +15,9 @@ class ChiefSelectPage extends StatelessWidget {
       ctx,
       MaterialPageRoute(
         builder: (ctx) {
-          return ChiefMainPage();
+          return StreamProvider<User>.value(
+            value: AuthService().user,
+            child: ChiefMainPage());
         },
       ),
     );
@@ -79,12 +81,20 @@ class ChiefSelectPage extends StatelessWidget {
                     itemCount: uidCompanys.length,
                     itemBuilder: (context, index) {
                       return RaisedButton(
-                        onPressed: () {
+                        onPressed: uidCompanys[index].active == true ? () {
                           openPageCompany(
                               context, uidCompanys[index].uidCompanys);
-                        },
-                        child: Text(
-                            'Nazwa Firmy - ${uidCompanys[index].nameCompany}'),
+                        } : null,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: <Widget>[
+                            Text(
+                                'Nazwa Firmy - ${uidCompanys[index].nameCompany}'),
+                            Icon(Icons.radio_button_checked,
+                            color: uidCompanys[index].active == true ? Colors.green : Colors.red,
+                            size: 15,),
+                          ],
+                        ),
                       );
                     },
                   ),

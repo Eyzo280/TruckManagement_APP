@@ -1,22 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:truckmanagement_app/models/user.dart';
 import 'package:truckmanagement_app/widgets/userPage/chief_acc/models/company_Employees.dart';
 import 'package:truckmanagement_app/widgets/userPage/chief_acc/pages/company/fullLookDriverTruck.dart';
-import 'package:truckmanagement_app/widgets/userPage/chief_acc/services_company/database_company.dart';
+import 'package:truckmanagement_app/widgets/userPage/chief_acc/services/database_company.dart';
 
 class ColumnCompanyLookDriverTrucks extends StatelessWidget {
-  void openFullLookDriverTruck(BuildContext ctx, user, index) {
+  final String companyUid;
+
+  ColumnCompanyLookDriverTrucks(this.companyUid);
+
+  void openFullLookDriverTruck(BuildContext ctx, driver, uidCompany, index) {
     Navigator.of(ctx).push(MaterialPageRoute(builder: (_) {
-      return StreamProvider<List<FullTruckDriverData>>.value(
-        value: Database_CompanyEmployees(uid: user.uid).getFullDataEmployees,
-        child: FullLookDriverTruck(index));
+      return StreamProvider<FullTruckDriverData>.value(
+        value: Database_CompanyEmployees(uid: driver, uidCompany: uidCompany).getFullDataEmployees,
+        child: FullLookDriverTruck());
     }));
   }
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<User>(context);
     final listDriverTuck = Provider.of<List<BaseTruckDriverData>>(context);
 
             return listDriverTuck.isEmpty ? Text('data') : ListView.builder(
@@ -135,7 +137,7 @@ class ColumnCompanyLookDriverTrucks extends StatelessWidget {
                               icon: Icon(Icons.folder_open),
                               onPressed: () {
                                 openFullLookDriverTruck(
-                                    ctx, user, index);
+                                    ctx, listDriverTuck[index].uidDriver, companyUid, index);
                               }),
                         ),
                       ),

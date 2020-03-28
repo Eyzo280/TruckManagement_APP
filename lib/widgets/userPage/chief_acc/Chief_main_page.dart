@@ -1,18 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:truckmanagement_app/models/user.dart';
 import 'package:truckmanagement_app/services/auth.dart';
+import 'package:truckmanagement_app/widgets/userPage/chief_acc/models/chief.dart';
 import 'package:truckmanagement_app/widgets/userPage/chief_acc/pages/chief/preview_company.dart';
+import 'package:truckmanagement_app/widgets/userPage/chief_acc/services/database_chief.dart';
 
 class ChiefMainPage extends StatelessWidget {
   final AuthService _auth = AuthService();
   
-  void openPagePreviewCompany(BuildContext ctx) {
+  void openPagePreviewCompany(BuildContext ctx, userUid) {
     Navigator.of(ctx).push(MaterialPageRoute(builder: (_){
-      return PreviewCompany();
+      return StreamProvider<List<BaseCompanyData>>.value(
+        value: DataBase_Chief(uid: userUid).getBaseCompanyData,
+        child: PreviewCompany(chiefUid: userUid));
     }));
   }
 
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<User>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text('Chief Main'),
@@ -48,7 +55,7 @@ class ChiefMainPage extends StatelessWidget {
               leading: Icon(Icons.add_box),
               title: Text('Podglad Firm'),
               onTap: () {
-                openPagePreviewCompany(context);
+                openPagePreviewCompany(context, user.uid);
                 print('Podglad Firm');
               },
             ),

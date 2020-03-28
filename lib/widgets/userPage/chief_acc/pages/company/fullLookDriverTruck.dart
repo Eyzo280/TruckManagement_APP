@@ -4,15 +4,9 @@ import 'package:provider/provider.dart';
 import 'package:truckmanagement_app/widgets/userPage/chief_acc/models/company_Employees.dart';
 
 class FullLookDriverTruck extends StatelessWidget {
-
-  final int indexDriver;
-
-  FullLookDriverTruck(this.indexDriver);
-
   @override
   Widget build(BuildContext context) {
-    final listDriverTuck = Provider.of<List<FullTruckDriverData>>(context);
-    
+    final driverTuck = Provider.of<FullTruckDriverData>(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -26,9 +20,11 @@ class FullLookDriverTruck extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Text('Status:'),
-                listDriverTuck[indexDriver].statusDriver == true
-                    ? Text('W Trasie')
-                    : Text('Wolne'),
+                driverTuck.statusDriver == null
+                    ? Text('Brak danych')
+                    : driverTuck.statusDriver == true
+                        ? Text('W Trasie')
+                        : Text('Wolne'),
               ],
             ),
           ),
@@ -66,12 +62,15 @@ class FullLookDriverTruck extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Text(
-                              'Imie: ${listDriverTuck[indexDriver].firstNameDriver}'),
-                          Text(
-                              'Nazwisko: ${listDriverTuck[indexDriver].lastNameDriver}'),
-                          Text(
-                              'Data Zatrudnienia: ${DateFormat('dd-MM-yyy').format(listDriverTuck[indexDriver].dateOfEmplotment)}'),
+                          Text(driverTuck.firstNameDriver == null
+                              ? Text('Brak danych')
+                              : 'Imie: ${driverTuck.firstNameDriver}'),
+                          Text(driverTuck.lastNameDriver == null
+                              ? Text('Brak danych')
+                              : 'Nazwisko: ${driverTuck.lastNameDriver}'),
+                          Text(driverTuck.dateOfEmplotment == null
+                              ? Text('Brak danych')
+                              : 'Data Zatrudnienia: ${DateFormat('dd-MM-yyy').format(driverTuck.dateOfEmplotment)}'),
                         ],
                       ),
                     ),
@@ -85,8 +84,9 @@ class FullLookDriverTruck extends StatelessWidget {
             fit: FlexFit.tight,
             child: Column(
               children: <Widget>[
-                Text(
-                    'Przejechane Km: ${listDriverTuck[indexDriver].distanceTraveled}'),
+                Text(driverTuck.distanceTraveled == null
+                    ? Text('Brak danych')
+                    : 'Przejechane Km: ${driverTuck.distanceTraveled}'),
                 Container(
                   margin: EdgeInsets.all(5),
                   width: double.infinity,

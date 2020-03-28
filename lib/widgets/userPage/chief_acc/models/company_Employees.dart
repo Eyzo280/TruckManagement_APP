@@ -31,6 +31,7 @@ class FullTruckDriverData {
 }
 
 class BaseTruckDriverData {
+  final String uidDriver; // uid Driver
   final String firstNameDriver; // imie
   final String lastNameDriver; // nazwisko
   final int salary; // pensja
@@ -40,6 +41,7 @@ class BaseTruckDriverData {
   final bool statusDriver; // status okresla czy kierowca jest w trasie czy nie
 
   BaseTruckDriverData({
+    @required this.uidDriver,
     @required this.firstNameDriver,
     @required this.lastNameDriver,
     @required this.salary,

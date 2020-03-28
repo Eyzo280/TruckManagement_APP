@@ -5,6 +5,9 @@ import 'package:truckmanagement_app/widgets/userPage/chief_acc/pages/company/Col
 import 'package:truckmanagement_app/widgets/userPage/chief_acc/pages/company/top_body_CompanyLookDriverTrucks.dart';
 
 class MainCompanyLookTrucker extends StatefulWidget {
+  final String companyUid;
+
+  MainCompanyLookTrucker(this.companyUid);
 
   @override
   _CompanyLookTruckerState createState() => _CompanyLookTruckerState();
@@ -51,8 +54,6 @@ class _CompanyLookTruckerState extends State<MainCompanyLookTrucker> {
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<User>(context);
-  
       return Scaffold(
       appBar: AppBar(
         title: Center(
@@ -76,7 +77,7 @@ class _CompanyLookTruckerState extends State<MainCompanyLookTrucker> {
           TopBodyCompanyLookDriverTrucks(),
           Container(
             height: 250,
-            child: ColumnCompanyLookDriverTrucks(),
+            child: ColumnCompanyLookDriverTrucks(widget.companyUid),
           ),
         ],
       ),

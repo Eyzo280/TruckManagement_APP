@@ -24,10 +24,12 @@ class UserData {
 
 class ChiefUidCompanys {
   final String uidCompanys; // identyfikatory firm
-  final String nameCompany; // identyfikatory firm
+  final String nameCompany; // nazwa firm
+  final bool active; // jezeli true to aktywna
 
   ChiefUidCompanys({
     @required this.uidCompanys,
     @required this.nameCompany,
+    @required this.active,
   });
 }

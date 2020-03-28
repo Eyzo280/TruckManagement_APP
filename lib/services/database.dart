@@ -167,7 +167,7 @@ class DatabaseService {
         .collection('Chiefs')
         .document(uid)
         .collection('Companys')
-        .where('active', isEqualTo: true)
+        // .where('active', isEqualTo: true)
         .snapshots();
     var companys = List<ChiefUidCompanys>();
     await for (var companysSnapshot in companysStream) {
@@ -181,6 +181,7 @@ class DatabaseService {
           company = ChiefUidCompanys(
             uidCompanys: companyDoc.documentID,
             nameCompany: companyName.data['nameCompany'],
+            active: companyDoc.data['active'],
           );
         }
         companys.add(company);
