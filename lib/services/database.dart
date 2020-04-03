@@ -153,11 +153,35 @@ class DatabaseService {
     }
   }
 
-  // pobieranie danych uzytkownika
-  Stream<UserData> get userData {
-    final CollectionReference user = Firestore.instance.collection(
-        'Chiefs'); // Trzeba zrobic zeby przy logowaniu dalo sie wybierac czy chcemy zalogowac sie na szefa, spedtyora czy kierowce
-    return user.document(uid).snapshots().map(_userDataFromsnapshot);
+  // pobieranie danych uzytkownika takich jak typeUser
+  Stream<UserData> get userData async* {
+    List listCollectionsUsers = ['Chiefs', 'Drivers', 'Forwarders'];
+    var userType = null;
+    var complete = false;
+
+    for (var i in listCollectionsUsers) {
+      void wlacz() {
+        userType = Firestore.instance
+            .collection(i.toString())
+            .document(uid)
+            .snapshots()
+            .map(_userDataFromsnapshot);
+      }
+
+      final collection = await Firestore.instance
+          .collection(i.toString())
+          .document(uid)
+          .get()
+          .then((val) {
+        if (val.exists) {
+          wlacz();
+        }
+      });
+    }
+    if (userType != null && complete == false) {
+      yield* userType;
+      complete = true;
+    }
   }
 
   // Pobieranie uid Companys

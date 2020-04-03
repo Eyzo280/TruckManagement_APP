@@ -17,6 +17,7 @@ class MyApp extends StatelessWidget {
         accentColor: Colors.red,
         textTheme: ThemeData.light().textTheme.copyWith(
               title: TextStyle(
+                color: Colors.green,
                 fontFamily: 'OpenSans',
                 fontWeight: FontWeight.bold,
                 fontSize: 18,

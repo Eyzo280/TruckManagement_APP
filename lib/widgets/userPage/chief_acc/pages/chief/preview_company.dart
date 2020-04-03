@@ -2,12 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:truckmanagement_app/widgets/shared/loading.dart';
 import 'package:truckmanagement_app/widgets/userPage/chief_acc/models/chief.dart';
+import 'package:truckmanagement_app/widgets/userPage/chief_acc/pages/chief/create_company.dart';
 import 'package:truckmanagement_app/widgets/userPage/chief_acc/services/database_chief.dart';
 
 class PreviewCompany extends StatelessWidget {
   final String chiefUid;
 
   PreviewCompany({this.chiefUid});
+
+  void openCreateCompany(BuildContext ctx, chiefUid) {
+    Navigator.of(ctx).push(MaterialPageRoute(builder: (ctx) {
+      return CreateCompany(chiefUid: chiefUid);
+    }));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -166,6 +173,7 @@ class PreviewCompany extends StatelessWidget {
               child: Icon(Icons.add),
               onPressed: companysBaseData.length < 5 // dodac ile firm mozna zrobic maksymalnie
                   ? () {
+                      openCreateCompany(context, chiefUid);
                       print('Dodaj Nowa firme');
                     }
                   : null,
