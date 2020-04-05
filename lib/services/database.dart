@@ -219,4 +219,29 @@ class DatabaseService {
     return (user.document(uid).collection('Companys').where('active', isEqualTo: true).snapshots().map(_getUidCompanys));
   }
   */
+
+  // Pobieranie Danych DriverTruck
+
+  DriverTruck _getDataDriver(DocumentSnapshot snapshot) {
+    return DriverTruck(
+      driverUid: snapshot.documentID,
+      firstNameDriver: snapshot.data['firstNameDriver'] ?? null,
+      lastNameDriver: snapshot.data['lastNameDriver'] ?? null,
+      numberPhone: snapshot.data['numberPhone'] ?? null,
+      drivingLicense: snapshot.data['drivingLicense'] ?? null,
+      drivingLicenseFrom: DateTime.fromMillisecondsSinceEpoch(
+              snapshot.data['drivingLicenseFrom'].seconds * 1000) ??
+          null,
+      knownLanguages: snapshot.data['knownLanguages'] ?? null,
+      totalDistanceTraveled: snapshot.data['totalDistanceTraveled'] ?? null,
+    );
+  }
+
+  Stream<DriverTruck> get dataDriver {
+    final CollectionReference driver = Firestore.instance.collection('Drivers');
+
+    return driver.document(uid).snapshots().map(_getDataDriver);
+  }
+
+  //
 }

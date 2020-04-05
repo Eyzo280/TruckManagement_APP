@@ -67,3 +67,23 @@ class CompanyData {
     @required this.yearEstablishmentCompany,
   });
 }
+
+class InvBaseData {
+  final String invUid; // uid
+  final DateTime dateSentInv; // uid Select Company
+  final String firstNameDriver; // ogloszenie
+  final String knownLanguages; // nazwa firmy
+  final String lastNameDriver; // ilosc pracownikow
+  final String numberPhone; // rok zalozenia firmy
+  final int totalDistanceTraveled; // rok zalozenia firmy
+
+  InvBaseData({
+    @required this.invUid,
+    @required this.dateSentInv,
+    @required this.firstNameDriver,
+    @required this.knownLanguages,
+    @required this.lastNameDriver,
+    @required this.numberPhone,
+    @required this.totalDistanceTraveled,
+  });
+}

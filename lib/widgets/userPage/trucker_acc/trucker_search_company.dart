@@ -5,12 +5,19 @@ import 'package:truckmanagement_app/widgets/userPage/trucker_acc/models/trucker.
 import 'package:truckmanagement_app/widgets/userPage/trucker_acc/services_Trucker/database_Trucker.dart';
 
 class TruckerSearchCompany extends StatelessWidget {
+  final userData;
+
+  TruckerSearchCompany(this.userData);
+
   @override
   Widget build(BuildContext context) {
     final searchCompanys = Provider.of<List<BaseSearchCompany>>(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Wyszukiwarka Firmy', style: TextStyle(color: Theme.of(context).canvasColor,)) ,
+        title: Text('Wyszukiwarka Firmy',
+            style: TextStyle(
+              color: Theme.of(context).canvasColor,
+            )),
       ),
       body: ListView.builder(
         itemCount: searchCompanys.length,
@@ -30,7 +37,7 @@ class TruckerSearchCompany extends StatelessWidget {
                         child: Container(
                           color: Colors.blue,
                           child: Center(
-                            child: Text(index.toString()),
+                            child: Text(searchCompanys[index].nameCompany),
                           ),
                         ),
                       ),
@@ -84,14 +91,25 @@ class TruckerSearchCompany extends StatelessWidget {
                     trailing: FittedBox(
                         child: Column(
                       children: <Widget>[
-                        
-                        IconButton(icon: Icon(Icons.open_in_new), onPressed: () {
-                          print('Pokaz szczegoly');
-                        }),
-                        IconButton(icon: Icon(Icons.add_box), onPressed: () {
-                          print('Wyslij Prosbe');
-                        }),
-
+                        IconButton(
+                            icon: Icon(Icons.open_in_new),
+                            onPressed: () {
+                              print('Pokaz szczegoly');
+                            }),
+                        IconButton(
+                            icon: Icon(Icons.add_box),
+                            onPressed: () {
+                              DataBase_Trucker(uid: userData.driverUid).sendInvite(
+                                companyUid: searchCompanys[index].idCompany,
+                                firstNameDriver: userData.firstNameDriver,
+                                lastNameDriver: userData.lastNameDriver,
+                                numberPhone: userData.numberPhone,
+                                knownLanguages: userData.knownLanguages,
+                                totalDistanceTraveled:
+                                    userData.totalDistanceTraveled,
+                              );
+                              print('Wyslij Prosbe');
+                            }),
                       ],
                     )),
                   ),

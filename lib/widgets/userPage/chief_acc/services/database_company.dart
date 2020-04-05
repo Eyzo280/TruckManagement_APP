@@ -4,14 +4,14 @@ import 'package:truckmanagement_app/widgets/userPage/chief_acc/models/company_Em
 
 class Database_CompanyEmployees {
   final String uid;
-  final String uidCompany;
+  final String companyUid;
 
   Database_CompanyEmployees({
-    @required this.uid,
-    this.uidCompany,
+    this.uid,
+    this.companyUid,
   });
 
-  final CollectionReference user = Firestore.instance.collection('Companys');
+  final CollectionReference company = Firestore.instance.collection('Companys');
 
   // Dane ChiefEmployees
   FullTruckDriverData _getFullDataChiefEmoloyees(DocumentSnapshot doc) {
@@ -35,8 +35,8 @@ class Database_CompanyEmployees {
   }
 
   Stream<FullTruckDriverData> get getFullDataEmployees {
-    return user
-        .document(uidCompany)
+    return company
+        .document(companyUid)
         .collection('DriverTrucks')
         .document(uid)
         .snapshots()
@@ -62,7 +62,7 @@ class Database_CompanyEmployees {
   }
 
   Stream<List<BaseTruckDriverData>> get getBaseDataEmployees {
-    return user
+    return company
         .document(uid)
         .collection('DriverTrucks')
         .snapshots()
@@ -84,6 +84,61 @@ class Database_CompanyEmployees {
   }
 
   Stream<CompanyData> get getCompanyData {
-    return user.document(uid).snapshots().map(_getCompanyData);
+    return company.document(uid).snapshots().map(_getCompanyData);
+  }
+
+  // Podstawowe informacje zaproszen
+
+  List<InvBaseData> _getInvBaseData(
+      QuerySnapshot snapshot) {
+    return snapshot.documents.map((doc) {
+      return InvBaseData(
+        invUid: doc.documentID,
+        dateSentInv: DateTime.fromMillisecondsSinceEpoch(
+              doc.data['dateSentInv'].seconds * 1000) ?? null,
+        firstNameDriver: doc.data['firstNameDriver'] ?? null,
+        knownLanguages: doc.data['knownLanguages'] ?? null,
+        lastNameDriver: doc.data['lastNameDriver'] ?? null,
+        numberPhone: doc.data['numberPhone'] ?? null,
+        totalDistanceTraveled: doc.data['totalDistanceTraveled'] ?? null,
+      );
+    }).toList();
+  }
+
+  Stream<List<InvBaseData>> get getInvBaseData {
+    return company
+        .document('pJxRVVMPOJZobvwa38cJMjTC2y82_1')
+        .collection('Invitations')
+        .snapshots()
+        .map(_getInvBaseData);
+  }
+
+  // Akceptowanie zaproszenia
+
+  Future acceptInv({
+    String driverUid,
+    String firstNameDriver,
+    String lastNameDriver,
+    String numberPhone,
+  }) async {
+    company
+        .document(companyUid)
+        .collection('DriverTrucks')
+        .document(driverUid)
+        .setData({
+      'costDriver': 0,
+      'dateOfEmplotment': DateTime.now(),
+      'distanceTraveled': 0,
+      'earned': 0,
+      'firstNameDriver': firstNameDriver,
+      'lastNameDriver': lastNameDriver,
+      'numberPhone': numberPhone,
+      'paid': 0,
+      'payday': DateTime.now(), // trzeba dodac ustawienie z tym kiedy prawcownicy dostaja wyplaty
+      'salary': 7500, // trzeba dodawc ustawienie wyplaty kierowcow
+      'statusDriver': false, // trzeba dodawc ustawienie zmiany statusu kierowcy
+    }).whenComplete((){
+      company.document(companyUid).collection('Invitations').document(driverUid).delete();
+    });
   }
 }

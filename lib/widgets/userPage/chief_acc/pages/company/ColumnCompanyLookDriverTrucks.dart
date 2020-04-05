@@ -9,10 +9,10 @@ class ColumnCompanyLookDriverTrucks extends StatelessWidget {
 
   ColumnCompanyLookDriverTrucks(this.companyUid);
 
-  void openFullLookDriverTruck(BuildContext ctx, driver, uidCompany, index) {
+  void openFullLookDriverTruck(BuildContext ctx, driver, companyUid, index) {
     Navigator.of(ctx).push(MaterialPageRoute(builder: (_) {
       return StreamProvider<FullTruckDriverData>.value(
-        value: Database_CompanyEmployees(uid: driver, uidCompany: uidCompany).getFullDataEmployees,
+        value: Database_CompanyEmployees(uid: driver, companyUid: companyUid).getFullDataEmployees,
         child: FullLookDriverTruck());
     }));
   }

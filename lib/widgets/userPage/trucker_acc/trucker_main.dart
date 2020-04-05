@@ -12,14 +12,14 @@ class TruckerMain extends StatelessWidget {
   void openSearchCompany(BuildContext ctx, user) {
     Navigator.of(ctx).push(MaterialPageRoute(builder: (_) {
       return StreamProvider<List<BaseSearchCompany>>.value(
-        value: DataBase_Trucker(uid: user.uid).getBaseSearchCompany,
-        child: TruckerSearchCompany()); // trzeba dac wysylanie id kierowcy
+        value: DataBase_Trucker().getBaseSearchCompany,
+        child: TruckerSearchCompany(user)); // trzeba dac wysylanie id kierowcy
     }));
   }
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<User>(context);
+    final user = Provider.of<DriverTruck>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text('Kierowca - Nazwa'),
@@ -82,10 +82,10 @@ class TruckerMain extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Text('Imie:'),
-                      Text('Nazwisko:'),
-                      Text('Prawo jazdy:'),
-                      Text('Przejechane km:'),
+                      Text('Imie: ${user.firstNameDriver}'),
+                      Text('Nazwisko: ${user.lastNameDriver}'),
+                      Text('Prawo jazdy: ${user.drivingLicense}'),
+                      Text('Przejechane km: ${user.totalDistanceTraveled}'),
                     ],
                   ),
                 ),

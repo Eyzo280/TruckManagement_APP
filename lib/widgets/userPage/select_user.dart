@@ -28,7 +28,9 @@ class _SelectUserState extends State<SelectUser> {
     } else if (userData.typeUser == 'Forwarder') {
       return ForwarderMain();
     } else if (userData.typeUser == 'DriverTruck') {
-      return TruckerMain();
+      return StreamProvider<DriverTruck>.value(
+        value: DatabaseService(uid: userData.uid).dataDriver,
+        child: TruckerMain());
     } else {
       return ErrorPage();
     }

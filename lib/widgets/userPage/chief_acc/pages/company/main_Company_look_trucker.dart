@@ -54,8 +54,7 @@ class _CompanyLookTruckerState extends State<MainCompanyLookTrucker> {
 
   @override
   Widget build(BuildContext context) {
-      return Scaffold(
-      appBar: AppBar(
+    final appBar = AppBar(
         title: Center(
           child: Text('Kierowcy'),
         ),
@@ -71,12 +70,17 @@ class _CompanyLookTruckerState extends State<MainCompanyLookTrucker> {
             ),
           ),
         ],
-      ),
+      );
+      return Scaffold(
+      appBar: appBar,
       body: Column(
         children: <Widget>[
-          TopBodyCompanyLookDriverTrucks(),
           Container(
-            height: 250,
+            height: (MediaQuery.of(context).size.height - appBar.preferredSize.height - MediaQuery.of(context).padding.top) * 0.17,
+            child: TopBodyCompanyLookDriverTrucks(),),
+          
+          Container(
+            height: (MediaQuery.of(context).size.height - appBar.preferredSize.height - MediaQuery.of(context).padding.top) * 0.83,
             child: ColumnCompanyLookDriverTrucks(widget.companyUid),
           ),
         ],

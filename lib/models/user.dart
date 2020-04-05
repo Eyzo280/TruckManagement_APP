@@ -33,3 +33,25 @@ class ChiefUidCompanys {
     @required this.active,
   });
 }
+
+class DriverTruck {
+  final String driverUid; // Uid
+  final String firstNameDriver; // Imie
+  final String lastNameDriver; // Nazwisko
+  final String numberPhone; // Nr tel
+  final String drivingLicense; // Prawo jazdy
+  final DateTime drivingLicenseFrom; // od kiedy prawojazdy
+  final String knownLanguages; // Jakie zna jezyki
+  final int totalDistanceTraveled; // Calkowita ilosc przejechanych km
+
+  DriverTruck({
+    @required this.driverUid,
+    @required this.firstNameDriver,
+    @required this.lastNameDriver,
+    @required this.numberPhone,
+    @required this.drivingLicense,
+    @required this.drivingLicenseFrom,
+    @required this.knownLanguages,
+    @required this.totalDistanceTraveled,
+  });
+}
