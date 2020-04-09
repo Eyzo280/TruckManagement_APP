@@ -203,9 +203,9 @@ class DatabaseService {
               .document(companyDoc.documentID)
               .get();
           company = ChiefUidCompanys(
-            uidCompanys: companyDoc.documentID,
-            nameCompany: companyName.data['nameCompany'],
-            active: companyDoc.data['active'],
+            uidCompanys: companyDoc.documentID ?? null,
+            nameCompany: companyName.data['nameCompany'] ?? null,
+            active: companyDoc.data['active'] ?? null,
           );
         }
         companys.add(company);

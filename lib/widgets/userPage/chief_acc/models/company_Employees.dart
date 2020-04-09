@@ -87,3 +87,21 @@ class InvBaseData {
     @required this.totalDistanceTraveled,
   });
 }
+
+class SearchEmployeesBaseData {
+  final String driverUid;
+  final DateTime drivingLicenseFrom;
+  final String firstNameDriver;
+  final String knownLanguages;
+  final String lastNameDriver;
+  final int totalDistanceTraveled;
+
+    SearchEmployeesBaseData({
+      this.driverUid,
+      this.drivingLicenseFrom,
+      this.firstNameDriver,
+      this.knownLanguages,
+      this.lastNameDriver,
+      this.totalDistanceTraveled,
+    });
+}

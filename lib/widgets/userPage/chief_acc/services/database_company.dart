@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:truckmanagement_app/widgets/userPage/chief_acc/models/company_Employees.dart';
@@ -6,9 +8,13 @@ class Database_CompanyEmployees {
   final String uid;
   final String companyUid;
 
+  // Filtr
+  final List searchSettings;
+
   Database_CompanyEmployees({
     this.uid,
     this.companyUid,
+    this.searchSettings,
   });
 
   final CollectionReference company = Firestore.instance.collection('Companys');
@@ -89,13 +95,13 @@ class Database_CompanyEmployees {
 
   // Podstawowe informacje zaproszen
 
-  List<InvBaseData> _getInvBaseData(
-      QuerySnapshot snapshot) {
+  List<InvBaseData> _getInvBaseData(QuerySnapshot snapshot) {
     return snapshot.documents.map((doc) {
       return InvBaseData(
         invUid: doc.documentID,
         dateSentInv: DateTime.fromMillisecondsSinceEpoch(
-              doc.data['dateSentInv'].seconds * 1000) ?? null,
+                doc.data['dateSentInv'].seconds * 1000) ??
+            null,
         firstNameDriver: doc.data['firstNameDriver'] ?? null,
         knownLanguages: doc.data['knownLanguages'] ?? null,
         lastNameDriver: doc.data['lastNameDriver'] ?? null,
@@ -107,7 +113,7 @@ class Database_CompanyEmployees {
 
   Stream<List<InvBaseData>> get getInvBaseData {
     return company
-        .document('pJxRVVMPOJZobvwa38cJMjTC2y82_1')
+        .document(companyUid)
         .collection('Invitations')
         .snapshots()
         .map(_getInvBaseData);
@@ -134,11 +140,43 @@ class Database_CompanyEmployees {
       'lastNameDriver': lastNameDriver,
       'numberPhone': numberPhone,
       'paid': 0,
-      'payday': DateTime.now(), // trzeba dodac ustawienie z tym kiedy prawcownicy dostaja wyplaty
+      'payday': DateTime
+          .now(), // trzeba dodac ustawienie z tym kiedy prawcownicy dostaja wyplaty
       'salary': 7500, // trzeba dodawc ustawienie wyplaty kierowcow
       'statusDriver': false, // trzeba dodawc ustawienie zmiany statusu kierowcy
-    }).whenComplete((){
-      company.document(companyUid).collection('Invitations').document(driverUid).delete();
+    }).whenComplete(() {
+      company
+          .document(companyUid)
+          .collection('Invitations')
+          .document(driverUid)
+          .delete();
     });
+  }
+
+  // Wyszukiwarka Pracownikow
+
+   FutureOr<List<SearchEmployeesBaseData>> _getSearchEmployeesBaseData(
+      QuerySnapshot snapshots) async {
+    return snapshots.documents.map((doc) {
+      return SearchEmployeesBaseData(
+        driverUid: doc.documentID ?? null,
+        drivingLicenseFrom: DateTime.fromMillisecondsSinceEpoch(
+            doc.data['drivingLicenseFrom'].seconds * 1000) ?? null,
+        firstNameDriver: doc.data['firstNameDriver'] ?? null,
+        knownLanguages: doc.data['knownLanguages'] ?? null,
+        lastNameDriver: doc.data['lastNameDriver'] ?? null,
+        totalDistanceTraveled: doc.data['totalDistanceTraveled'] ?? null,
+      );
+    }).toList();
+  }
+
+  Stream<List<SearchEmployeesBaseData>> get getSearchEmployeesBaseData {
+    print(searchSettings[0]['kmOd']);
+    print(searchSettings[0]['kmDo']);
+    if (searchSettings[0]['typeEmployees'] == 'Driver') {
+    final CollectionReference employees =
+        Firestore.instance.collection('Drivers');
+    return employees.where('totalDistanceTraveled', isGreaterThanOrEqualTo: searchSettings[0]['kmOd']).where('totalDistanceTraveled', isLessThanOrEqualTo: searchSettings[0]['kmDo']).snapshots().asyncMap(_getSearchEmployeesBaseData);
+    } else return null;
   }
 }

@@ -21,6 +21,7 @@ class _SelectUserState extends State<SelectUser> {
   Widget build(BuildContext context) {
     final UserData userData = widget.data;
 
+    print('Problem');
     if (userData.typeUser == 'Chief') {
       return StreamProvider<List<ChiefUidCompanys>>.value(
         value: DatabaseService(uid: userData.uid).getUidCompanys,
