@@ -152,31 +152,4 @@ class Database_CompanyEmployees {
           .delete();
     });
   }
-
-  // Wyszukiwarka Pracownikow
-
-   FutureOr<List<SearchEmployeesBaseData>> _getSearchEmployeesBaseData(
-      QuerySnapshot snapshots) async {
-    return snapshots.documents.map((doc) {
-      return SearchEmployeesBaseData(
-        driverUid: doc.documentID ?? null,
-        drivingLicenseFrom: DateTime.fromMillisecondsSinceEpoch(
-            doc.data['drivingLicenseFrom'].seconds * 1000) ?? null,
-        firstNameDriver: doc.data['firstNameDriver'] ?? null,
-        knownLanguages: doc.data['knownLanguages'] ?? null,
-        lastNameDriver: doc.data['lastNameDriver'] ?? null,
-        totalDistanceTraveled: doc.data['totalDistanceTraveled'] ?? null,
-      );
-    }).toList();
-  }
-
-  Stream<List<SearchEmployeesBaseData>> get getSearchEmployeesBaseData {
-    print(searchSettings[0]['kmOd']);
-    print(searchSettings[0]['kmDo']);
-    if (searchSettings[0]['typeEmployees'] == 'Driver') {
-    final CollectionReference employees =
-        Firestore.instance.collection('Drivers');
-    return employees.where('totalDistanceTraveled', isGreaterThanOrEqualTo: searchSettings[0]['kmOd']).where('totalDistanceTraveled', isLessThanOrEqualTo: searchSettings[0]['kmDo']).snapshots().asyncMap(_getSearchEmployeesBaseData);
-    } else return null;
-  }
 }

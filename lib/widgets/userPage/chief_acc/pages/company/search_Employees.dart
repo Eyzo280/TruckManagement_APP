@@ -1,7 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:truckmanagement_app/widgets/shared/loading.dart';
 import 'package:truckmanagement_app/widgets/userPage/chief_acc/models/company_Employees.dart';
-import 'package:truckmanagement_app/widgets/userPage/chief_acc/services/database_company.dart';
 
 class SearchEmployees extends StatefulWidget {
   @override
@@ -9,14 +9,124 @@ class SearchEmployees extends StatefulWidget {
 }
 
 class _SearchEmployeesState extends State<SearchEmployees> {
+  Firestore _firestore = Firestore.instance;
+  List<SearchEmployeesBaseData> _employees = [];
+  bool _loadingEmployees = true;
+  int _per_page = 8;
+  DocumentSnapshot _lastDocument;
+  ScrollController _scrollController = ScrollController();
+  bool _gettingMoreEmployees = false;
+  bool _moreEmployeesAbailable = true;
+
+  _getEmployees() async {
+    Query q = _firestore
+        .collection('Drivers')
+        .where('totalDistanceTraveled',
+            isGreaterThanOrEqualTo:
+                kmOd.value.text != '' ? int.parse(kmOd.value.text) : 0)
+        .where('totalDistanceTraveled',
+            isLessThanOrEqualTo:
+                kmDo.value.text != '' ? int.parse(kmDo.value.text) : 999999999)
+        .orderBy('totalDistanceTraveled')
+        .limit(_per_page);
+
+    setState(() {
+      _loadingEmployees = true;
+    });
+    QuerySnapshot querySnapshot = await q.getDocuments();
+    _employees = querySnapshot.documents.map((doc) {
+      return SearchEmployeesBaseData(
+        driverUid: doc.documentID ?? null,
+        drivingLicenseFrom: DateTime.fromMillisecondsSinceEpoch(
+                doc.data['drivingLicenseFrom'].seconds * 1000) ??
+            null,
+        firstNameDriver: doc.data['firstNameDriver'] ?? null,
+        knownLanguages: doc.data['knownLanguages'] ?? null,
+        lastNameDriver: doc.data['lastNameDriver'] ?? null,
+        totalDistanceTraveled: doc.data['totalDistanceTraveled'] ?? null,
+      );
+    }).toList();
+    _lastDocument = querySnapshot.documents[querySnapshot.documents.length - 1];
+
+    setState(() {
+      _loadingEmployees = false;
+    });
+  }
+
+  _getMoreEmployees() async {
+    print("_getMoreEmployees called");
+
+    if (_moreEmployeesAbailable == false) {
+      print("No More Employees");
+      return;
+    }
+
+    if (_gettingMoreEmployees == true) {
+      return;
+    }
+
+    _gettingMoreEmployees = true;
+
+    Query q = _firestore
+        .collection('Drivers')
+        .where('totalDistanceTraveled',
+            isGreaterThanOrEqualTo:
+                kmOd.value.text != '' ? int.parse(kmOd.value.text) : 0)
+        .where('totalDistanceTraveled',
+            isLessThanOrEqualTo:
+                kmDo.value.text != '' ? int.parse(kmDo.value.text) : 999999999)
+        .orderBy('totalDistanceTraveled')
+        .startAfter([_lastDocument.data['totalDistanceTraveled']]).limit(
+            _per_page);
+
+    QuerySnapshot querySnapshot = await q.getDocuments();
+
+    if (querySnapshot.documents.length < _per_page) {
+      _moreEmployeesAbailable = false;
+    }
+
+    _lastDocument = querySnapshot.documents[querySnapshot.documents.length - 1];
+
+    _employees.addAll(querySnapshot.documents.map((doc) {
+      return SearchEmployeesBaseData(
+        driverUid: doc.documentID ?? null,
+        drivingLicenseFrom: DateTime.fromMillisecondsSinceEpoch(
+                doc.data['drivingLicenseFrom'].seconds * 1000) ??
+            null,
+        firstNameDriver: doc.data['firstNameDriver'] ?? null,
+        knownLanguages: doc.data['knownLanguages'] ?? null,
+        lastNameDriver: doc.data['lastNameDriver'] ?? null,
+        totalDistanceTraveled: doc.data['totalDistanceTraveled'] ?? null,
+      );
+    }).toList());
+
+    setState(() {});
+
+    _gettingMoreEmployees = false;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _getEmployees();
+
+    _scrollController.addListener(() {
+      double maxScroll = _scrollController.position.maxScrollExtent;
+      double currentScroll = _scrollController.position.pixels;
+      double delta = MediaQuery.of(context).size.height * 25;
+
+      if (maxScroll - currentScroll <= delta) {
+        _getMoreEmployees();
+      }
+    });
+  }
+
   final _formkey = GlobalKey<FormState>();
   bool filtrActive = false;
 
   String dropdownValue = 'Wybierz';
   final kmOd = TextEditingController();
   final kmDo = TextEditingController();
-
-  List listFiltr = [{}];
 
   Widget Filter() {
     return Form(
@@ -56,19 +166,25 @@ class _SearchEmployeesState extends State<SearchEmployees> {
                       height: 50,
                       width: 50,
                       child: TextFormField(
-                          decoration: InputDecoration(
-                              border: OutlineInputBorder(), hintText: 'Do'),
-                          keyboardType: TextInputType.number,
-                          controller: kmDo,),
+                        decoration: InputDecoration(
+                            border: OutlineInputBorder(), hintText: 'Do'),
+                        keyboardType: TextInputType.number,
+                        controller: kmDo,
+                      ),
                     ),
                   ],
                 ),
               ],
             ),
             RaisedButton(
-              onPressed: () {setState(() {
-                
-              });},
+              onPressed: () {
+                setState(() {
+                  _moreEmployeesAbailable = true;
+                  _gettingMoreEmployees = false;
+                  _getEmployees();
+                  Navigator.of(context).pop();
+                });
+              },
               child: Text('Zastosuj'),
             ),
           ],
@@ -79,16 +195,13 @@ class _SearchEmployeesState extends State<SearchEmployees> {
 
   void _openFilter(BuildContext ctx) {
     Future<void> future = showModalBottomSheet<void>(
-      
         context: ctx,
         builder: (_) {
           return Filter();
         });
-      future.then((void value) {
-        setState(() {
-          
-        });
-      });
+    future.then((void value) {
+      setState(() {});
+    });
   }
 
   @override
@@ -141,141 +254,112 @@ class _SearchEmployeesState extends State<SearchEmployees> {
       ),
       body: dropdownValue == 'Wybierz' && filtrActive == false
           ? Center(child: Text('Prosze wybrac typ wyszukiwania'))
-          : StreamBuilder<List<SearchEmployeesBaseData>>(
-              stream: Database_CompanyEmployees(searchSettings: [
-                {
-                  'typeEmployees': dropdownValue,
-                  'kmOd':
-                      kmOd.value.text == '' ? 0 : int.parse(kmOd.value.text),
-                  'kmDo': kmDo.value.text == '' ? 999999999 : int.parse(kmDo.value.text),
-                }
-              ]).getSearchEmployeesBaseData,
-              builder: (context, AsyncSnapshot snapshot) {
-                // Trzeba dodac spedytorow
-                if (snapshot.data != null) {
-                  return ListView.builder(
-                    itemCount: snapshot.data.length,
-                    itemBuilder: (context, index) {
-                      return Container(
-                        padding: EdgeInsets.all(5),
-                        child: Column(
-                          children: <Widget>[
-                            Row(
-                              children: <Widget>[
-                                Flexible(
-                                  fit: FlexFit.tight,
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(5),
-                                        topRight: Radius.circular(20)),
-                                    child: Container(
-                                      color: Colors.blue,
-                                      child: Center(
-                                        child: Text('Nazwa'),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Flexible(
-                                  fit: FlexFit.tight,
-                                  child: Opacity(opacity: 0.0),
-                                ),
-                              ],
-                            ),
-                            Card(
-                              shape: RoundedRectangleBorder(
+          : _employees.length == 0
+              ? Loading()
+              :
+              // Trzeba dodac spedytorow
+
+              ListView.builder(
+                  controller: _scrollController,
+                  itemCount: _employees.length,
+                  itemBuilder: (context, index) {
+                    return Container(
+                      padding: EdgeInsets.all(5),
+                      child: Column(
+                        children: <Widget>[
+                          Row(
+                            children: <Widget>[
+                              Flexible(
+                                fit: FlexFit.tight,
+                                child: ClipRRect(
                                   borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(0),
-                                topRight: Radius.circular(5),
-                                bottomLeft: Radius.circular(5),
-                                bottomRight: Radius.circular(5),
-                              )),
-                              margin: EdgeInsets.only(top: 0),
-                              elevation: 5,
-                              color: Colors.red,
-                              child: ListTile(
-                                leading: Icon(Icons.add_a_photo),
-                                title: Container(
-                                  color: Colors.blue,
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: <Widget>[
-                                      Column(
-                                        children: <Widget>[
-                                          Text('Przejechane km:'),
-                                          Text(snapshot
-                                              .data[index].totalDistanceTraveled
-                                              .toString()),
-                                        ],
-                                      ),
-                                      Column(
-                                        children: <Widget>[
-                                          Text('Znaj j.Obcych:'),
-                                          Text(snapshot.data[index]
-                                                      .knownLanguages !=
-                                                  ''
-                                              ? snapshot
-                                                  .data[index].knownLanguages
-                                              : ''),
-                                        ],
-                                      ),
-                                      Column(
-                                        children: <Widget>[
-                                          Text(
-                                              'Kursy:'), // do jakich krajow sa kursy
-                                          Text('PL, DE'),
-                                        ],
-                                      ),
-                                    ],
+                                      topLeft: Radius.circular(5),
+                                      topRight: Radius.circular(20)),
+                                  child: Container(
+                                    color: Colors.blue,
+                                    child: Center(
+                                      child: Text('Nazwa'),
+                                    ),
                                   ),
                                 ),
-                                trailing: FittedBox(
-                                    child: Column(
-                                  children: <Widget>[
-                                    IconButton(
-                                        icon: Icon(Icons.open_in_new),
-                                        onPressed: () {
-                                          print('Pokaz szczegoly');
-                                        }),
-                                    IconButton(
-                                        icon: Icon(Icons.add_box),
-                                        onPressed: () {
-                                          print('Wyslij Zaproszenie');
-                                        }),
-                                  ],
-                                )),
                               ),
-                            ),
-                            snapshot.data.length - 1 == index
-                                ? Container(
-                                    margin: EdgeInsets.only(top: 15),
-                                    child: MaterialButton(
-                                      onPressed: () {
-                                        print('Wiecej');
-                                      },
-                                      color: Colors.blue,
-                                      textColor: Colors.white,
-                                      child: Icon(
-                                        Icons.keyboard_arrow_down,
-                                        size: 24,
-                                      ),
-                                      padding: EdgeInsets.all(16),
-                                      shape: CircleBorder(),
+                              Flexible(
+                                fit: FlexFit.tight,
+                                child: Opacity(opacity: 0.0),
+                              ),
+                            ],
+                          ),
+                          Card(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(0),
+                              topRight: Radius.circular(5),
+                              bottomLeft: Radius.circular(5),
+                              bottomRight: Radius.circular(5),
+                            )),
+                            margin: EdgeInsets.only(top: 0),
+                            elevation: 5,
+                            color: Colors.red,
+                            child: ListTile(
+                              leading: Icon(Icons.add_a_photo),
+                              title: Container(
+                                color: Colors.blue,
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: <Widget>[
+                                    Column(
+                                      children: <Widget>[
+                                        Text('Przejechane km:'),
+                                        Text(_employees[index]
+                                            .totalDistanceTraveled
+                                            .toString()),
+                                      ],
                                     ),
-                                  )
-                                : SizedBox(),
-                          ],
-                        ),
-                      );
-                    },
-                  );
-                } else
-                  return Loading();
-              },
-            ),
+                                    Column(
+                                      children: <Widget>[
+                                        Text('Znaj j.Obcych:'),
+                                        Text(_employees[index].knownLanguages !=
+                                                ''
+                                            ? _employees[index].knownLanguages
+                                            : ''),
+                                      ],
+                                    ),
+                                    Column(
+                                      children: <Widget>[
+                                        Text(
+                                            'Kursy:'), // do jakich krajow sa kursy
+                                        Text('PL, DE'),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              trailing: FittedBox(
+                                  child: Column(
+                                children: <Widget>[
+                                  IconButton(
+                                      icon: Icon(Icons.open_in_new),
+                                      onPressed: () {
+                                        print('Pokaz szczegoly');
+                                      }),
+                                  IconButton(
+                                      icon: Icon(Icons.add_box),
+                                      onPressed: () {
+                                        print('Wyslij Zaproszenie');
+                                      }),
+                                ],
+                              )),
+                            ),
+                          ),
+                          index == _employees.length - 1 && _gettingMoreEmployees == true ? Text('Ladowanie') : SizedBox(),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+
       /* floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
