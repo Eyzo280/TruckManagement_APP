@@ -90,18 +90,77 @@ class InvBaseData {
 
 class SearchEmployeesBaseData {
   final String driverUid;
+  final DateTime dateOfEmplotment;
+  final String drivingLicense;
   final DateTime drivingLicenseFrom;
   final String firstNameDriver;
   final String knownLanguages;
   final String lastNameDriver;
+  final String numberPhone;
   final int totalDistanceTraveled;
 
-    SearchEmployeesBaseData({
-      this.driverUid,
-      this.drivingLicenseFrom,
-      this.firstNameDriver,
-      this.knownLanguages,
-      this.lastNameDriver,
-      this.totalDistanceTraveled,
-    });
+  SearchEmployeesBaseData({
+    this.driverUid,
+    this.dateOfEmplotment,
+    this.drivingLicense,
+    this.drivingLicenseFrom,
+    this.firstNameDriver,
+    this.knownLanguages,
+    this.lastNameDriver,
+    this.numberPhone,
+    this.totalDistanceTraveled,
+  });
+
+  calculationAccountActivityTime<String>({registerAccTime}) {
+    int year;
+    int month;
+    int day;
+
+    int yearNow = DateTime.now().year;
+    int monthNow = DateTime.now().month;
+    int dayNow = DateTime.now().day;
+
+    int yearAcc = registerAccTime.year;
+    int monthAcc = registerAccTime.month;
+    int dayAcc = registerAccTime.day;
+
+    year = yearNow - yearAcc;
+    month = monthNow - monthAcc;
+    day = dayNow - dayAcc;
+
+    int amountDay =
+        DateTime.now().difference(registerAccTime).inDays;
+
+    if (year != 0 && amountDay > 365) {                  //                  Trzeba jeszcze sprawdzic
+      int amount = (amountDay / 365).truncate();
+      if (amount == 1) {
+        print('Ponad roku');
+        return 'Ponad roku';
+      } // else if (amount < 5) {
+        // print('Ponad ${amount.toString()} lata');
+        // return 'Ponad ${amount.toString()} lata';
+        // } 
+      else {
+        print('Ponad ${amount.toString()} lat');
+        return 'Ponad ${amount.toString()} lat';
+      }
+    } else if (dayNow >= dayAcc && month > 0) {
+      print('Ponad ${month.toString()} mies');
+      return 'Ponad ${month.toString()} mies';
+    } else if (day > 0) {
+      print('Ponad ${amountDay.toString()} dni');
+      return 'Ponad ${amountDay.toString()} dni';
+    } else {
+      if (amountDay == 1) {
+        print('Ponad ${amountDay.toString()} dzien');
+        return 'Ponad ${amountDay.toString()} dzien';
+      } else if (amountDay == 0) {
+        print('Ponizej jednego dnia');
+        return 'Ponizej jednego dnia';
+      } else {
+        print('Ponad ${amountDay.toString()} dni');
+        return 'Ponad ${amountDay.toString()} dni';
+      }
+    }
+  }
 }

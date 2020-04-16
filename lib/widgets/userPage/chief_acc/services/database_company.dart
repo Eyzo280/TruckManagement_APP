@@ -152,4 +152,47 @@ class Database_CompanyEmployees {
           .delete();
     });
   }
+
+  // Funkcja do Wysylania Zaproszenia
+
+  Future sendInvite({
+    String employeesUid,
+    String nameCompany,
+    DateTime yearEstablishmentCompany,
+    String firstNameDriver,
+    String lastNameDriver,
+    DateTime drivingLicenseFrom,
+    String drivingLicense,
+    String knownLanguages,
+    int totalDistanceTraveled,
+  }) async {
+    final CollectionReference driver = Firestore.instance.collection('Drivers');
+
+    driver
+        .document(employeesUid)
+        .collection('Invitations')
+        .document(companyUid)
+        .setData({
+      'nameCompany': nameCompany,
+      'yearEstablishmentCompany': yearEstablishmentCompany,
+      'dateSentInv': DateTime.now(),
+    });
+
+    final CollectionReference company =
+        Firestore.instance.collection('Companys');
+
+    company
+        .document(companyUid)
+        .collection('SentInvitations')
+        .document(employeesUid)
+        .setData({
+      'firstNameDriver': firstNameDriver,
+      'lastNameDriver': lastNameDriver,
+      'drivingLicenseFrom': drivingLicenseFrom,
+      'drivingLicense': drivingLicense,
+      'knownLanguages': knownLanguages,
+      'totalDistanceTraveled': totalDistanceTraveled,
+      'dateSentInv': DateTime.now(),
+    });
+  }
 }

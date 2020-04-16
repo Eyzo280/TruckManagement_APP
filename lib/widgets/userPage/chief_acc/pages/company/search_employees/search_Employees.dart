@@ -2,8 +2,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:truckmanagement_app/widgets/shared/loading.dart';
 import 'package:truckmanagement_app/widgets/userPage/chief_acc/models/company_Employees.dart';
+import 'package:truckmanagement_app/widgets/userPage/chief_acc/pages/company/search_employees/fullData/fulldata_employee.dart';
+import 'package:truckmanagement_app/widgets/userPage/chief_acc/services/database_company.dart';
 
 class SearchEmployees extends StatefulWidget {
+  final companyData;
+
+  SearchEmployees({this.companyData});
+
   @override
   _SearchEmployeesState createState() => _SearchEmployeesState();
 }
@@ -17,40 +23,63 @@ class _SearchEmployeesState extends State<SearchEmployees> {
   ScrollController _scrollController = ScrollController();
   bool _gettingMoreEmployees = false;
   bool _moreEmployeesAbailable = true;
+  List sentInvitations = [];
+  bool statusSentInvitations = false;
 
   _getEmployees() async {
-    Query q = _firestore
-        .collection('Drivers')
-        .where('totalDistanceTraveled',
-            isGreaterThanOrEqualTo:
-                kmOd.value.text != '' ? int.parse(kmOd.value.text) : 0)
-        .where('totalDistanceTraveled',
-            isLessThanOrEqualTo:
-                kmDo.value.text != '' ? int.parse(kmDo.value.text) : 999999999)
-        .orderBy('totalDistanceTraveled')
-        .limit(_per_page);
-
-    setState(() {
-      _loadingEmployees = true;
+    await _firestore
+        .collection('Companys')
+        .document(widget.companyData.uidCompany)
+        .collection('SentInvitations')
+        .getDocuments()
+        .then((snap) {
+      for (var i in snap.documents) {
+        sentInvitations.add(i.documentID);
+      }
+      statusSentInvitations = true;
     });
-    QuerySnapshot querySnapshot = await q.getDocuments();
-    _employees = querySnapshot.documents.map((doc) {
-      return SearchEmployeesBaseData(
-        driverUid: doc.documentID ?? null,
-        drivingLicenseFrom: DateTime.fromMillisecondsSinceEpoch(
-                doc.data['drivingLicenseFrom'].seconds * 1000) ??
-            null,
-        firstNameDriver: doc.data['firstNameDriver'] ?? null,
-        knownLanguages: doc.data['knownLanguages'] ?? null,
-        lastNameDriver: doc.data['lastNameDriver'] ?? null,
-        totalDistanceTraveled: doc.data['totalDistanceTraveled'] ?? null,
-      );
-    }).toList();
-    _lastDocument = querySnapshot.documents[querySnapshot.documents.length - 1];
+    if (statusSentInvitations = true) {
+      Query q = _firestore
+          .collection('Drivers')
+          .where('totalDistanceTraveled',
+              isGreaterThanOrEqualTo:
+                  kmOd.value.text != '' ? int.parse(kmOd.value.text) : 0)
+          .where('totalDistanceTraveled',
+              isLessThanOrEqualTo: kmDo.value.text != ''
+                  ? int.parse(kmDo.value.text)
+                  : 999999999)
+          .orderBy('totalDistanceTraveled')
+          .limit(_per_page);
 
-    setState(() {
-      _loadingEmployees = false;
-    });
+      setState(() {
+        _loadingEmployees = true;
+      });
+      QuerySnapshot querySnapshot = await q.getDocuments();
+      _employees = querySnapshot.documents.map((doc) {
+        return SearchEmployeesBaseData(
+          driverUid: doc.documentID ?? null,
+          dateOfEmplotment: DateTime.fromMillisecondsSinceEpoch(
+                  doc.data['dateOfEmplotment'].seconds * 1000) ??
+              null,
+          drivingLicense: doc.data['drivingLicense'] ?? null,
+          drivingLicenseFrom: DateTime.fromMillisecondsSinceEpoch(
+                  doc.data['drivingLicenseFrom'].seconds * 1000) ??
+              null,
+          firstNameDriver: doc.data['firstNameDriver'] ?? null,
+          knownLanguages: doc.data['knownLanguages'] ?? null,
+          lastNameDriver: doc.data['lastNameDriver'] ?? null,
+          numberPhone: doc.data['numberPhone'] ?? null,
+          totalDistanceTraveled: doc.data['totalDistanceTraveled'] ?? null,
+        );
+      }).toList();
+      _lastDocument =
+          querySnapshot.documents[querySnapshot.documents.length - 1];
+
+      setState(() {
+        _loadingEmployees = false;
+      });
+    } else
+      print('Problem z odczytem "SentInvitations" Firmy');
   }
 
   _getMoreEmployees() async {
@@ -90,12 +119,17 @@ class _SearchEmployeesState extends State<SearchEmployees> {
     _employees.addAll(querySnapshot.documents.map((doc) {
       return SearchEmployeesBaseData(
         driverUid: doc.documentID ?? null,
+        dateOfEmplotment: DateTime.fromMillisecondsSinceEpoch(
+                doc.data['dateOfEmplotment'].seconds * 1000) ??
+            null,
+        drivingLicense: doc.data['drivingLicense'] ?? null,
         drivingLicenseFrom: DateTime.fromMillisecondsSinceEpoch(
                 doc.data['drivingLicenseFrom'].seconds * 1000) ??
             null,
         firstNameDriver: doc.data['firstNameDriver'] ?? null,
         knownLanguages: doc.data['knownLanguages'] ?? null,
         lastNameDriver: doc.data['lastNameDriver'] ?? null,
+        numberPhone: doc.data['numberPhone'] ?? null,
         totalDistanceTraveled: doc.data['totalDistanceTraveled'] ?? null,
       );
     }).toList());
@@ -108,7 +142,7 @@ class _SearchEmployeesState extends State<SearchEmployees> {
   @override
   void initState() {
     super.initState();
-    _getEmployees();
+    // _getEmployees();
 
     _scrollController.addListener(() {
       double maxScroll = _scrollController.position.maxScrollExtent;
@@ -204,6 +238,46 @@ class _SearchEmployeesState extends State<SearchEmployees> {
     });
   }
 
+  void _openFullDataEmployee(ctx, sendInv, driverData, companyData) {
+    Navigator.of(ctx).push(MaterialPageRoute(builder: (ctx) {
+      return FullDataEmployee(sendInv, driverData, companyData);
+    }));
+  }
+
+  // Wysylanie Zaproszenia
+
+  void _sendInv(
+      {companyData,
+      employeesUid,
+      nameCompany,
+      yearEstablishmentCompany,
+      firstNameDriver,
+      lastNameDriver,
+      drivingLicenseFrom,
+      drivingLicense,
+      knownLanguages,
+      totalDistanceTraveled}) {
+    if (companyData != null && employeesUid != null) {
+      Database_CompanyEmployees(companyUid: widget.companyData.uidCompany)
+          .sendInvite(
+        employeesUid: employeesUid,
+        nameCompany: nameCompany,
+        yearEstablishmentCompany: yearEstablishmentCompany,
+        firstNameDriver: firstNameDriver,
+        lastNameDriver: lastNameDriver,
+        drivingLicenseFrom: drivingLicenseFrom,
+        drivingLicense: drivingLicense,
+        knownLanguages: knownLanguages,
+        totalDistanceTraveled: totalDistanceTraveled,
+      );
+      sentInvitations.add(employeesUid);
+      setState(() {});
+      print('Wyslano Zaproszenie');
+    } else {
+      print('Problem z wyslaniem zaproszenia. Brak Uid firmy i pracownika.');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     // final searchEmployeesBaseData = Provider.of<List<SearchEmployeesBaseData>>(context);
@@ -230,6 +304,9 @@ class _SearchEmployeesState extends State<SearchEmployees> {
                 onChanged: (String newValue) {
                   setState(() {
                     dropdownValue = newValue;
+                    if (dropdownValue != 'Wybierz') {
+                      _getEmployees();
+                    }
                   });
                 },
                 items: <String>['Wybierz', 'Driver', 'Spedytorzy']
@@ -342,18 +419,74 @@ class _SearchEmployeesState extends State<SearchEmployees> {
                                   IconButton(
                                       icon: Icon(Icons.open_in_new),
                                       onPressed: () {
+                                        _openFullDataEmployee(
+                                            context,
+                                            sentInvitations.any((test) {
+                                              return test ==
+                                                  _employees[index].driverUid;
+                                            })
+                                                ? null
+                                                : _sendInv,
+                                            _employees[index],
+                                            widget.companyData);
                                         print('Pokaz szczegoly');
                                       }),
                                   IconButton(
-                                      icon: Icon(Icons.add_box),
-                                      onPressed: () {
-                                        print('Wyslij Zaproszenie');
-                                      }),
+                                      icon: sentInvitations.any((test) {
+                                        return test ==
+                                            _employees[index].driverUid;
+                                      })
+                                          ? Icon(Icons.check_box)
+                                          : Icon(Icons.add_box),
+                                      color: sentInvitations.any((test) {
+                                        return test ==
+                                            _employees[index].driverUid;
+                                      })
+                                          ? Colors.grey
+                                          : Colors.green,
+                                      onPressed: sentInvitations.any((test) {
+                                        return test ==
+                                            _employees[index].driverUid;
+                                      })
+                                          ? null
+                                          : () {
+                                              _sendInv(
+                                                  companyData: widget
+                                                      .companyData.uidCompany,
+                                                  employeesUid: _employees[index]
+                                                      .driverUid,
+                                                  nameCompany: widget
+                                                      .companyData.nameCompany,
+                                                  yearEstablishmentCompany: widget
+                                                      .companyData
+                                                      .yearEstablishmentCompany,
+                                                  firstNameDriver:
+                                                      _employees[index]
+                                                          .firstNameDriver,
+                                                  lastNameDriver:
+                                                      _employees[index]
+                                                          .lastNameDriver,
+                                                  drivingLicenseFrom:
+                                                      _employees[index]
+                                                          .drivingLicenseFrom,
+                                                  drivingLicense:
+                                                      _employees[index]
+                                                          .drivingLicense,
+                                                  knownLanguages:
+                                                      _employees[index]
+                                                          .knownLanguages,
+                                                  totalDistanceTraveled:
+                                                      _employees[index]
+                                                          .totalDistanceTraveled);
+                                            }),
                                 ],
                               )),
                             ),
                           ),
-                          index == _employees.length - 1 && _gettingMoreEmployees == true ? Text('Ladowanie') : SizedBox(),
+                          index == _employees.length - 1 &&
+                                  _gettingMoreEmployees == true
+                              ? Text('Ladowanie')
+                              : SizedBox(),
                         ],
                       ),
                     );

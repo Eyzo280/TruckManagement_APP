@@ -7,7 +7,7 @@ import 'package:truckmanagement_app/widgets/userPage/chief_acc/chief_select_page
 import 'package:truckmanagement_app/widgets/userPage/chief_acc/models/company_Employees.dart';
 import 'package:truckmanagement_app/widgets/userPage/chief_acc/pages/company/invites.dart';
 import 'package:truckmanagement_app/widgets/userPage/chief_acc/pages/company/main_company_look_trucker.dart';
-import 'package:truckmanagement_app/widgets/userPage/chief_acc/pages/company/search_Employees.dart';
+import 'package:truckmanagement_app/widgets/userPage/chief_acc/pages/company/search_employees/search_Employees.dart';
 import 'package:truckmanagement_app/widgets/userPage/chief_acc/services/database_company.dart';
 
 class CompanyMain extends StatelessWidget {
@@ -51,7 +51,7 @@ class CompanyMain extends StatelessWidget {
 
   }
 
-  void _openSearchEmployees(BuildContext ctx) {
+  void _openSearchEmployees(BuildContext ctx, companyData) {
     Navigator.of(ctx).push(MaterialPageRoute(builder: (_){
       return 
            /* StreamProvider<List<SearchEmployeesBaseData>>.value(
@@ -59,7 +59,7 @@ class CompanyMain extends StatelessWidget {
                 Database_CompanyEmployees().getSearchEmployeesBaseData,
             child: SearchEmployees());
             */
-            SearchEmployees();
+            SearchEmployees(companyData: companyData);
     }));
 
   }
@@ -118,7 +118,7 @@ class CompanyMain extends StatelessWidget {
               leading: Icon(Icons.search),
               title: Text('Szukaj Pracownikow'),
               onTap: () {
-                _openSearchEmployees(context);
+                _openSearchEmployees(context, companyData);
                 print('Szukaj Pracownikow');
               },
             ),
