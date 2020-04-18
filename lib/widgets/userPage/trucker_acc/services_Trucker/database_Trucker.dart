@@ -30,12 +30,17 @@ class DataBase_Trucker {
 
   Future sendInvite({
     String companyUid,
+    DateTime dateOfEmplotment,
+    String drivingLicense,
+    DateTime drivingLicenseFrom,
     String firstNameDriver,
+    String knownLanguages,
     String lastNameDriver,
     String numberPhone,
-    String knownLanguages,
     int totalDistanceTraveled,
+    String typeUser,
   }) async {
+    final CollectionReference driver = Firestore.instance.collection('Drivers');
     final CollectionReference company =
         Firestore.instance.collection('Companys');
 
@@ -44,12 +49,20 @@ class DataBase_Trucker {
         .collection('Invitations')
         .document(uid)
         .setData({
+      'dateOfEmplotment': dateOfEmplotment,
+      'drivingLicense': drivingLicense,
+      'drivingLicenseFrom': drivingLicenseFrom,
       'firstNameDriver': firstNameDriver,
+      'knownLanguages': knownLanguages,
       'lastNameDriver': lastNameDriver,
       'numberPhone': numberPhone,
-      'knownLanguages': knownLanguages,
       'totalDistanceTraveled': totalDistanceTraveled,
+      'typeUser': typeUser,
       'dateSentInv': DateTime.now(),
+    }).whenComplete((){
+      driver.document(uid).collection('SentInvitations').document(companyUid).setData({
+        // Trzeba dodac dane firmy
+      });
     });
   }
 }

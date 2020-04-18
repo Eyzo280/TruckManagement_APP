@@ -68,23 +68,31 @@ class CompanyData {
   });
 }
 
-class InvBaseData {
+class InvData {
   final String invUid; // uid
   final DateTime dateSentInv; // uid Select Company
-  final String firstNameDriver; // ogloszenie
-  final String knownLanguages; // nazwa firmy
-  final String lastNameDriver; // ilosc pracownikow
-  final String numberPhone; // rok zalozenia firmy
-  final int totalDistanceTraveled; // rok zalozenia firmy
+  final DateTime dateOfEmplotment; // Data utworzenia konta
+  final String drivingLicense; // Prawo jazdy
+  final DateTime drivingLicenseFrom; // od kiedy prawojazdy
+  final String firstNameDriver; // Imie
+  final String knownLanguages; // Jakie zna jezyki
+  final String lastNameDriver; // Nazwisko
+  final String numberPhone; // Nr tel
+  final int totalDistanceTraveled; // Calkowita ilosc przejechanych km
+  final String typeUser; // typ Konta uzytkownika
 
-  InvBaseData({
+  InvData({
     @required this.invUid,
     @required this.dateSentInv,
+     @required this.dateOfEmplotment,
     @required this.firstNameDriver,
-    @required this.knownLanguages,
     @required this.lastNameDriver,
     @required this.numberPhone,
+    @required this.drivingLicense,
+    @required this.drivingLicenseFrom,
+    @required this.knownLanguages,
     @required this.totalDistanceTraveled,
+    @required this.typeUser,
   });
 }
 
@@ -128,18 +136,18 @@ class SearchEmployeesBaseData {
     month = monthNow - monthAcc;
     day = dayNow - dayAcc;
 
-    int amountDay =
-        DateTime.now().difference(registerAccTime).inDays;
+    int amountDay = DateTime.now().difference(registerAccTime).inDays;
 
-    if (year != 0 && amountDay > 365) {                  //                  Trzeba jeszcze sprawdzic
+    if (year != 0 && amountDay > 365) {
+      //                  Trzeba jeszcze sprawdzic
       int amount = (amountDay / 365).truncate();
       if (amount == 1) {
         print('Ponad roku');
         return 'Ponad roku';
       } // else if (amount < 5) {
-        // print('Ponad ${amount.toString()} lata');
-        // return 'Ponad ${amount.toString()} lata';
-        // } 
+      // print('Ponad ${amount.toString()} lata');
+      // return 'Ponad ${amount.toString()} lata';
+      // }
       else {
         print('Ponad ${amount.toString()} lat');
         return 'Ponad ${amount.toString()} lat';

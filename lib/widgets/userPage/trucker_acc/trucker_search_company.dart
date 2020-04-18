@@ -101,12 +101,16 @@ class TruckerSearchCompany extends StatelessWidget {
                             onPressed: () {
                               DataBase_Trucker(uid: userData.driverUid).sendInvite(
                                 companyUid: searchCompanys[index].idCompany,
+                                dateOfEmplotment: userData.dateOfEmplotment,
+                                drivingLicense: userData.drivingLicense,
+                                drivingLicenseFrom: userData.drivingLicenseFrom,
                                 firstNameDriver: userData.firstNameDriver,
+                                knownLanguages: userData.knownLanguages,
                                 lastNameDriver: userData.lastNameDriver,
                                 numberPhone: userData.numberPhone,
-                                knownLanguages: userData.knownLanguages,
                                 totalDistanceTraveled:
                                     userData.totalDistanceTraveled,
+                                typeUser: userData.typeUser,
                               );
                               print('Wyslij Prosbe');
                             }),

@@ -225,15 +225,18 @@ class DatabaseService {
   DriverTruck _getDataDriver(DocumentSnapshot snapshot) {
     return DriverTruck(
       driverUid: snapshot.documentID,
-      firstNameDriver: snapshot.data['firstNameDriver'] ?? null,
-      lastNameDriver: snapshot.data['lastNameDriver'] ?? null,
-      numberPhone: snapshot.data['numberPhone'] ?? null,
+      dateOfEmplotment: DateTime.fromMillisecondsSinceEpoch(
+              snapshot.data['dateOfEmplotment'].seconds * 1000) ?? null,
       drivingLicense: snapshot.data['drivingLicense'] ?? null,
       drivingLicenseFrom: DateTime.fromMillisecondsSinceEpoch(
               snapshot.data['drivingLicenseFrom'].seconds * 1000) ??
           null,
+      firstNameDriver: snapshot.data['firstNameDriver'] ?? null,
       knownLanguages: snapshot.data['knownLanguages'] ?? null,
+      lastNameDriver: snapshot.data['lastNameDriver'] ?? null,
+      numberPhone: snapshot.data['numberPhone'] ?? null,
       totalDistanceTraveled: snapshot.data['totalDistanceTraveled'] ?? null,
+      typeUser: snapshot.data['typeUser'] ?? null,
     );
   }
 

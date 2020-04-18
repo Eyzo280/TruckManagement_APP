@@ -36,16 +36,19 @@ class ChiefUidCompanys {
 
 class DriverTruck {
   final String driverUid; // Uid
-  final String firstNameDriver; // Imie
-  final String lastNameDriver; // Nazwisko
-  final String numberPhone; // Nr tel
+  final DateTime dateOfEmplotment; // Data utworzenia konta
   final String drivingLicense; // Prawo jazdy
   final DateTime drivingLicenseFrom; // od kiedy prawojazdy
+  final String firstNameDriver; // Imie
   final String knownLanguages; // Jakie zna jezyki
+  final String lastNameDriver; // Nazwisko
+  final String numberPhone; // Nr tel
   final int totalDistanceTraveled; // Calkowita ilosc przejechanych km
+  final String typeUser;
 
   DriverTruck({
     @required this.driverUid,
+    @required this.dateOfEmplotment,
     @required this.firstNameDriver,
     @required this.lastNameDriver,
     @required this.numberPhone,
@@ -53,5 +56,6 @@ class DriverTruck {
     @required this.drivingLicenseFrom,
     @required this.knownLanguages,
     @required this.totalDistanceTraveled,
+    @required this.typeUser,
   });
 }

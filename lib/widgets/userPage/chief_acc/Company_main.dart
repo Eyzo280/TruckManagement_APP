@@ -5,7 +5,7 @@ import 'package:truckmanagement_app/models/user.dart';
 import 'package:truckmanagement_app/services/database.dart';
 import 'package:truckmanagement_app/widgets/userPage/chief_acc/chief_select_page.dart';
 import 'package:truckmanagement_app/widgets/userPage/chief_acc/models/company_Employees.dart';
-import 'package:truckmanagement_app/widgets/userPage/chief_acc/pages/company/invites.dart';
+import 'package:truckmanagement_app/widgets/userPage/chief_acc/pages/company/invites/invites.dart';
 import 'package:truckmanagement_app/widgets/userPage/chief_acc/pages/company/main_company_look_trucker.dart';
 import 'package:truckmanagement_app/widgets/userPage/chief_acc/pages/company/search_employees/search_Employees.dart';
 import 'package:truckmanagement_app/widgets/userPage/chief_acc/services/database_company.dart';
@@ -43,10 +43,12 @@ class CompanyMain extends StatelessWidget {
 
   void _openInvitations(BuildContext ctx, companyUid) {
     Navigator.of(ctx).push(MaterialPageRoute(builder: (_){
-      return StreamProvider<List<InvBaseData>>.value(
+      return /* StreamProvider<List<InvBaseData>>.value(
             value:
                 Database_CompanyEmployees(companyUid: companyUid).getInvBaseData,
             child: Invitations(companyUid: companyUid));
+            */
+            Invitations(companyUid: companyUid);
     }));
 
   }
@@ -276,6 +278,7 @@ class CompanyMain extends StatelessWidget {
                                   padding: EdgeInsets.all(0),
                                   onPressed: () {
                                     // Trzeba zrobic nowe okno z zapraszaniem nowych kierowcow
+                                    _openSearchEmployees(context, companyData);
                                     print('Szukaj nowych kierowcow');
                                   },
                                   child: Container(

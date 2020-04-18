@@ -94,7 +94,7 @@ class Database_CompanyEmployees {
   }
 
   // Podstawowe informacje zaproszen
-
+/*
   List<InvBaseData> _getInvBaseData(QuerySnapshot snapshot) {
     return snapshot.documents.map((doc) {
       return InvBaseData(
@@ -118,7 +118,7 @@ class Database_CompanyEmployees {
         .snapshots()
         .map(_getInvBaseData);
   }
-
+*/
   // Akceptowanie zaproszenia
 
   Future acceptInv({
@@ -144,6 +144,10 @@ class Database_CompanyEmployees {
           .now(), // trzeba dodac ustawienie z tym kiedy prawcownicy dostaja wyplaty
       'salary': 7500, // trzeba dodawc ustawienie wyplaty kierowcow
       'statusDriver': false, // trzeba dodawc ustawienie zmiany statusu kierowcy
+    }).whenComplete(() {
+      Firestore.instance.collection('Drivers').document(driverUid).updateData({
+        'nameCompany': companyUid,              // trzeba bedzie chyba przerobic zeby byla odzielna kolekcja z firma, a w danych uzytkownika bedzie tylko, ze jest zatrudniony
+      });
     }).whenComplete(() {
       company
           .document(companyUid)
