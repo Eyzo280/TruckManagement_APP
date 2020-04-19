@@ -13,14 +13,13 @@ import 'package:truckmanagement_app/widgets/userPage/chief_acc/services/database
 class CompanyMain extends StatelessWidget {
   final AuthService _auth = AuthService();
 
-  void openChiefLookTrucker(BuildContext ctx, String company) {
+  void openChiefLookTrucker(BuildContext ctx, company) {
     Navigator.of(ctx).push(
       MaterialPageRoute(builder: (_) {
         return StreamProvider<List<BaseTruckDriverData>>.value(
-            value:
-                Database_CompanyEmployees(uid: company).getBaseDataEmployees,
-            child:
-                MainCompanyLookTrucker(company)); // wysyla companyuid i otwiera ChiefLookTrucker
+            value: Database_CompanyEmployees(uid: company.uidCompany).getBaseDataEmployees,
+            child: MainCompanyLookTrucker(
+                company)); // wysyla companyuid i otwiera ChiefLookTrucker
       }),
     );
   }
@@ -42,28 +41,26 @@ class CompanyMain extends StatelessWidget {
   }
 
   void _openInvitations(BuildContext ctx, companyUid) {
-    Navigator.of(ctx).push(MaterialPageRoute(builder: (_){
+    Navigator.of(ctx).push(MaterialPageRoute(builder: (_) {
       return /* StreamProvider<List<InvBaseData>>.value(
             value:
                 Database_CompanyEmployees(companyUid: companyUid).getInvBaseData,
             child: Invitations(companyUid: companyUid));
             */
-            Invitations(companyUid: companyUid);
+          Invitations(companyUid: companyUid);
     }));
-
   }
 
   void _openSearchEmployees(BuildContext ctx, companyData) {
-    Navigator.of(ctx).push(MaterialPageRoute(builder: (_){
-      return 
-           /* StreamProvider<List<SearchEmployeesBaseData>>.value(
+    Navigator.of(ctx).push(MaterialPageRoute(builder: (_) {
+      return
+          /* StreamProvider<List<SearchEmployeesBaseData>>.value(
             value:
                 Database_CompanyEmployees().getSearchEmployeesBaseData,
             child: SearchEmployees());
             */
-            SearchEmployees(companyData: companyData);
+          SearchEmployees(companyData: companyData);
     }));
-
   }
 
   @override
@@ -78,7 +75,7 @@ class CompanyMain extends StatelessWidget {
             child: IconButton(
               icon: Icon(Icons.lock_outline),
               onPressed: () async {
-                return await _auth.signOut();
+                return await _auth.signOut(context);
               },
             ),
           ),
@@ -92,12 +89,37 @@ class CompanyMain extends StatelessWidget {
               decoration: BoxDecoration(
                 color: Colors.blue,
               ),
-              child: Text(
-                'Zarzadzanie',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 24,
-                ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  FittedBox(
+                    child: Text(
+                      'Firma: ' + companyData.nameCompany,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.01,
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.height * 0.1,
+                    height: MediaQuery.of(context).size.height * 0.1,
+                    decoration: BoxDecoration(
+                        image: DecorationImage(
+                            image:
+                                NetworkImage('https://i.imgur.com/BoN9kdC.png'),
+                            fit: BoxFit.fill),
+                        shape: BoxShape.circle),
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.01,
+                  ),
+                  Text('ID: ${companyData.uidCompany}'),
+                ],
               ),
             ),
             ListTile(
@@ -254,7 +276,7 @@ class CompanyMain extends StatelessWidget {
                                   padding: EdgeInsets.all(0),
                                   onPressed: () {
                                     openChiefLookTrucker(
-                                        context, companyData.uidCompany);
+                                        context, companyData);
                                     print('Podglad Kierowcow Firmy');
                                   },
                                   child: Container(

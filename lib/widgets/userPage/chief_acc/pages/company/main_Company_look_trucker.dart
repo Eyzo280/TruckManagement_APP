@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:truckmanagement_app/models/user.dart';
 import 'package:truckmanagement_app/widgets/userPage/chief_acc/pages/company/ColumnCompanyLookDriverTrucks.dart';
+import 'package:truckmanagement_app/widgets/userPage/chief_acc/pages/company/search_employees/search_Employees.dart';
 import 'package:truckmanagement_app/widgets/userPage/chief_acc/pages/company/top_body_CompanyLookDriverTrucks.dart';
 
 class MainCompanyLookTrucker extends StatefulWidget {
-  final String companyUid;
+  var companyData;
 
-  MainCompanyLookTrucker(this.companyUid);
+  MainCompanyLookTrucker(this.companyData);
 
   @override
   _CompanyLookTruckerState createState() => _CompanyLookTruckerState();
@@ -50,6 +51,18 @@ class _CompanyLookTruckerState extends State<MainCompanyLookTrucker> {
 
 
 */
+
+  void _openSearchEmployees(BuildContext ctx, companyData) {
+    Navigator.of(ctx).push(MaterialPageRoute(builder: (_) {
+      return
+          /* StreamProvider<List<SearchEmployeesBaseData>>.value(
+            value:
+                Database_CompanyEmployees().getSearchEmployeesBaseData,
+            child: SearchEmployees());
+            */
+          SearchEmployees(companyData: companyData);
+    }));
+  }
   
 
   @override
@@ -65,6 +78,7 @@ class _CompanyLookTruckerState extends State<MainCompanyLookTrucker> {
               icon: Icon(Icons.add),
               onPressed: () {
                 //showCreatorNewDriverTruck(context);
+                _openSearchEmployees(context, widget.companyData);
                 print('Add new Trucker');
               },
             ),
@@ -81,7 +95,7 @@ class _CompanyLookTruckerState extends State<MainCompanyLookTrucker> {
           
           Container(
             height: (MediaQuery.of(context).size.height - appBar.preferredSize.height - MediaQuery.of(context).padding.top) * 0.83,
-            child: ColumnCompanyLookDriverTrucks(widget.companyUid),
+            child: ColumnCompanyLookDriverTrucks(widget.companyData.uidCompany),
           ),
         ],
       ),

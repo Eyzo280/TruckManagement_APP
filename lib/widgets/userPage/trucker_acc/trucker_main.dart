@@ -19,7 +19,7 @@ class TruckerMain extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<DriverTruck>(context);
+    final user = Provider.of<DriverTruck>(context) ?? null;
     return Scaffold(
       appBar: AppBar(
         title: Text('Kierowca - Nazwa'),
@@ -29,7 +29,7 @@ class TruckerMain extends StatelessWidget {
             child: IconButton(
               icon: Icon(Icons.lock_outline),
               onPressed: () async {
-                return await _auth.signOut();
+                return await _auth.signOut(context);
               },
             ),
           ),
@@ -43,12 +43,28 @@ class TruckerMain extends StatelessWidget {
               decoration: BoxDecoration(
                 color: Colors.blue,
               ),
-              child: Text(
-                'Name',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 24,
-                ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  FittedBox(
+                                      child: Text(
+                      user.firstNameDriver + ' ' + user.lastNameDriver,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.01,
+                  ),
+                  Container(width: MediaQuery.of(context).size.height * 0.1, height: MediaQuery.of(context).size.height * 0.1, decoration: BoxDecoration(image: DecorationImage(image: NetworkImage('https://i.imgur.com/BoN9kdC.png'), fit: BoxFit.fill), shape: BoxShape.circle),),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.01,
+                  ),
+                  Text('ID: ${user.driverUid}'),
+                ],
               ),
             ),
             ListTile(
@@ -82,10 +98,10 @@ class TruckerMain extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Text('Imie: ${user.firstNameDriver}'),
-                      Text('Nazwisko: ${user.lastNameDriver}'),
-                      Text('Prawo jazdy: ${user.drivingLicense}'),
-                      Text('Przejechane km: ${user.totalDistanceTraveled}'),
+                      user != null ? Text('Imie: ${user.firstNameDriver}') : CircularProgressIndicator(),
+                      user != null ? Text('Nazwisko: ${user.lastNameDriver}') : CircularProgressIndicator(),
+                      user != null ? Text('Prawo jazdy: ${user.drivingLicense}') : CircularProgressIndicator(),
+                      user != null ? Text('Przejechane km: ${user.totalDistanceTraveled}') : CircularProgressIndicator(),
                     ],
                   ),
                 ),

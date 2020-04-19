@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:truckmanagement_app/main.dart';
 import 'package:truckmanagement_app/models/user.dart';
 import 'package:truckmanagement_app/services/database.dart';
+import 'package:flutter/material.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -58,9 +60,18 @@ class AuthService {
 
   // Wylogowanie
 
-  Future signOut() async {
+  Future signOut(context) async {
     try {
-      return await _auth.signOut();
+      await Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (ctx) {
+                      _auth.signOut();
+                      return MyApp();
+                    },
+                  ),
+                );
+      // return await _auth.signOut();
     } catch (e) {
       print('Wystapil blad przy wylogowywaniu.');
       print(e);
