@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:truckmanagement_app/models/chat.dart';
 import 'package:truckmanagement_app/widgets/userPage/chief_acc/models/company_Employees.dart';
 
 class FullDataEmployee extends StatefulWidget {
@@ -53,9 +54,37 @@ class _FullDataEmployeeState extends State<FullDataEmployee> {
                       IconButton(
                           icon: Icon(
                             Icons.call,
-                            color: widget.driverData.numberPhone != null ? Colors.green : Colors.grey,
+                            color: widget.driverData.numberPhone != null
+                                ? Colors.green
+                                : Colors.grey,
                           ),
-                          onPressed: () => widget.driverData.numberPhone != null ? print('Zadzwon') : null)
+                          onPressed: () => widget.driverData.numberPhone != null
+                              ? print('Zadzwon')
+                              : null)
+                    ],
+                  ),
+                ),
+                Container(
+                  width: (MediaQuery.of(context).size.width -
+                          MediaQuery.of(context).padding.vertical -
+                          10) *
+                      0.5,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text('Chat: '),
+                      IconButton(
+                          icon: Icon(
+                            Icons.chat,
+                            color: Colors.blue,
+                          ),
+                          onPressed: () {
+                            Chat(
+                                    mainUid: widget.companyData.uidCompany,
+                                    peopleUid: widget.driverData.driverUid)
+                                .searchChat(context);
+                            print('Wlacz Chat');
+                          })
                     ],
                   ),
                 ),
@@ -160,20 +189,9 @@ class _FullDataEmployeeState extends State<FullDataEmployee> {
                       if (widget.sendInv != null) {
                         setState(() {
                           widget.sendInv(
-                              companyData: widget.companyData.uidCompany,
-                              employeesUid: widget.driverData.driverUid,
-                              nameCompany: widget.companyData.nameCompany,
-                              yearEstablishmentCompany:
-                                  widget.companyData.yearEstablishmentCompany,
-                              firstNameDriver:
-                                  widget.driverData.firstNameDriver,
-                              lastNameDriver: widget.driverData.lastNameDriver,
-                              drivingLicenseFrom:
-                                  widget.driverData.drivingLicenseFrom,
-                              drivingLicense: widget.driverData.drivingLicense,
-                              knownLanguages: widget.driverData.knownLanguages,
-                              totalDistanceTraveled:
-                                  widget.driverData.totalDistanceTraveled);
+                            companyData: widget.companyData,
+                            employeesData: widget.driverData,
+                          );
                           widget.sendInv = null;
                         });
                       } else {

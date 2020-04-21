@@ -86,6 +86,7 @@ class Database_CompanyEmployees {
       yearEstablishmentCompany: DateTime.fromMillisecondsSinceEpoch(
               doc.data['yearEstablishmentCompany'].seconds * 1000) ??
           DateTime.now(),
+          typeUser: doc.data['typeUser'] ?? '',
     );
   }
 
@@ -160,25 +161,18 @@ class Database_CompanyEmployees {
   // Funkcja do Wysylania Zaproszenia
 
   Future sendInvite({
-    String employeesUid,
-    String nameCompany,
-    DateTime yearEstablishmentCompany,
-    String firstNameDriver,
-    String lastNameDriver,
-    DateTime drivingLicenseFrom,
-    String drivingLicense,
-    String knownLanguages,
-    int totalDistanceTraveled,
+    companyData,
+    employeesData,
   }) async {
     final CollectionReference driver = Firestore.instance.collection('Drivers');
 
     driver
-        .document(employeesUid)
+        .document(employeesData.driverUid)
         .collection('Invitations')
-        .document(companyUid)
+        .document(companyData.uidCompany)
         .setData({
-      'nameCompany': nameCompany,
-      'yearEstablishmentCompany': yearEstablishmentCompany,
+      'nameCompany': companyData.nameCompany,
+      'yearEstablishmentCompany': companyData.yearEstablishmentCompany,
       'dateSentInv': DateTime.now(),
     });
 
@@ -186,16 +180,17 @@ class Database_CompanyEmployees {
         Firestore.instance.collection('Companys');
 
     company
-        .document(companyUid)
+        .document(companyData.uidCompany)
         .collection('SentInvitations')
-        .document(employeesUid)
+        .document(employeesData.driverUid)
         .setData({
-      'firstNameDriver': firstNameDriver,
-      'lastNameDriver': lastNameDriver,
-      'drivingLicenseFrom': drivingLicenseFrom,
-      'drivingLicense': drivingLicense,
-      'knownLanguages': knownLanguages,
-      'totalDistanceTraveled': totalDistanceTraveled,
+      'firstNameDriver': employeesData.firstNameDriver,
+      'lastNameDriver': employeesData.lastNameDriver,
+      'drivingLicenseFrom': employeesData.drivingLicenseFrom,
+      'drivingLicense': employeesData.drivingLicense,
+      'knownLanguages': employeesData.knownLanguages,
+      'totalDistanceTraveled': employeesData.totalDistanceTraveled,
+      'typeUser': employeesData.typeUser,
       'dateSentInv': DateTime.now(),
     });
   }

@@ -58,6 +58,7 @@ class CompanyData {
   final String nameCompany; // nazwa firmy
   final int employees; // ilosc pracownikow
   final DateTime yearEstablishmentCompany; // rok zalozenia firmy
+  final String typeUser;
 
   CompanyData({
     @required this.uidCompany,
@@ -65,6 +66,7 @@ class CompanyData {
     @required this.nameCompany,
     @required this.employees,
     @required this.yearEstablishmentCompany,
+    @required this.typeUser,
   });
 }
 
@@ -106,6 +108,7 @@ class SearchEmployeesBaseData {
   final String lastNameDriver;
   final String numberPhone;
   final int totalDistanceTraveled;
+  final String typeUser;
 
   SearchEmployeesBaseData({
     this.driverUid,
@@ -117,6 +120,7 @@ class SearchEmployeesBaseData {
     this.lastNameDriver,
     this.numberPhone,
     this.totalDistanceTraveled,
+    this.typeUser,
   });
 
   calculationAccountActivityTime<String>({registerAccTime}) {

@@ -70,6 +70,7 @@ class _SearchEmployeesState extends State<SearchEmployees> {
           lastNameDriver: doc.data['lastNameDriver'] ?? null,
           numberPhone: doc.data['numberPhone'] ?? null,
           totalDistanceTraveled: doc.data['totalDistanceTraveled'] ?? null,
+          typeUser: doc.data['typeUser'] ?? null,
         );
       }).toList();
       _lastDocument =
@@ -131,6 +132,7 @@ class _SearchEmployeesState extends State<SearchEmployees> {
         lastNameDriver: doc.data['lastNameDriver'] ?? null,
         numberPhone: doc.data['numberPhone'] ?? null,
         totalDistanceTraveled: doc.data['totalDistanceTraveled'] ?? null,
+        typeUser: doc.data['typeUser'] ?? null,
       );
     }).toList());
 
@@ -248,29 +250,15 @@ class _SearchEmployeesState extends State<SearchEmployees> {
 
   void _sendInv(
       {companyData,
-      employeesUid,
-      nameCompany,
-      yearEstablishmentCompany,
-      firstNameDriver,
-      lastNameDriver,
-      drivingLicenseFrom,
-      drivingLicense,
-      knownLanguages,
-      totalDistanceTraveled}) {
-    if (companyData != null && employeesUid != null) {
+      employeesData
+      }) {
+    if (companyData != null && employeesData != null) {
       Database_CompanyEmployees(companyUid: widget.companyData.uidCompany)
           .sendInvite(
-        employeesUid: employeesUid,
-        nameCompany: nameCompany,
-        yearEstablishmentCompany: yearEstablishmentCompany,
-        firstNameDriver: firstNameDriver,
-        lastNameDriver: lastNameDriver,
-        drivingLicenseFrom: drivingLicenseFrom,
-        drivingLicense: drivingLicense,
-        knownLanguages: knownLanguages,
-        totalDistanceTraveled: totalDistanceTraveled,
+        companyData: companyData,
+        employeesData: employeesData,
       );
-      sentInvitations.add(employeesUid);
+      sentInvitations.add(employeesData.driverUid);
       setState(() {});
       print('Wyslano Zaproszenie');
     } else {
@@ -451,33 +439,8 @@ class _SearchEmployeesState extends State<SearchEmployees> {
                                           ? null
                                           : () {
                                               _sendInv(
-                                                  companyData: widget
-                                                      .companyData.uidCompany,
-                                                  employeesUid: _employees[index]
-                                                      .driverUid,
-                                                  nameCompany: widget
-                                                      .companyData.nameCompany,
-                                                  yearEstablishmentCompany: widget
-                                                      .companyData
-                                                      .yearEstablishmentCompany,
-                                                  firstNameDriver:
-                                                      _employees[index]
-                                                          .firstNameDriver,
-                                                  lastNameDriver:
-                                                      _employees[index]
-                                                          .lastNameDriver,
-                                                  drivingLicenseFrom:
-                                                      _employees[index]
-                                                          .drivingLicenseFrom,
-                                                  drivingLicense:
-                                                      _employees[index]
-                                                          .drivingLicense,
-                                                  knownLanguages:
-                                                      _employees[index]
-                                                          .knownLanguages,
-                                                  totalDistanceTraveled:
-                                                      _employees[index]
-                                                          .totalDistanceTraveled);
+                                                  companyData: widget.companyData,
+                                                  employeesData: _employees[index]);
                                             }),
                                 ],
                               )),
