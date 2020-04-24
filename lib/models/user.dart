@@ -59,3 +59,14 @@ class DriverTruck {
     @required this.typeUser,
   });
 }
+
+class PeerChat {
+  final String uid;
+  final bool conversation;
+  final String firstName;
+  final String lastName;
+  final String typeUser;
+
+  PeerChat({this.uid, this.conversation , this.firstName, this.lastName, this.typeUser});
+
+}

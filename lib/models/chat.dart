@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:truckmanagement_app/models/user.dart';
+import 'package:truckmanagement_app/widgets/userPage/chief_acc/models/company_Employees.dart';
 import 'package:truckmanagement_app/widgets/userPage/chief_acc/pages/company/chat/conversation/conversation.dart';
 
 class Chat {
@@ -172,6 +174,119 @@ class Chat {
       }
     } catch (err) {
       print(err);
+    }
+  }
+
+  // Pobieranie danych o Chacie
+  /*
+  Stream<List<PeerChat>> getUserChats() async* {
+    var chatsStream = Firestore.instance
+        .collection('Messages')
+        .where(mainUid, whereIn: [true, false]).snapshots();
+    var chats = List<PeerChat>();
+    await for (var chatsSnapshot in chatsStream) {
+      for (var chatDoc in chatsSnapshot.documents) {
+        var chat;
+        var chatUid = chatDoc.documentID.split('-');
+        print(chatDoc.data['0CxwOlNsJbME7HgvY27X3A7V6NI2']);
+        for (var splitedUid in chatUid) {
+          if (mainUid != splitedUid) {
+
+            final bool conversation = chatDoc.data['0CxwOlNsJbME7HgvY27X3A7V6NI2'];
+            print(conversation);
+            await Firestore
+                .instance // Sprawdzanie, gdzie znajduja sie uzytkownicy i tworzenie objektow
+                .collection('Drivers')
+                .document(splitedUid)
+                .get()
+                .then((val) {
+              if (val.exists) {
+                chat = PeerChat(
+                    uid: splitedUid ?? null,
+                    firstName: val.data['firstName'] ?? null,
+                    lastName: val.data['lastName'] ?? null,
+                    typeUser: val.data['typeUser'] ?? null);
+              } else {
+                Firestore.instance
+                    .collection('Drivers')
+                    .document(splitedUid)
+                    .get()
+                    .then((val) {
+                  if (val.exists) {
+                    chat = PeerChat(
+                        uid: splitedUid ?? null,
+                        conversation: conversation ?? null,
+                        firstName: val.data['firstName'] ??
+                            null, // Pasowalo by przerobic baze danych, zeby zamiast firstNameDriver bylo firstName itp
+                        lastName: val.data['lastName'] ?? null,
+                        typeUser: val.data['typeUser'] ?? null);
+                        
+                  } else {
+                    print('Trzeba dodac Forwarders do Chatu w models/chat.dart !!!');
+                  }
+                });
+              }
+            });
+          }
+          chats.add(chat);
+        }
+        yield chats;
+      }
+    }
+  }
+  */
+
+  Stream<List<PeerChat>> getUserChats() async* {
+    var chatsStream = Firestore.instance
+        .collection('Messages')
+        .where(mainUid, whereIn: [true, false]).snapshots();
+    var chats = List<PeerChat>();
+    await for (var chatsSnapshot in chatsStream) {
+      for (var chatDoc in chatsSnapshot.documents) {
+        var chat;
+        var chatUid = chatDoc.documentID.split('-');
+        for (var splitedUid in chatUid) {
+          if (mainUid != splitedUid) {
+            var complete;
+            await Firestore
+                .instance // Sprawdzanie, gdzie znajduja sie uzytkownicy i tworzenie objektow
+                .collection('Chiefs')
+                .document(splitedUid)
+                .get()
+                .then((val) async {
+              if (val.exists) {
+                complete = val;
+              } else {
+                await Firestore.instance
+                    .collection('Drivers')
+                    .document(splitedUid)
+                    .get()
+                    .then((val) {
+                  if (val.exists) {
+                    complete = val;
+                  } else {
+                    print(
+                        'Trzeba dodac Forwarders do Chatu w models/chat.dart !!!');
+                  }
+                });
+              }
+            });
+            if (complete != null) {
+              chat = PeerChat(
+                  uid: splitedUid ?? null,
+                  conversation: chatDoc.data[splitedUid] ?? null,
+                  firstName: complete.data['firstNameDriver'] ??
+                      null, // Pasowalo by przerobic baze danych, zeby zamiast firstNameDriver bylo firstName itp
+                  lastName: complete.data['lastNameDriver'] ?? null,
+                  typeUser: complete.data['typeUser'] ?? null);
+            } else {
+              print('Nie znaleziono danych.');
+            }
+            chats.add(chat);
+          }
+        }
+      }
+      yield chats;
     }
   }
 }

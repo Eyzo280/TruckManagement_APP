@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:truckmanagement_app/models/chat.dart';
 import 'package:truckmanagement_app/widgets/userPage/chief_acc/pages/company/chat/conversation/inputConversation.dart';
 
-class Conversation extends StatefulWidget {
-  bool conversation;
+
+class Conversation extends StatelessWidget {
+bool conversation;
   bool firstMessage;
 
   final String mainUid;
@@ -20,11 +20,6 @@ class Conversation extends StatefulWidget {
     @required this.groupChatId,
   });
 
-  @override
-  _ConversationState createState() => _ConversationState();
-}
-
-class _ConversationState extends State<Conversation> {
   List listMessages = [];
   final ScrollController listScrollController = new ScrollController();
 
@@ -63,7 +58,7 @@ class _ConversationState extends State<Conversation> {
   }
 
   Widget _viewer_messages(int index, DocumentSnapshot document) {
-    if (document['idFrom'] == widget.mainUid) {
+    if (document['idFrom'] == mainUid) {
       // Right (my message)
       return Row(
         children: <Widget>[
@@ -140,7 +135,7 @@ class _ConversationState extends State<Conversation> {
   bool isLastMessageLeft(int index) {
     if ((index > 0 &&
             listMessages != null &&
-            listMessages[index - 1]['idFrom'] == widget.mainUid) ||
+            listMessages[index - 1]['idFrom'] == mainUid) ||
         index == 0) {
       return true;
     } else {
@@ -151,7 +146,7 @@ class _ConversationState extends State<Conversation> {
   bool isLastMessageRight(int index) {
     if ((index > 0 &&
             listMessages != null &&
-            listMessages[index - 1]['idFrom'] != widget.mainUid) ||
+            listMessages[index - 1]['idFrom'] != mainUid) ||
         index == 0) {
       return true;
     } else {
@@ -167,7 +162,7 @@ class _ConversationState extends State<Conversation> {
     );
 
     print(
-        widget.conversation.toString() + ' ' + widget.firstMessage.toString());
+        conversation.toString() + ' ' + firstMessage.toString());
     return Scaffold(
       appBar: appBar,
       body: Column(
@@ -177,8 +172,8 @@ class _ConversationState extends State<Conversation> {
             child: StreamBuilder(
               stream: Firestore.instance
                   .collection('Messages')
-                  .document(widget.groupChatId)
-                  .collection(widget.groupChatId)
+                  .document(groupChatId)
+                  .collection(groupChatId)
                   .orderBy('timestamp', descending: true)
                   .limit(10)
                   .snapshots(),
@@ -202,7 +197,7 @@ class _ConversationState extends State<Conversation> {
               },
             ),
           ),
-          InputConversation(conversation: widget.conversation, mainUid: widget.mainUid, peopleUid: widget.peopleUid,),
+          InputConversation(conversation: conversation, mainUid: mainUid, peopleUid: peopleUid,),
         ],
       ),
     );

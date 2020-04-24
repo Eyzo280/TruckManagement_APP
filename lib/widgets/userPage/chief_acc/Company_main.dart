@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:truckmanagement_app/models/chat.dart';
 import 'package:truckmanagement_app/services/auth.dart';
 import 'package:truckmanagement_app/models/user.dart';
 import 'package:truckmanagement_app/services/database.dart';
 import 'package:truckmanagement_app/widgets/userPage/chief_acc/chief_select_page.dart';
 import 'package:truckmanagement_app/widgets/userPage/chief_acc/models/company_Employees.dart';
+import 'package:truckmanagement_app/widgets/userPage/chief_acc/pages/company/chat/chats.dart';
 import 'package:truckmanagement_app/widgets/userPage/chief_acc/pages/company/invites/invites.dart';
 import 'package:truckmanagement_app/widgets/userPage/chief_acc/pages/company/main_company_look_trucker.dart';
 import 'package:truckmanagement_app/widgets/userPage/chief_acc/pages/company/search_employees/search_Employees.dart';
@@ -17,7 +19,8 @@ class CompanyMain extends StatelessWidget {
     Navigator.of(ctx).push(
       MaterialPageRoute(builder: (_) {
         return StreamProvider<List<BaseTruckDriverData>>.value(
-            value: Database_CompanyEmployees(uid: company.uidCompany).getBaseDataEmployees,
+            value: Database_CompanyEmployees(uid: company.uidCompany)
+                .getBaseDataEmployees,
             child: MainCompanyLookTrucker(
                 company)); // wysyla companyuid i otwiera ChiefLookTrucker
       }),
@@ -60,6 +63,15 @@ class CompanyMain extends StatelessWidget {
             child: SearchEmployees());
             */
           SearchEmployees(companyData: companyData);
+    }));
+  }
+
+  void _openChats(ctx, companyUid) {
+    Navigator.of(ctx).push(MaterialPageRoute(builder: (_) {
+      return StreamProvider<List<PeerChat>>.value(
+        value: Chat(mainUid: companyUid, peopleUid: null).getUserChats(),
+        child: Chats(companyUid: companyUid),
+      );
     }));
   }
 
@@ -136,6 +148,14 @@ class CompanyMain extends StatelessWidget {
               onTap: () {
                 _openInvitations(context, companyData.uidCompany);
                 print('Zaproszenia');
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.chat),
+              title: Text('Chat'),
+              onTap: () {
+                _openChats(context, companyData.uidCompany);
+                print('Chat');
               },
             ),
             ListTile(
@@ -275,8 +295,7 @@ class CompanyMain extends StatelessWidget {
                                 child: FlatButton(
                                   padding: EdgeInsets.all(0),
                                   onPressed: () {
-                                    openChiefLookTrucker(
-                                        context, companyData);
+                                    openChiefLookTrucker(context, companyData);
                                     print('Podglad Kierowcow Firmy');
                                   },
                                   child: Container(
