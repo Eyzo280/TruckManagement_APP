@@ -1,4 +1,6 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:truckmanagement_app/models/chat.dart';
@@ -14,8 +16,31 @@ class Chats extends StatefulWidget {
 }
 
 class _ChatsState extends State<Chats> {
-  Widget _people(context, PeerChat document) {
-    
+  /*
+  String _imageUrl;
+
+  Future _getImage() async {
+    try {
+      await FirebaseStorage.instance
+          .ref()
+          .child('images/Users/ID/stefan.png')
+          .getDownloadURL()
+          .then((val) {
+        if (_imageUrl == null) {
+          setState(() {
+            _imageUrl = val;
+            print(val);
+          });
+        }
+      });
+    } catch (err) {
+      print(err);
+    }
+  }
+  */
+  Widget _screen(context, PeerChat document) {
+    // _getImage();
+
     return Container(
       child: FlatButton(
         child: Row(
@@ -57,8 +82,8 @@ class _ChatsState extends State<Chats> {
           ],
         ),
         onPressed: () {
-          Chat(mainUid: widget.companyUid, peopleUid: document.uid).searchChat(context);
-          
+          Chat(mainUid: widget.companyUid, peopleUid: document.uid)
+              .searchChat(context);
         },
         color: Colors.grey,
         padding: EdgeInsets.fromLTRB(25.0, 10.0, 25.0, 10.0),
@@ -83,17 +108,18 @@ class _ChatsState extends State<Chats> {
         body: Stack(children: <Widget>[
           // List
           Container(
-            child: chats == null ? Center(
+            child: chats == null
+                ? Center(
                     child: CircularProgressIndicator(
                       valueColor: AlwaysStoppedAnimation<Color>(Colors.grey),
                     ),
-                  ) : ListView.builder(
-              padding: EdgeInsets.all(10.0),
-              itemCount: chats.length,
-              itemBuilder: (context, index) =>
-                  _people(context, chats[index]),
-              
-            ),
+                  )
+                : ListView.builder(
+                    padding: EdgeInsets.all(10.0),
+                    itemCount: chats.length,
+                    itemBuilder: (context, index) =>
+                        _screen(context, chats[index]),
+                  ),
           )
         ]));
 

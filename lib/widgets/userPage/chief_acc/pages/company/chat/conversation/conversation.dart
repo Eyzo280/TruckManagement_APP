@@ -1,11 +1,12 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:truckmanagement_app/models/chat.dart';
 import 'package:truckmanagement_app/widgets/userPage/chief_acc/pages/company/chat/conversation/inputConversation.dart';
 
-
 class Conversation extends StatelessWidget {
-bool conversation;
+  bool conversation;
   bool firstMessage;
 
   final String mainUid;
@@ -22,40 +23,6 @@ bool conversation;
 
   List listMessages = [];
   final ScrollController listScrollController = new ScrollController();
-
-  Widget _peopleMessages() {
-    return Align(
-      alignment: Alignment.centerLeft,
-      child: Container(
-        padding: EdgeInsets.all(10),
-        child: Card(
-          color: Colors.grey,
-          elevation: 5,
-          child: Container(
-            padding: EdgeInsets.all(5),
-            child: Text('Message'),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _myMessages() {
-    return Align(
-      alignment: Alignment.centerRight,
-      child: Container(
-        padding: EdgeInsets.all(10),
-        child: Card(
-          color: Colors.grey,
-          elevation: 5,
-          child: Container(
-            padding: EdgeInsets.all(5),
-            child: Text('Message'),
-          ),
-        ),
-      ),
-    );
-  }
 
   Widget _viewer_messages(int index, DocumentSnapshot document) {
     if (document['idFrom'] == mainUid) {
@@ -78,7 +45,58 @@ bool conversation;
                       bottom: isLastMessageRight(index) ? 20.0 : 10.0,
                       right: 10.0),
                 )
-              : SizedBox(),
+              : Container(
+                  child: FlatButton(
+                    child: Material(
+                      child: CachedNetworkImage(
+                        placeholder: (context, url) => Container(
+                          child: CircularProgressIndicator(
+                            valueColor:
+                                AlwaysStoppedAnimation<Color>(Colors.blue),
+                          ),
+                          width: 200.0,
+                          height: 200.0,
+                          padding: EdgeInsets.all(70.0),
+                          decoration: BoxDecoration(
+                            color: Colors.grey,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(8.0),
+                            ),
+                          ),
+                        ),
+                        errorWidget: (context, url, error) => Material(
+                          child: Image.asset(
+                            'images/img_not_available.jpeg',
+                            width: 200.0,
+                            height: 200.0,
+                            fit: BoxFit.cover,
+                          ),
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(8.0),
+                          ),
+                          clipBehavior: Clip.hardEdge,
+                        ),
+                        imageUrl: document
+                            ['content'], // Trzeba zrobic stream z obiektem i dac tam getUrl
+                        width: 200.0,
+                        height: 200.0,
+                        fit: BoxFit.cover,
+                      ),
+                      borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                      clipBehavior: Clip.hardEdge,
+                    ),
+                    onPressed: () {
+                      /*
+                          Navigator.push(
+                              context, MaterialPageRoute(builder: (context) => FullPhoto(url: document['content'])));
+                          */
+                    },
+                    padding: EdgeInsets.all(0),
+                  ),
+                  margin: EdgeInsets.only(
+                      bottom: isLastMessageRight(index) ? 20.0 : 10.0,
+                      right: 10.0),
+                ),
         ],
         mainAxisAlignment: MainAxisAlignment.end,
       );
@@ -105,7 +123,58 @@ bool conversation;
                             bottom: isLastMessageLeft(index) ? 20.0 : 10.0,
                             right: 10.0),
                       )
-                    : SizedBox(),
+                    : Container(
+                        child: FlatButton(
+                          child: Material(
+                            child: CachedNetworkImage(
+                              placeholder: (context, url) => Container(
+                                child: CircularProgressIndicator(
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                      Colors.blue),
+                                ),
+                                width: 200.0,
+                                height: 200.0,
+                                padding: EdgeInsets.all(70.0),
+                                decoration: BoxDecoration(
+                                  color: Colors.grey,
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(8.0),
+                                  ),
+                                ),
+                              ),
+                              errorWidget: (context, url, error) => Material(
+                                child: Image.asset(
+                                  'images/img_not_available.jpeg',
+                                  width: 200.0,
+                                  height: 200.0,
+                                  fit: BoxFit.cover,
+                                ),
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(8.0),
+                                ),
+                                clipBehavior: Clip.hardEdge,
+                              ),
+                              imageUrl: document['content'],
+                              width: 200.0,
+                              height: 200.0,
+                              fit: BoxFit.cover,
+                            ),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(8.0)),
+                            clipBehavior: Clip.hardEdge,
+                          ),
+                          onPressed: () {
+                            /*
+                          Navigator.push(
+                              context, MaterialPageRoute(builder: (context) => FullPhoto(url: document['content'])));
+                          */
+                          },
+                          padding: EdgeInsets.all(0),
+                        ),
+                        margin: EdgeInsets.only(
+                            bottom: isLastMessageRight(index) ? 20.0 : 10.0,
+                            right: 10.0),
+                      ),
               ],
             ),
 
@@ -136,6 +205,7 @@ bool conversation;
     if ((index > 0 &&
             listMessages != null &&
             listMessages[index - 1]['idFrom'] == mainUid) ||
+            //listMessages[index - 1].idFrom == mainUid) ||
         index == 0) {
       return true;
     } else {
@@ -147,6 +217,7 @@ bool conversation;
     if ((index > 0 &&
             listMessages != null &&
             listMessages[index - 1]['idFrom'] != mainUid) ||
+            // listMessages[index - 1].idFrom != mainUid) ||
         index == 0) {
       return true;
     } else {
@@ -161,8 +232,7 @@ bool conversation;
       centerTitle: true,
     );
 
-    print(
-        conversation.toString() + ' ' + firstMessage.toString());
+    print(conversation.toString() + ' ' + firstMessage.toString());
     return Scaffold(
       appBar: appBar,
       body: Column(
@@ -197,7 +267,12 @@ bool conversation;
               },
             ),
           ),
-          InputConversation(conversation: conversation, mainUid: mainUid, peopleUid: peopleUid,),
+          InputConversation(
+            conversation: conversation,
+            firstMessage: firstMessage,
+            mainUid: mainUid,
+            peopleUid: peopleUid,
+          ),
         ],
       ),
     );

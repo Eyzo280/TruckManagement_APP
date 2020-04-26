@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:truckmanagement_app/models/chat.dart';
 import 'package:truckmanagement_app/models/user.dart';
 import 'package:truckmanagement_app/services/auth.dart';
+import 'package:truckmanagement_app/widgets/userPage/chief_acc/pages/company/chat/chats.dart';
 import 'package:truckmanagement_app/widgets/userPage/trucker_acc/models/trucker.dart';
 import 'package:truckmanagement_app/widgets/userPage/trucker_acc/services_Trucker/database_Trucker.dart';
 import 'package:truckmanagement_app/widgets/userPage/trucker_acc/trucker_search_company.dart';
@@ -14,6 +16,15 @@ class TruckerMain extends StatelessWidget {
       return StreamProvider<List<BaseSearchCompany>>.value(
         value: DataBase_Trucker().getBaseSearchCompany,
         child: TruckerSearchCompany(user)); // trzeba dac wysylanie id kierowcy
+    }));
+  }
+
+  void _openChats(ctx, companyUid) {
+    Navigator.of(ctx).push(MaterialPageRoute(builder: (_) {
+      return StreamProvider<List<PeerChat>>.value(
+        value: Chat(mainUid: companyUid, peopleUid: null).getUserChats(),
+        child: Chats(companyUid: companyUid),
+      );
     }));
   }
 
@@ -78,6 +89,13 @@ class TruckerMain extends StatelessWidget {
               leading: Icon(Icons.notifications),
               title: Text('Zaproszenia'),
               onTap: () {},
+            ),
+            ListTile(
+              leading: Icon(Icons.chat),
+              title: Text('Chat'),
+              onTap: () {
+                _openChats(context, user.driverUid);
+              },
             ),
             ListTile(
               leading: Icon(Icons.settings),
