@@ -62,12 +62,12 @@ class FullLookDriverTruck extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Text(driverTuck.firstNameDriver == null
+                          Text(driverTuck.firstName == null
                               ? Text('Brak danych')
-                              : 'Imie: ${driverTuck.firstNameDriver}'),
-                          Text(driverTuck.lastNameDriver == null
+                              : 'Imie: ${driverTuck.firstName}'),
+                          Text(driverTuck.lastName == null
                               ? Text('Brak danych')
-                              : 'Nazwisko: ${driverTuck.lastNameDriver}'),
+                              : 'Nazwisko: ${driverTuck.lastName}'),
                           Text(driverTuck.dateOfEmplotment == null
                               ? Text('Brak danych')
                               : 'Data Zatrudnienia: ${DateFormat('dd-MM-yyy').format(driverTuck.dateOfEmplotment)}'),

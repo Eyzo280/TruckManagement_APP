@@ -68,7 +68,7 @@ class _ChatsState extends State<Chats> {
                     ),
                     Container(
                       child: Text(
-                        'Typ konta: ${document.typeUser ?? 'Not available'}',
+                        'Typ konta: ${document.type ?? 'Not available'}',
                         style: TextStyle(color: Colors.blue),
                       ),
                       alignment: Alignment.centerLeft,

@@ -22,13 +22,13 @@ class _SelectUserState extends State<SelectUser> {
     final UserData userData = widget.data;
 
     print('Problem');
-    if (userData.typeUser == 'Chief') {
+    if (userData.type == 'Chief') {
       return StreamProvider<List<ChiefUidCompanys>>.value(
         value: DatabaseService(uid: userData.uid).getUidCompanys,
         child: ChiefSelectPage());
-    } else if (userData.typeUser == 'Forwarder') {
+    } else if (userData.type == 'Forwarder') {
       return ForwarderMain();
-    } else if (userData.typeUser == 'DriverTruck') {
+    } else if (userData.type == 'DriverTruck') {
       return StreamProvider<DriverTruck>.value(
         value: DatabaseService(uid: userData.uid).dataDriver,
         child: TruckerMain());

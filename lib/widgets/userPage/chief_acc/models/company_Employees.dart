@@ -2,8 +2,8 @@ import 'package:flutter/foundation.dart';
 
 class FullTruckDriverData {
   //final String id; // powinno byc normalne ale to dopiero w Bazie danych sie zrobi
-  final String firstNameDriver; // imie
-  final String lastNameDriver; // nazwisko
+  final String firstName; // imie
+  final String lastName; // nazwisko
   final int salary; // pensja
   final int earned; // Zarobione pieniadze od dnia zaczecia pracy
   final int paid; // Zaplacone pieniadze
@@ -16,8 +16,8 @@ class FullTruckDriverData {
 
   FullTruckDriverData({
     //@required this.id,
-    @required this.firstNameDriver,
-    @required this.lastNameDriver,
+    @required this.firstName,
+    @required this.lastName,
     @required this.salary,
     @required this.earned,
     @required this.paid,
@@ -32,8 +32,8 @@ class FullTruckDriverData {
 
 class BaseTruckDriverData {
   final String uidDriver; // uid Driver
-  final String firstNameDriver; // imie
-  final String lastNameDriver; // nazwisko
+  final String firstName; // imie
+  final String lastName; // nazwisko
   final int salary; // pensja
   final int earned; // Zarobione pieniadze od dnia zaczecia pracy
   final int paid; // Zaplacone pieniadze
@@ -42,8 +42,8 @@ class BaseTruckDriverData {
 
   BaseTruckDriverData({
     @required this.uidDriver,
-    @required this.firstNameDriver,
-    @required this.lastNameDriver,
+    @required this.firstName,
+    @required this.lastName,
     @required this.salary,
     @required this.earned,
     @required this.paid,
@@ -58,7 +58,7 @@ class CompanyData {
   final String nameCompany; // nazwa firmy
   final int employees; // ilosc pracownikow
   final DateTime yearEstablishmentCompany; // rok zalozenia firmy
-  final String typeUser;
+  final String type;
 
   CompanyData({
     @required this.uidCompany,
@@ -66,7 +66,7 @@ class CompanyData {
     @required this.nameCompany,
     @required this.employees,
     @required this.yearEstablishmentCompany,
-    @required this.typeUser,
+    @required this.type,
   });
 }
 
@@ -76,25 +76,25 @@ class InvData {
   final DateTime dateOfEmplotment; // Data utworzenia konta
   final String drivingLicense; // Prawo jazdy
   final DateTime drivingLicenseFrom; // od kiedy prawojazdy
-  final String firstNameDriver; // Imie
+  final String firstName; // Imie
   final String knownLanguages; // Jakie zna jezyki
-  final String lastNameDriver; // Nazwisko
+  final String lastName; // Nazwisko
   final String numberPhone; // Nr tel
   final int totalDistanceTraveled; // Calkowita ilosc przejechanych km
-  final String typeUser; // typ Konta uzytkownika
+  final String type; // typ Konta uzytkownika
 
   InvData({
     @required this.invUid,
     @required this.dateSentInv,
      @required this.dateOfEmplotment,
-    @required this.firstNameDriver,
-    @required this.lastNameDriver,
+    @required this.firstName,
+    @required this.lastName,
     @required this.numberPhone,
     @required this.drivingLicense,
     @required this.drivingLicenseFrom,
     @required this.knownLanguages,
     @required this.totalDistanceTraveled,
-    @required this.typeUser,
+    @required this.type,
   });
 }
 
@@ -103,24 +103,24 @@ class SearchEmployeesBaseData {
   final DateTime dateOfEmplotment;
   final String drivingLicense;
   final DateTime drivingLicenseFrom;
-  final String firstNameDriver;
+  final String firstName;
   final String knownLanguages;
-  final String lastNameDriver;
+  final String lastName;
   final String numberPhone;
   final int totalDistanceTraveled;
-  final String typeUser;
+  final String type;
 
   SearchEmployeesBaseData({
     this.driverUid,
     this.dateOfEmplotment,
     this.drivingLicense,
     this.drivingLicenseFrom,
-    this.firstNameDriver,
+    this.firstName,
     this.knownLanguages,
-    this.lastNameDriver,
+    this.lastName,
     this.numberPhone,
     this.totalDistanceTraveled,
-    this.typeUser,
+    this.type,
   });
 
   calculationAccountActivityTime<String>({registerAccTime}) {

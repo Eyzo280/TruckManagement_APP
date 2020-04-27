@@ -115,7 +115,7 @@ class _RegisterForwarderState extends State<RegisterForwarder> {
                                       });
                                       dynamic result = await _auth
                                           .registerWithEmailAndPassword(
-                                              email: email, password: password, typeUser: 'Frowarder');
+                                              email: email, password: password, type: 'Frowarder');
                                       if (result == null) {
                                         setState(() {
                                           error = 'Prosze sprawdzic poprawnosc danych.';

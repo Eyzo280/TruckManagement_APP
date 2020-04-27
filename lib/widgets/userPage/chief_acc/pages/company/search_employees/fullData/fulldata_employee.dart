@@ -40,8 +40,8 @@ class _FullDataEmployeeState extends State<FullDataEmployee> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Text('Imie: ${widget.driverData.firstNameDriver}'),
-                Text('Nazwisko: ${widget.driverData.lastNameDriver}'),
+                Text('Imie: ${widget.driverData.firstName}'),
+                Text('Nazwisko: ${widget.driverData.lastName}'),
                 Container(
                   width: (MediaQuery.of(context).size.width -
                           MediaQuery.of(context).padding.vertical -

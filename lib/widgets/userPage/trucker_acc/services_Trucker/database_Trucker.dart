@@ -33,12 +33,12 @@ class DataBase_Trucker {
     DateTime dateOfEmplotment,
     String drivingLicense,
     DateTime drivingLicenseFrom,
-    String firstNameDriver,
+    String firstName,
     String knownLanguages,
-    String lastNameDriver,
+    String lastName,
     String numberPhone,
     int totalDistanceTraveled,
-    String typeUser,
+    String type,
   }) async {
     final CollectionReference driver = Firestore.instance.collection('Drivers');
     final CollectionReference company =
@@ -52,12 +52,12 @@ class DataBase_Trucker {
       'dateOfEmplotment': dateOfEmplotment,
       'drivingLicense': drivingLicense,
       'drivingLicenseFrom': drivingLicenseFrom,
-      'firstNameDriver': firstNameDriver,
+      'firstName': firstName,
       'knownLanguages': knownLanguages,
-      'lastNameDriver': lastNameDriver,
+      'lastName': lastName,
       'numberPhone': numberPhone,
       'totalDistanceTraveled': totalDistanceTraveled,
-      'typeUser': typeUser,
+      'type': type,
       'dateSentInv': DateTime.now(),
     }).whenComplete((){
       driver.document(uid).collection('SentInvitations').document(companyUid).setData({

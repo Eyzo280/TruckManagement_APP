@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:truckmanagement_app/models/chat.dart';
 import 'package:truckmanagement_app/models/user.dart';
 import 'package:truckmanagement_app/services/auth.dart';
-import 'package:truckmanagement_app/widgets/userPage/chief_acc/pages/company/chat/chats.dart';
+import 'package:truckmanagement_app/widgets//chat/chats.dart';
 import 'package:truckmanagement_app/widgets/userPage/trucker_acc/models/trucker.dart';
 import 'package:truckmanagement_app/widgets/userPage/trucker_acc/services_Trucker/database_Trucker.dart';
 import 'package:truckmanagement_app/widgets/userPage/trucker_acc/trucker_search_company.dart';
@@ -60,7 +60,7 @@ class TruckerMain extends StatelessWidget {
                 children: <Widget>[
                   FittedBox(
                                       child: Text(
-                      user.firstNameDriver + ' ' + user.lastNameDriver,
+                      user.firstName + ' ' + user.lastName,
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 20,
@@ -116,8 +116,8 @@ class TruckerMain extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      user != null ? Text('Imie: ${user.firstNameDriver}') : CircularProgressIndicator(),
-                      user != null ? Text('Nazwisko: ${user.lastNameDriver}') : CircularProgressIndicator(),
+                      user != null ? Text('Imie: ${user.firstName}') : CircularProgressIndicator(),
+                      user != null ? Text('Nazwisko: ${user.lastName}') : CircularProgressIndicator(),
                       user != null ? Text('Prawo jazdy: ${user.drivingLicense}') : CircularProgressIndicator(),
                       user != null ? Text('Przejechane km: ${user.totalDistanceTraveled}') : CircularProgressIndicator(),
                     ],

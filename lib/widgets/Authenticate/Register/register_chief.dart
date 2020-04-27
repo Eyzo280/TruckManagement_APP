@@ -186,7 +186,7 @@ class _RegisterChiefState extends State<RegisterChief> {
                                           });
                                           dynamic result = await _auth
                                               .registerWithEmailAndPassword(nameCompany: nameCompany,
-                                                  email: email, displayName: displayName, firstName: firstName, lastName: lastName, password: password, typeUser: 'Chief');
+                                                  email: email, displayName: displayName, firstName: firstName, lastName: lastName, password: password, type: 'Chief');
                                           if (result == null) {
                                             setState(() {
                                               error = 'Prosze sprawdzic poprawnosc danych.';

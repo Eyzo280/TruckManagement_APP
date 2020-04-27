@@ -27,11 +27,11 @@ class _CompanyLookTruckerState extends State<MainCompanyLookTrucker> {
 
   // Dodaje nowego Kierowce w firmie
   void addNewDriverTruck(
-      _firstNameDriver, _lastNameDriver, _salary, _dateOfEmplotment, _payday, _numberPhone) {
+      _firstName, _lastName, _salary, _dateOfEmplotment, _payday, _numberPhone) {
     final newdriver = TruckDriver(
         id: DateTime.now().toString(), // Tymczasowo
-        firstNameDriver: _firstNameDriver,
-        lastNameDriver: _lastNameDriver,
+        firstName: _firstName,
+        lastName: _lastName,
         salary: double.parse(_salary),
         earned: 0,
         paid: 0,

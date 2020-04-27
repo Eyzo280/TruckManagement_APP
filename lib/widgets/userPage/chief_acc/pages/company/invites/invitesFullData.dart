@@ -34,8 +34,8 @@ class InvitesFullData extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Text('Imie: ${inviteData.firstNameDriver}'),
-                Text('Nazwisko: ${inviteData.lastNameDriver}'),
+                Text('Imie: ${inviteData.firstName}'),
+                Text('Nazwisko: ${inviteData.lastName}'),
                 Container(
                   width: (MediaQuery.of(context).size.width -
                           MediaQuery.of(context).padding.vertical -
@@ -159,9 +159,9 @@ class InvitesFullData extends StatelessWidget {
                               nameCompany: widget.companyData.nameCompany,
                               yearEstablishmentCompany:
                                   widget.companyData.yearEstablishmentCompany,
-                              firstNameDriver:
-                                  widget.driverData.firstNameDriver,
-                              lastNameDriver: widget.driverData.lastNameDriver,
+                              firstName:
+                                  widget.driverData.firstName,
+                              lastName: widget.driverData.lastName,
                               drivingLicenseFrom:
                                   widget.driverData.drivingLicenseFrom,
                               drivingLicense: widget.driverData.drivingLicense,
@@ -176,8 +176,8 @@ class InvitesFullData extends StatelessWidget {
                       */
                     Database_CompanyEmployees(companyUid: companyUid).acceptInv(
                         driverUid: inviteData.invUid,
-                        firstNameDriver: inviteData.firstNameDriver,
-                        lastNameDriver: inviteData.lastNameDriver,
+                        firstName: inviteData.firstName,
+                        lastName: inviteData.lastName,
                         numberPhone: inviteData.numberPhone);
                     Navigator.of(context).pop();
                   },

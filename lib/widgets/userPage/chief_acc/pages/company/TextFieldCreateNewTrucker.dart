@@ -13,9 +13,9 @@ class TextFieldCreateNewTrucker extends StatefulWidget {
 
 class _TextFieldCreateNewTruckerState extends State<TextFieldCreateNewTrucker> {
   // Wartosci NewDriver
-  final _firstNameDriver = TextEditingController();
+  final _firstName = TextEditingController();
 
-  final _lastNameDriver = TextEditingController();
+  final _lastName = TextEditingController();
 
   final _salary = TextEditingController();
 
@@ -57,7 +57,7 @@ class _TextFieldCreateNewTruckerState extends State<TextFieldCreateNewTrucker> {
   }
 
   void _submitData({bool activehints}) {
-    if (_firstNameDriver.text.isEmpty || _lastNameDriver.text.isEmpty ||
+    if (_firstName.text.isEmpty || _lastName.text.isEmpty ||
         _salary.text.isEmpty ||
         _dateOfEmplotment == null ||
         _payday == null ||
@@ -73,7 +73,7 @@ class _TextFieldCreateNewTruckerState extends State<TextFieldCreateNewTrucker> {
 
     print('Dodawanie DriverTruck 1/2');
 
-    widget.addDriverTruck(_firstNameDriver.text, _lastNameDriver.text, _salary.text, _dateOfEmplotment,
+    widget.addDriverTruck(_firstName.text, _lastName.text, _salary.text, _dateOfEmplotment,
         _payday, _numberPhone.text);
 
     Navigator.of(context).pop();
@@ -98,7 +98,7 @@ class _TextFieldCreateNewTruckerState extends State<TextFieldCreateNewTrucker> {
                 fit: FlexFit.tight,
                 child: Center(
                     child: TextField(
-                  controller: _firstNameDriver,
+                  controller: _firstName,
                   keyboardType: TextInputType.text,
                   onSubmitted: (_) {
                     _submitData();
@@ -119,7 +119,7 @@ class _TextFieldCreateNewTruckerState extends State<TextFieldCreateNewTrucker> {
                 fit: FlexFit.tight,
                 child: Center(
                     child: TextField(
-                  controller: _lastNameDriver,
+                  controller: _lastName,
                   keyboardType: TextInputType.text,
                   onSubmitted: (_) {
                     _submitData();

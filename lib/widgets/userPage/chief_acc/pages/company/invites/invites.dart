@@ -53,12 +53,12 @@ class _InvitationsState extends State<Invitations> {
       drivingLicenseFrom: DateTime.fromMillisecondsSinceEpoch(
               doc.data['drivingLicenseFrom'].seconds * 1000) ??
           null,
-      firstNameDriver: doc.data['firstNameDriver'] ?? null,
+      firstName: doc.data['firstName'] ?? null,
       knownLanguages: doc.data['knownLanguages'] ?? null,
-      lastNameDriver: doc.data['lastNameDriver'] ?? null,
+      lastName: doc.data['lastName'] ?? null,
       numberPhone: doc.data['numberPhone'] ?? null,
       totalDistanceTraveled: doc.data['totalDistanceTraveled'] ?? null,
-      typeUser: doc.data['typeUser'] ?? null,
+      type: doc.data['type'] ?? null,
       );
       }).toList();
       _lastDocument =
@@ -110,12 +110,12 @@ class _InvitationsState extends State<Invitations> {
       drivingLicenseFrom: DateTime.fromMillisecondsSinceEpoch(
               doc.data['drivingLicenseFrom'].seconds * 1000) ??
           null,
-      firstNameDriver: doc.data['firstNameDriver'] ?? null,
+      firstName: doc.data['firstName'] ?? null,
       knownLanguages: doc.data['knownLanguages'] ?? null,
-      lastNameDriver: doc.data['lastNameDriver'] ?? null,
+      lastName: doc.data['lastName'] ?? null,
       numberPhone: doc.data['numberPhone'] ?? null,
       totalDistanceTraveled: doc.data['totalDistanceTraveled'] ?? null,
-      typeUser: doc.data['typeUser'] ?? null,
+      type: doc.data['type'] ?? null,
       );
     }).toList());
 
@@ -235,7 +235,7 @@ class _InvitationsState extends State<Invitations> {
                                 }),
                             FlatButton(
                                 onPressed: () {
-                                  Database_CompanyEmployees(companyUid: widget.companyUid).acceptInv(driverUid: _invites[index].invUid, firstNameDriver: _invites[index].firstNameDriver, lastNameDriver: _invites[index].lastNameDriver, numberPhone: _invites[index].numberPhone);
+                                  Database_CompanyEmployees(companyUid: widget.companyUid).acceptInv(driverUid: _invites[index].invUid, firstName: _invites[index].firstName, lastName: _invites[index].lastName, numberPhone: _invites[index].numberPhone);
                                   print('Akceptuj');
                                 },
                                 child: Text('Akceptuj'))

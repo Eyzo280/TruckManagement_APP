@@ -46,9 +46,9 @@ class DataBase_Chief {
             .getDocuments();
         var companyTopEmployees;
         for (var companyDoc in companyEmployees.documents) {
-          companyTopEmployees = companyDoc.data['firstNameDriver'] +
+          companyTopEmployees = companyDoc.data['firstName'] +
               ' ' +
-              companyDoc.data['lastNameDriver'].toString().substring(0, 1);
+              companyDoc.data['lastName'].toString().substring(0, 1);
         }
 
         company = BaseCompanyData(
@@ -105,6 +105,7 @@ class DataBase_Chief {
           'advertisement': advertisement,
           'pakiet': pakiet,
           'nameCompany': nameCompany,
+          'type': 'Company',
           'yearEstablishmentCompany': yearEstablishmentCompany,
           'phoneNumber': phoneNumber,
         });

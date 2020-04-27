@@ -12,14 +12,14 @@ class UserData {
   final String firstName; // Imie Uzytkownika
   final String lastName; // Nazwisko Uzytkownika
   final String nameCompany; // NazwaFirmy
-  final String typeUser; // Typ konta uzytkownika
+  final String type; // Typ konta uzytkownika
 
   UserData(
       {@required this.uid,
       @required this.firstName,
       @required this.lastName,
       this.nameCompany,
-      @required this.typeUser});
+      @required this.type});
 }
 
 class ChiefUidCompanys {
@@ -39,24 +39,24 @@ class DriverTruck {
   final DateTime dateOfEmplotment; // Data utworzenia konta
   final String drivingLicense; // Prawo jazdy
   final DateTime drivingLicenseFrom; // od kiedy prawojazdy
-  final String firstNameDriver; // Imie
+  final String firstName; // Imie
   final String knownLanguages; // Jakie zna jezyki
-  final String lastNameDriver; // Nazwisko
+  final String lastName; // Nazwisko
   final String numberPhone; // Nr tel
   final int totalDistanceTraveled; // Calkowita ilosc przejechanych km
-  final String typeUser;
+  final String type;
 
   DriverTruck({
     @required this.driverUid,
     @required this.dateOfEmplotment,
-    @required this.firstNameDriver,
-    @required this.lastNameDriver,
+    @required this.firstName,
+    @required this.lastName,
     @required this.numberPhone,
     @required this.drivingLicense,
     @required this.drivingLicenseFrom,
     @required this.knownLanguages,
     @required this.totalDistanceTraveled,
-    @required this.typeUser,
+    @required this.type,
   });
 }
 
@@ -65,8 +65,8 @@ class PeerChat {
   final bool conversation;
   final String firstName;
   final String lastName;
-  final String typeUser;
+  final String type;
 
-  PeerChat({this.uid, this.conversation , this.firstName, this.lastName, this.typeUser});
+  PeerChat({this.uid, this.conversation , this.firstName, this.lastName, this.type});
 
 }

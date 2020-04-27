@@ -41,9 +41,9 @@ class ColumnCompanyLookDriverTrucks extends StatelessWidget {
                                 child: Container(
                                     color: Colors.blue,
                                     child: Center(
-                                        child: Text(listDriverTuck[index].firstNameDriver +
+                                        child: Text(listDriverTuck[index].firstName +
                                             ' ' +
-                                            listDriverTuck[index].lastNameDriver))),
+                                            listDriverTuck[index].lastName))),
                               ),
                             ),
                             Flexible(
@@ -99,7 +99,7 @@ class ColumnCompanyLookDriverTrucks extends StatelessWidget {
                                       width: 60,
                                       child: FittedBox(
                                         child: Text(
-                                          listDriverTuck[index].firstNameDriver,
+                                          listDriverTuck[index].firstName,
                                           style: TextStyle(fontSize: 13),
                                         ),
                                       ),
@@ -108,7 +108,7 @@ class ColumnCompanyLookDriverTrucks extends StatelessWidget {
                                       width: 60,
                                       child: FittedBox(
                                         child: Text(
-                                          listDriverTuck[index].lastNameDriver,
+                                          listDriverTuck[index].lastName,
                                           style: TextStyle(fontSize: 13),
                                         ),
                                       ),

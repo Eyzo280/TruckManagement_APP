@@ -115,7 +115,7 @@ class _RegisterDriverTruckState extends State<RegisterDriverTruck> {
                                       });
                                       dynamic result = await _auth
                                           .registerWithEmailAndPassword(
-                                              email: email, password: password, typeUser: 'DriverTruck');
+                                              email: email, password: password, type: 'DriverTruck');
                                       if (result == null) {
                                         setState(() {
                                           error = 'Prosze sprawdzic poprawnosc danych.';

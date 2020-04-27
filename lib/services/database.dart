@@ -14,19 +14,17 @@ class DatabaseService {
       {String nameCompany,
       String firstName,
       String lastName,
-      String typeUser}) async {
-    if (typeUser == 'Chief') {
+      String type}) async {
+    if (type == 'Chief') {
       final chiefData = Firestore.instance.collection('Chiefs').document(uid);
       final companyData =
           Firestore.instance.collection('Companys').document(uid + '_1');
       //                                                           Chief
       return await chiefData.setData({
-        'firstname': firstName, // Imie szefa
+        'firstName': firstName, // Imie szefa
         'lastName': lastName, // Nazwisko szefa
         'numberPhone': '2131123213', // numer telefonu szefa
-        'typeUser': typeUser, // Typ konta uzytkownika
-        'employees': 1,
-        'maxEmployees': 10,
+        'type': type, // Typ konta uzytkownika
       }).whenComplete(() {
         chiefData.collection('Companys').document(uid + '_1').setData({
           'active': false, // dzien wyplaty
@@ -34,6 +32,7 @@ class DatabaseService {
         companyData.setData({
           'advertisement': false,
           'nameCompany': nameCompany, // NazwaFirmy
+          'type': 'Company',
           'yearEstablishmentCompany': DateTime.now(), // rok zalozenia firmy
           'employees': 0,
         }).whenComplete(() {
@@ -42,8 +41,8 @@ class DatabaseService {
               .collection('DriverTrucks')
               .document('testDriver')
               .setData({
-            'firstNameDriver': 'TestoweImie', // imie
-            'lastNameDriver': 'TestoweNazwisko', // nazwisko
+            'firstName': 'TestoweImie', // imie
+            'lastName': 'TestoweNazwisko', // nazwisko
             'salary': 0, // pensja
             'earned': 0, // Zarobione pieniadze od dnia zaczecia pracy
             'paid': 0, // Zaplacone pieniadze
@@ -89,13 +88,13 @@ class DatabaseService {
           });
         });
       });
-    } else if (typeUser == 'DriverTruck') {
+    } else if (type == 'DriverTruck') {
       final userdata = Firestore.instance.collection('Drivers').document(uid);
       //                                                DriverTruck
       return await userdata.setData({
-        'firstNameDriver': 'TestoweImie', // imie
-        'lastNameDriver': 'TestoweNazwisko', // nazwisko
-        'typeUser': typeUser, // Typ konta uzytkownika
+        'firstName': 'TestoweImie', // imie
+        'lastName': 'TestoweNazwisko', // nazwisko
+        'type': type, // Typ konta uzytkownika
         'salary': 0, // pensja
         'drivingLicense': 'C', // jakie prawo jazdy posiada
         'drivingLicenseFrom': DateTime.now(), // od kiedy posiada prawo jazdy
@@ -113,7 +112,7 @@ class DatabaseService {
             .document('testInvitation')
             .setData({
           'idSentInvitationToCompany' // id do ktorej wyslano zaproszenie
-              'firstname': firstName, // Imie szefa
+              'firstName': firstName, // Imie szefa
           'lastName': lastName, // Nazwisko szefa
           'salary': 0, // pensja kierowcy w firmie
           'nameCompany': 'NazwaFirmy', // nazwa firmy
@@ -131,21 +130,21 @@ class DatabaseService {
   // dane uzytkownika ze snapshot
 
   UserData _userDataFromsnapshot(DocumentSnapshot snapshot) {
-    if (snapshot.data['typeUser'] == 'Chief') {
+    if (snapshot.data['type'] == 'Chief') {
       return UserData(
         uid: uid,
         firstName: snapshot.data['firstName'],
         lastName: snapshot.data['lastName'],
-        typeUser: snapshot.data['typeUser'],
+        type: snapshot.data['type'],
       );
-    } else if (snapshot.data['typeUser'] == 'DriverTruck') {
+    } else if (snapshot.data['type'] == 'DriverTruck') {
       // Trzeba dodac obiekty reszte uzytkownikow Forwarder i DriverTruck
       return UserData(
         uid: uid,
-        firstName: snapshot.data['firstNameDriver'],
-        lastName: snapshot.data['lastNameDriver'],
+        firstName: snapshot.data['firstName'],
+        lastName: snapshot.data['lastName'],
         nameCompany: snapshot.data['nameCompany'],
-        typeUser: snapshot.data['typeUser'],
+        type: snapshot.data['type'],
       );
     } else {
       // Trzeba dodac obiekty reszte uzytkownikow Forwarder i DriverTruck
@@ -153,7 +152,7 @@ class DatabaseService {
     }
   }
 
-  // pobieranie danych uzytkownika takich jak typeUser
+  // pobieranie danych uzytkownika takich jak type
   Stream<UserData> get userData async* {
     List listCollectionsUsers = ['Chiefs', 'Drivers', 'Forwarders'];
     var userType = null;
@@ -231,12 +230,12 @@ class DatabaseService {
       drivingLicenseFrom: DateTime.fromMillisecondsSinceEpoch(
               snapshot.data['drivingLicenseFrom'].seconds * 1000) ??
           null,
-      firstNameDriver: snapshot.data['firstNameDriver'] ?? null,
+      firstName: snapshot.data['firstName'] ?? null,
       knownLanguages: snapshot.data['knownLanguages'] ?? null,
-      lastNameDriver: snapshot.data['lastNameDriver'] ?? null,
+      lastName: snapshot.data['lastName'] ?? null,
       numberPhone: snapshot.data['numberPhone'] ?? null,
       totalDistanceTraveled: snapshot.data['totalDistanceTraveled'] ?? null,
-      typeUser: snapshot.data['typeUser'] ?? null,
+      type: snapshot.data['type'] ?? null,
     );
   }
 

@@ -100,10 +100,10 @@ class Chat {
       @required String message,
       @required int typeMessage}) async {
     /*
-    final String mainUid = mainData.typeUser != 'DriverTruck'
+    final String mainUid = mainData.type != 'DriverTruck'
         ? mainData.uidCompany
         : mainData.driverUid;
-    final String peopleUid = peopleData.typeUser != 'DriverTruck'
+    final String peopleUid = peopleData.type != 'DriverTruck'
         ? peopleData.uidCompany
         : peopleData.driverUid;
         */
@@ -184,7 +184,7 @@ class Chat {
                     uid: splitedUid ?? null,
                     firstName: val.data['firstName'] ?? null,
                     lastName: val.data['lastName'] ?? null,
-                    typeUser: val.data['typeUser'] ?? null);
+                    type: val.data['type'] ?? null);
               } else {
                 Firestore.instance
                     .collection('Drivers')
@@ -196,9 +196,9 @@ class Chat {
                         uid: splitedUid ?? null,
                         conversation: conversation ?? null,
                         firstName: val.data['firstName'] ??
-                            null, // Pasowalo by przerobic baze danych, zeby zamiast firstNameDriver bylo firstName itp
+                            null, // Pasowalo by przerobic baze danych, zeby zamiast firstName bylo firstName itp
                         lastName: val.data['lastName'] ?? null,
-                        typeUser: val.data['typeUser'] ?? null);
+                        type: val.data['type'] ?? null);
                         
                   } else {
                     print('Trzeba dodac Forwarders do Chatu w models/chat.dart !!!');
@@ -237,27 +237,76 @@ class Chat {
                 complete = val;
               } else {
                 await Firestore.instance
-                    .collection('Drivers')
+                    .collection('Companys')
                     .document(splitedUid)
                     .get()
-                    .then((val) {
+                    .then((val) async {
                   if (val.exists) {
                     complete = val;
                   } else {
-                    print(
-                        'Trzeba dodac Forwarders do Chatu w models/chat.dart !!!');
+                    await Firestore.instance
+                        .collection('Drivers')
+                        .document(splitedUid)
+                        .get()
+                        .then((val) async {
+                      if (val.exists) {
+                        complete = val;
+                      } else {
+                        await Firestore.instance
+                            .collection('Forwarders')
+                            .document(splitedUid)
+                            .get()
+                            .then((val) async {
+                          if (val.exists) {
+                            complete = val;
+                          } else {
+                            print('Problem przy znalezieniu danych.');
+                          }
+                        });
+                      }
+                    });
                   }
                 });
               }
             });
             if (complete != null) {
-              chat = PeerChat(
+              if (complete.data['type'] == 'Chief') {
+                chat = PeerChat(
                   uid: splitedUid ?? null,
                   conversation: chatDoc.data[splitedUid] ?? null,
-                  firstName: complete.data['firstNameDriver'] ??
-                      null, // Pasowalo by przerobic baze danych, zeby zamiast firstNameDriver bylo firstName itp
-                  lastName: complete.data['lastNameDriver'] ?? null,
-                  typeUser: complete.data['typeUser'] ?? null);
+                  firstName: complete.data['firstName'] ??
+                      null, // Pasowalo by przerobic baze danych, zeby zamiast firstName bylo firstName itp
+                  lastName: complete.data['lastName'] ?? null,
+                  type: complete.data['type'] ?? null,
+                );
+              } else if (complete.data['type'] == 'Company') {
+                chat = PeerChat(
+                  uid: splitedUid ?? null,
+                  conversation: chatDoc.data[splitedUid] ?? null,
+                  firstName: complete.data['nameCompany'] ??
+                      null, // Pasowalo by przerobic baze danych, zeby zamiast firstName bylo firstName itp
+                  lastName: null,
+                  type: complete.data['type'] ?? null,
+                );
+              } else if (complete.data['type'] == 'DriverTruck') {
+                chat = PeerChat(
+                  uid: splitedUid ?? null,
+                  conversation: chatDoc.data[splitedUid] ?? null,
+                  firstName: complete.data['firstName'] ??
+                      null, // Pasowalo by przerobic baze danych, zeby zamiast firstName bylo firstName itp
+                  lastName: complete.data['lastName'] ?? null,
+                  type: complete.data['type'] ?? null,
+                );
+              } else if (complete.data['type'] == 'Forwarder') {
+                chat = PeerChat(
+                  uid: splitedUid ?? null,
+                  conversation: chatDoc.data[splitedUid] ?? null,
+                  firstName: complete.data['firstName'] ??
+                      null, // Pasowalo by przerobic baze danych, zeby zamiast firstName bylo firstName itp
+                  lastName: complete.data['lastName'] ?? null,
+                  type: complete.data['type'] ?? null,
+                );
+              }
             } else {
               print('Nie znaleziono danych.');
             }

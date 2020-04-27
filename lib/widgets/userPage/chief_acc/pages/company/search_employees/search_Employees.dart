@@ -65,12 +65,12 @@ class _SearchEmployeesState extends State<SearchEmployees> {
           drivingLicenseFrom: DateTime.fromMillisecondsSinceEpoch(
                   doc.data['drivingLicenseFrom'].seconds * 1000) ??
               null,
-          firstNameDriver: doc.data['firstNameDriver'] ?? null,
+          firstName: doc.data['firstName'] ?? null,
           knownLanguages: doc.data['knownLanguages'] ?? null,
-          lastNameDriver: doc.data['lastNameDriver'] ?? null,
+          lastName: doc.data['lastName'] ?? null,
           numberPhone: doc.data['numberPhone'] ?? null,
           totalDistanceTraveled: doc.data['totalDistanceTraveled'] ?? null,
-          typeUser: doc.data['typeUser'] ?? null,
+          type: doc.data['type'] ?? null,
         );
       }).toList();
       _lastDocument =
@@ -127,12 +127,12 @@ class _SearchEmployeesState extends State<SearchEmployees> {
         drivingLicenseFrom: DateTime.fromMillisecondsSinceEpoch(
                 doc.data['drivingLicenseFrom'].seconds * 1000) ??
             null,
-        firstNameDriver: doc.data['firstNameDriver'] ?? null,
+        firstName: doc.data['firstName'] ?? null,
         knownLanguages: doc.data['knownLanguages'] ?? null,
-        lastNameDriver: doc.data['lastNameDriver'] ?? null,
+        lastName: doc.data['lastName'] ?? null,
         numberPhone: doc.data['numberPhone'] ?? null,
         totalDistanceTraveled: doc.data['totalDistanceTraveled'] ?? null,
-        typeUser: doc.data['typeUser'] ?? null,
+        type: doc.data['type'] ?? null,
       );
     }).toList());
 

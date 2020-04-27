@@ -43,7 +43,7 @@ class AuthService {
 
   // Rejestracja za pomoca email i hasla
 
-  Future registerWithEmailAndPassword({String email, String displayName, String nameCompany, String firstName, String lastName, String password, String typeUser}) async {
+  Future registerWithEmailAndPassword({String email, String displayName, String nameCompany, String firstName, String lastName, String password, String type}) async {
     try {
       AuthResult result = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
@@ -51,7 +51,7 @@ class AuthService {
       UserUpdateInfo userUpdateInfo = new UserUpdateInfo();
       userUpdateInfo.displayName = displayName;
       await user.updateProfile(userUpdateInfo);
-      await DatabaseService(uid: user.uid).updateUserData(nameCompany: nameCompany,firstName: firstName, lastName: lastName, typeUser: typeUser);
+      await DatabaseService(uid: user.uid).updateUserData(nameCompany: nameCompany,firstName: firstName, lastName: lastName, type: type);
       return user;
     } catch (e) {
       print(e);

@@ -19,7 +19,7 @@ class _TopBodyCompanyLookDriverTrucksState extends State<TopBodyCompanyLookDrive
         due = listDriverTrucks[index].earned -
             listDriverTrucks[index].paid;
         return {
-          'NameDriver': listDriverTrucks[index].firstNameDriver + ' ' + listDriverTrucks[index].lastNameDriver.substring(0,1),
+          'NameDriver': listDriverTrucks[index].firstName + ' ' + listDriverTrucks[index].lastName.substring(0,1),
           'DueDriver': due
         };
       },

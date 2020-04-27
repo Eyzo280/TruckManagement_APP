@@ -104,13 +104,13 @@ class TruckerSearchCompany extends StatelessWidget {
                                 dateOfEmplotment: userData.dateOfEmplotment,
                                 drivingLicense: userData.drivingLicense,
                                 drivingLicenseFrom: userData.drivingLicenseFrom,
-                                firstNameDriver: userData.firstNameDriver,
+                                firstName: userData.firstName,
                                 knownLanguages: userData.knownLanguages,
-                                lastNameDriver: userData.lastNameDriver,
+                                lastName: userData.lastName,
                                 numberPhone: userData.numberPhone,
                                 totalDistanceTraveled:
                                     userData.totalDistanceTraveled,
-                                typeUser: userData.typeUser,
+                                type: userData.type,
                               );
                               print('Wyslij Prosbe');
                             }),

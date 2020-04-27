@@ -22,8 +22,8 @@ class Database_CompanyEmployees {
   // Dane ChiefEmployees
   FullTruckDriverData _getFullDataChiefEmoloyees(DocumentSnapshot doc) {
     return FullTruckDriverData(
-      firstNameDriver: doc.data['firstNameDriver'] ?? null,
-      lastNameDriver: doc.data['lastNameDriver'] ?? null,
+      firstName: doc.data['firstName'] ?? null,
+      lastName: doc.data['lastName'] ?? null,
       salary: doc.data['salary'] ?? null,
       earned: doc.data['earned'] ?? null,
       paid: doc.data['paid'] ?? null,
@@ -55,8 +55,8 @@ class Database_CompanyEmployees {
     return snapshot.documents.map((doc) {
       return BaseTruckDriverData(
         uidDriver: doc.documentID,
-        firstNameDriver: doc.data['firstNameDriver'] ?? null,
-        lastNameDriver: doc.data['lastNameDriver'] ?? null,
+        firstName: doc.data['firstName'] ?? null,
+        lastName: doc.data['lastName'] ?? null,
         salary: doc.data['salary'] ?? null,
         earned: doc.data['earned'] ?? null,
         paid: doc.data['paid'] ?? null,
@@ -86,7 +86,7 @@ class Database_CompanyEmployees {
       yearEstablishmentCompany: DateTime.fromMillisecondsSinceEpoch(
               doc.data['yearEstablishmentCompany'].seconds * 1000) ??
           DateTime.now(),
-          typeUser: doc.data['typeUser'] ?? '',
+          type: doc.data['type'] ?? '',
     );
   }
 
@@ -103,9 +103,9 @@ class Database_CompanyEmployees {
         dateSentInv: DateTime.fromMillisecondsSinceEpoch(
                 doc.data['dateSentInv'].seconds * 1000) ??
             null,
-        firstNameDriver: doc.data['firstNameDriver'] ?? null,
+        firstName: doc.data['firstName'] ?? null,
         knownLanguages: doc.data['knownLanguages'] ?? null,
-        lastNameDriver: doc.data['lastNameDriver'] ?? null,
+        lastName: doc.data['lastName'] ?? null,
         numberPhone: doc.data['numberPhone'] ?? null,
         totalDistanceTraveled: doc.data['totalDistanceTraveled'] ?? null,
       );
@@ -124,8 +124,8 @@ class Database_CompanyEmployees {
 
   Future acceptInv({
     String driverUid,
-    String firstNameDriver,
-    String lastNameDriver,
+    String firstName,
+    String lastName,
     String numberPhone,
   }) async {
     company
@@ -137,8 +137,8 @@ class Database_CompanyEmployees {
       'dateOfEmplotment': DateTime.now(),
       'distanceTraveled': 0,
       'earned': 0,
-      'firstNameDriver': firstNameDriver,
-      'lastNameDriver': lastNameDriver,
+      'firstName': firstName,
+      'lastName': lastName,
       'numberPhone': numberPhone,
       'paid': 0,
       'payday': DateTime
@@ -184,13 +184,13 @@ class Database_CompanyEmployees {
         .collection('SentInvitations')
         .document(employeesData.driverUid)
         .setData({
-      'firstNameDriver': employeesData.firstNameDriver,
-      'lastNameDriver': employeesData.lastNameDriver,
+      'firstName': employeesData.firstName,
+      'lastName': employeesData.lastName,
       'drivingLicenseFrom': employeesData.drivingLicenseFrom,
       'drivingLicense': employeesData.drivingLicense,
       'knownLanguages': employeesData.knownLanguages,
       'totalDistanceTraveled': employeesData.totalDistanceTraveled,
-      'typeUser': employeesData.typeUser,
+      'type': employeesData.type,
       'dateSentInv': DateTime.now(),
     });
   }
