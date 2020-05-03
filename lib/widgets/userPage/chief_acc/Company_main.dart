@@ -10,6 +10,7 @@ import 'package:truckmanagement_app/widgets//chat/chats.dart';
 import 'package:truckmanagement_app/widgets/userPage/chief_acc/pages/company/invites/invites.dart';
 import 'package:truckmanagement_app/widgets/userPage/chief_acc/pages/company/main_company_look_trucker.dart';
 import 'package:truckmanagement_app/widgets/userPage/chief_acc/pages/company/search_employees/search_Employees.dart';
+import 'package:truckmanagement_app/widgets/userPage/chief_acc/pages/company/tracks/select_Preview.dart';
 import 'package:truckmanagement_app/widgets/userPage/chief_acc/services/database_company.dart';
 
 class CompanyMain extends StatelessWidget {
@@ -546,7 +547,10 @@ class CompanyMain extends StatelessWidget {
                                 child: FlatButton(
                                   padding: EdgeInsets.all(0),
                                   onPressed: () {
-                                    print('Podglad Kursow');
+                                    Navigator.of(context)
+                                        .push(MaterialPageRoute(builder: (_) {
+                                      return TracksSelect(companyData: companyData);
+                                    }));
                                   },
                                   child: Container(
                                     height: 60,

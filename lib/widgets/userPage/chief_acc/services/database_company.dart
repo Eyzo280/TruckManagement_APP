@@ -194,4 +194,15 @@ class Database_CompanyEmployees {
       'dateSentInv': DateTime.now(),
     });
   }
+
+  // Kod dotyczący Tras
+  /*
+  Track _getTrackData(DocumentSnapshot doc) {
+
+  }
+
+  Stream<Track> get getTracksData {
+    return company.document(companyUid).collection('Tracks').snapshots().map(_getTrackData);
+  }
+  */
 }

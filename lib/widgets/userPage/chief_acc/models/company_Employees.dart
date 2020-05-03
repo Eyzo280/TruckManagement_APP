@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 
 class FullTruckDriverData {
@@ -86,7 +87,7 @@ class InvData {
   InvData({
     @required this.invUid,
     @required this.dateSentInv,
-     @required this.dateOfEmplotment,
+    @required this.dateOfEmplotment,
     @required this.firstName,
     @required this.lastName,
     @required this.numberPhone,
@@ -175,4 +176,24 @@ class SearchEmployeesBaseData {
       }
     }
   }
+}
+
+class Track {
+  final String dodatkoweInfo;
+  final int fracht;
+  final String from;
+  final bool status;
+  final DateTime termin;
+  final String to;
+  final GeoPoint wspolrzedneDostawy;
+
+  Track({
+    this.dodatkoweInfo,
+    this.fracht,
+    this.from,
+    this.status,
+    this.termin,
+    this.to,
+    this.wspolrzedneDostawy,
+  });
 }

@@ -2,8 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:truckmanagement_app/models/chat.dart';
-import 'package:truckmanagement_app/widgets/userPage/chief_acc/pages/company/chat/conversation/inputConversation.dart';
+import 'package:truckmanagement_app/widgets/chat/conversation/inputConversation.dart';
 
 class Conversation extends StatelessWidget {
   bool conversation;
