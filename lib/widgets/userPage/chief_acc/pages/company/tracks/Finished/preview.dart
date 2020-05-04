@@ -23,41 +23,60 @@ class _TracksFinishedState extends State<TracksFinished> {
 
   Future _getTrackData(DateTime date) async {
     try {
-      trackData = [];
       final Timestamp viewDate = Timestamp.fromDate((date.add(Duration(
           hours: -date.hour,
           minutes: -date.minute,
           seconds: -date.second,
           microseconds: -date.microsecond,
           milliseconds: -date.millisecond))));
-      await Firestore.instance
-          .collection('Companys')
-          .document(widget.companyData.uidCompany)
-          .collection(
-              'Tracks') // V // W bazie danych zawsze musza byc 2 godz do przodu bo jest UTC+2, dlatego czasami nie pojawia sie dana z dnia, gdy np. jest przed 2 w nocy.
-          .where('Termin',
-              isGreaterThanOrEqualTo: viewDate,
-              isLessThanOrEqualTo:
-                  Timestamp(viewDate.seconds + (23 * 59 * 59), 0))
-          .getDocuments()
-          .then((val) async {
-        for (var doc in val.documents) {
-          trackData.add(Track(
-            dodatkoweInfo: doc.data['DodatkoweInfo'] ?? null,
-            fracht: doc.data['Fracht'] ?? null,
-            from: doc.data['From'] ?? null,
-            status: doc.data['Status'] ?? null,
-            termin: DateTime.fromMillisecondsSinceEpoch(
-                doc.data['Termin'].seconds * 1000),
-            to: doc.data['To'] ?? null,
-            wspolrzedneDostawy: doc.data['WspolrzedneDostawy'] ?? null,
-          ));
+
+      var checkData;
+      checkData = trackData.where((val) {
+        // Sprawdzanie czy w liscie sa juz dane, aby zapobiec ponownemu wczytywaniu tych samych danych, moze byc tylko problem, gdy w momencie gdy beda juz dane w liscie i sie zmienia w bazie to ciagle beda wyswietlane stare dane.
+        if (DateFormat('d-M-y').format(val.termin) ==
+                DateFormat('d-M-y').format(pickedDate) &&
+            Timestamp.fromDate(val.termin).seconds >= viewDate.seconds &&
+            val.termin.second <= viewDate.seconds + (23 * 59 * 59)) {
+          return true;
+        } else {
+          return false;
         }
-        print('Znaleziono w indeksie 0: ' + trackData.length.toString());
+      });
+      print(checkData);
+      if (checkData.isEmpty) {
+        await Firestore.instance
+            .collection('Companys')
+            .document(widget.companyData.uidCompany)
+            .collection(
+                'Tracks') // V // W bazie danych zawsze musza byc 2 godz do przodu bo jest UTC+2, dlatego czasami nie pojawia sie dana z dnia, gdy np. jest przed 2 w nocy.
+            .where('Termin',
+                isGreaterThanOrEqualTo: viewDate,
+                isLessThanOrEqualTo:
+                    Timestamp(viewDate.seconds + (23 * 59 * 59), 0))
+            .getDocuments()
+            .then((val) async {
+          for (var doc in val.documents) {
+            trackData.add(Track(
+              dodatkoweInfo: doc.data['DodatkoweInfo'] ?? null,
+              fracht: doc.data['Fracht'] ?? null,
+              from: doc.data['From'] ?? null,
+              status: doc.data['Status'] ?? null,
+              termin: DateTime.fromMillisecondsSinceEpoch(
+                  doc.data['Termin'].seconds * 1000),
+              to: doc.data['To'] ?? null,
+              wspolrzedneDostawy: doc.data['WspolrzedneDostawy'] ?? null,
+            ));
+          }
+          print('Znaleziono w indeksie 0: ' + trackData.length.toString());
+          setState(() {
+            loading = false;
+          });
+        });
+      } else {
         setState(() {
           loading = false;
         });
-      });
+      }
     } catch (err) {
       print(err);
     }
@@ -131,7 +150,8 @@ class _TracksFinishedState extends State<TracksFinished> {
                                 child: Container(
                                     padding: EdgeInsets.only(left: 5, right: 5),
                                     child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       children: <Widget>[
                                         Text(
                                           pickedDate ==
@@ -144,17 +164,22 @@ class _TracksFinishedState extends State<TracksFinished> {
                                                       milliseconds:
                                                           -dayNow.millisecond))
                                               ? 'Dzisiaj'
-                                              : pickedDate == dayNow.add(Duration(
-                                                days: - 1,
-                                                      hours: -dayNow.hour,
-                                                      minutes: -dayNow.minute,
-                                                      seconds: -dayNow.second,
-                                                      microseconds:
-                                                          -dayNow.microsecond,
-                                                      milliseconds:
-                                                          -dayNow.millisecond))
+                                              : pickedDate ==
+                                                      dayNow.add(Duration(
+                                                          days: -1,
+                                                          hours: -dayNow.hour,
+                                                          minutes:
+                                                              -dayNow.minute,
+                                                          seconds:
+                                                              -dayNow.second,
+                                                          microseconds: -dayNow
+                                                              .microsecond,
+                                                          milliseconds: -dayNow
+                                                              .millisecond))
                                                   ? 'Wczoraj'
-                                                  : 'Data: ' + DateFormat('d-M-y').format(pickedDate) ,
+                                                  : 'Data: ' +
+                                                      DateFormat('d-M-y')
+                                                          .format(pickedDate),
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                               fontSize: 25),
@@ -167,7 +192,13 @@ class _TracksFinishedState extends State<TracksFinished> {
                             child: Container(
                               height: double.infinity,
                               child: ListView.builder(
-                                itemCount: trackData.length,
+                                itemCount: trackData.where((val) { // wybiera tylko te elementy, której data sie zgadza z wybraną.
+                                  return DateFormat('d-M-y')
+                                              .format(val.termin) ==
+                                          DateFormat('d-M-y').format(pickedDate)
+                                      ? true
+                                      : false;
+                                }).length,
                                 itemBuilder: (context, index) {
                                   return Container(
                                     height:
@@ -186,7 +217,8 @@ class _TracksFinishedState extends State<TracksFinished> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: <Widget>[
-                                        Text('Rozpoczety Z: ${trackData[index].from}'),
+                                        Text(
+                                            'Rozpoczety Z: ${trackData[index].from}'),
                                         Text('Do: ${trackData[index].to}'),
                                         Text('Zakonczony przez: trzeba dodac')
                                       ],
