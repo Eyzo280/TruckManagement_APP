@@ -10,6 +10,7 @@ import 'package:truckmanagement_app/widgets//chat/chats.dart';
 import 'package:truckmanagement_app/widgets/userPage/chief_acc/pages/company/invites/invites.dart';
 import 'package:truckmanagement_app/widgets/userPage/chief_acc/pages/company/main_company_look_trucker.dart';
 import 'package:truckmanagement_app/widgets/userPage/chief_acc/pages/company/search_employees/search_Employees.dart';
+import 'package:truckmanagement_app/widgets/userPage/chief_acc/pages/company/tracks/add_New_Track.dart';
 import 'package:truckmanagement_app/widgets/userPage/chief_acc/pages/company/tracks/select_Preview.dart';
 import 'package:truckmanagement_app/widgets/userPage/chief_acc/services/database_company.dart';
 
@@ -573,6 +574,9 @@ class CompanyMain extends StatelessWidget {
                                   padding: EdgeInsets.all(0),
                                   onPressed: () {
                                     // Trzeba zrobic nowe okno z zapraszaniem nowych kierowcow
+                                    Navigator.of(context).push(MaterialPageRoute(builder: (_) {
+                                      return AddNewTrack(companyData: companyData);
+                                    }));
                                     print('Dodaj Nowy Kurs');
                                   },
                                   child: Container(

@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:truckmanagement_app/widgets/userPage/chief_acc/models/company_Employees.dart';
 
 class Database_CompanyEmployees {
@@ -86,7 +85,7 @@ class Database_CompanyEmployees {
       yearEstablishmentCompany: DateTime.fromMillisecondsSinceEpoch(
               doc.data['yearEstablishmentCompany'].seconds * 1000) ??
           DateTime.now(),
-          type: doc.data['type'] ?? '',
+      type: doc.data['type'] ?? '',
     );
   }
 
@@ -147,7 +146,8 @@ class Database_CompanyEmployees {
       'statusDriver': false, // trzeba dodawc ustawienie zmiany statusu kierowcy
     }).whenComplete(() {
       Firestore.instance.collection('Drivers').document(driverUid).updateData({
-        'nameCompany': companyUid,              // trzeba bedzie chyba przerobic zeby byla odzielna kolekcja z firma, a w danych uzytkownika bedzie tylko, ze jest zatrudniony
+        'nameCompany':
+            companyUid, // trzeba bedzie chyba przerobic zeby byla odzielna kolekcja z firma, a w danych uzytkownika bedzie tylko, ze jest zatrudniony
       });
     }).whenComplete(() {
       company
@@ -195,14 +195,22 @@ class Database_CompanyEmployees {
     });
   }
 
-  // Kod dotyczący Tras
-  /*
-  Track _getTrackData(DocumentSnapshot doc) {
+  // Dodawanie nowego kursu
 
+  Future addNewTrack({String dodatkoweInfo, int fracht, String from, DateTime termin, String to, GeoPoint wspolrzedneDostawy, String driver}) async {
+    try {
+      company.document(companyUid).collection('Tracks').document().setData({
+        'DodatkoweInfo': dodatkoweInfo,
+        'Fracht': fracht,
+        'From': from,
+        'Status': true,
+        'Termin': termin,
+        'To': to,
+        'WspolrzedneDostawy': wspolrzedneDostawy,
+        'Driver': driver,
+      });
+    } catch (err) {
+      print(err);
+    }
   }
-
-  Stream<Track> get getTracksData {
-    return company.document(companyUid).collection('Tracks').snapshots().map(_getTrackData);
-  }
-  */
 }
