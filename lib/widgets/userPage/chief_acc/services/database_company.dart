@@ -197,7 +197,14 @@ class Database_CompanyEmployees {
 
   // Dodawanie nowego kursu
 
-  Future addNewTrack({String dodatkoweInfo, int fracht, String from, DateTime termin, String to, GeoPoint wspolrzedneDostawy, String driver}) async {
+  Future addNewTrack(
+      {String dodatkoweInfo,
+      int fracht,
+      String from,
+      DateTime termin,
+      String to,
+      GeoPoint wspolrzedneDostawy,
+      String driver}) async {
     try {
       company.document(companyUid).collection('Tracks').document().setData({
         'DodatkoweInfo': dodatkoweInfo,
@@ -213,4 +220,34 @@ class Database_CompanyEmployees {
       print(err);
     }
   }
-}
+
+  // Pobieranie Akctive Tracks
+
+  List<Track> getActiveTracks(QuerySnapshot snap) {
+    try {
+      return snap.documents.map((doc) {
+        return Track(
+          dodatkoweInfo: doc.data['DodatkoweInfo'] ?? null,
+          fracht: doc.data['Fracht'] ?? null,
+          from: doc.data['From'] ?? null,
+          status: doc.data['Status'] ?? null,
+          termin:  DateTime.fromMillisecondsSinceEpoch(
+          doc.data['Termin'].seconds * 1000) ?? null,
+          to: doc.data['To'] ?? null,
+          wspolrzedneDostawy: doc.data['WspolrzedneDostawy'] ?? null,
+        );
+      }).toList();
+    } catch (err) {
+      print('Blad w getActiveTracks().');
+    }
+  }
+
+  Stream<List<Track>> get streamActiveTracks {
+    return Firestore.instance
+                  .collection('Companys')
+                  .document(companyUid)
+                  .collection('Tracks')
+                  .where('Status', isEqualTo: true)
+                  .snapshots().map(getActiveTracks);
+  }
+ }

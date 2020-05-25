@@ -8,13 +8,13 @@ class TracksSelect extends StatelessWidget {
   TracksSelect({this.companyData});
 
   void _openPreview(BuildContext ctx, String preview) {
-    Navigator.of(ctx).push(MaterialPageRoute(builder: (_) {
+
       if (preview == 'Active') {
-        return TracksActive();
+        Navigator.of(ctx).pushNamed(TracksActive.routeName);
       } else {
-        return TracksFinished(companyData: companyData);
+        Navigator.of(ctx).pushNamed(TracksFinished.routeName);
       }
-    }));
+
   }
 
   @override

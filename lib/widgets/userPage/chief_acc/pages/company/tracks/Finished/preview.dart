@@ -4,6 +4,8 @@ import 'package:intl/intl.dart';
 import 'package:truckmanagement_app/widgets/userPage/chief_acc/models/company_Employees.dart';
 
 class TracksFinished extends StatefulWidget {
+  static const routeName = '/TracksFinished';
+
   final companyData;
 
   TracksFinished({this.companyData});
@@ -56,16 +58,18 @@ class _TracksFinishedState extends State<TracksFinished> {
             .getDocuments()
             .then((val) async {
           for (var doc in val.documents) {
-            trackData.add(Track(
-              dodatkoweInfo: doc.data['DodatkoweInfo'] ?? null,
-              fracht: doc.data['Fracht'] ?? null,
-              from: doc.data['From'] ?? null,
-              status: doc.data['Status'] ?? null,
-              termin: DateTime.fromMillisecondsSinceEpoch(
-                  doc.data['Termin'].seconds * 1000),
-              to: doc.data['To'] ?? null,
-              wspolrzedneDostawy: doc.data['WspolrzedneDostawy'] ?? null,
-            ));
+            if (doc.data['Status'] == false) { // jest to malo wydajne, ale nie wiem jak zrobic przy pobieraniu danych dwoch warunkow
+              trackData.add(Track(
+                dodatkoweInfo: doc.data['DodatkoweInfo'] ?? null,
+                fracht: doc.data['Fracht'] ?? null,
+                from: doc.data['From'] ?? null,
+                status: doc.data['Status'] ?? null,
+                termin: DateTime.fromMillisecondsSinceEpoch(
+                    doc.data['Termin'].seconds * 1000),
+                to: doc.data['To'] ?? null,
+                wspolrzedneDostawy: doc.data['WspolrzedneDostawy'] ?? null,
+              ));
+            }
           }
           print('Znaleziono w indeksie 0: ' + trackData.length.toString());
           setState(() {
@@ -192,7 +196,8 @@ class _TracksFinishedState extends State<TracksFinished> {
                             child: Container(
                               height: double.infinity,
                               child: ListView.builder(
-                                itemCount: trackData.where((val) { // wybiera tylko te elementy, której data sie zgadza z wybraną.
+                                itemCount: trackData.where((val) {
+                                  // wybiera tylko te elementy, której data sie zgadza z wybraną.
                                   return DateFormat('d-M-y')
                                               .format(val.termin) ==
                                           DateFormat('d-M-y').format(pickedDate)
