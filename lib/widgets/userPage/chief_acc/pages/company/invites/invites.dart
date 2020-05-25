@@ -6,6 +6,8 @@ import 'package:truckmanagement_app/widgets/userPage/chief_acc/pages/company/inv
 import 'package:truckmanagement_app/widgets/userPage/chief_acc/services/database_company.dart';
 
 class Invitations extends StatefulWidget {
+  static const routeName = '/Invitations';
+
   final companyUid;
 
   Invitations({this.companyUid});

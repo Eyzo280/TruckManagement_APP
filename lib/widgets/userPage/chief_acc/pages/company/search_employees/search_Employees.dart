@@ -6,9 +6,7 @@ import 'package:truckmanagement_app/widgets/userPage/chief_acc/pages/company/sea
 import 'package:truckmanagement_app/widgets/userPage/chief_acc/services/database_company.dart';
 
 class SearchEmployees extends StatefulWidget {
-  final companyData;
-
-  SearchEmployees({this.companyData});
+  static const routeName = '/SearchEmployees';
 
   @override
   _SearchEmployeesState createState() => _SearchEmployeesState();
@@ -26,10 +24,10 @@ class _SearchEmployeesState extends State<SearchEmployees> {
   List sentInvitations = [];
   bool statusSentInvitations = false;
 
-  _getEmployees() async {
+  _getEmployees({@required CompanyData companyData}) async {
     await _firestore
         .collection('Companys')
-        .document(widget.companyData.uidCompany)
+        .document(companyData.uidCompany)
         .collection('SentInvitations')
         .getDocuments()
         .then((snap) {
@@ -164,7 +162,7 @@ class _SearchEmployeesState extends State<SearchEmployees> {
   final kmOd = TextEditingController();
   final kmDo = TextEditingController();
 
-  Widget Filter() {
+  Widget Filter({@required CompanyData companyData}) {
     return Form(
       child: Container(
         padding: EdgeInsets.all(15),
@@ -217,7 +215,7 @@ class _SearchEmployeesState extends State<SearchEmployees> {
                 setState(() {
                   _moreEmployeesAbailable = true;
                   _gettingMoreEmployees = false;
-                  _getEmployees();
+                  _getEmployees(companyData: companyData);
                   Navigator.of(context).pop();
                 });
               },
@@ -229,11 +227,11 @@ class _SearchEmployeesState extends State<SearchEmployees> {
     );
   }
 
-  void _openFilter(BuildContext ctx) {
+  void _openFilter({@required BuildContext ctx, @required CompanyData companyData}) {
     Future<void> future = showModalBottomSheet<void>(
         context: ctx,
         builder: (_) {
-          return Filter();
+          return Filter(companyData: companyData);
         });
     future.then((void value) {
       setState(() {});
@@ -253,7 +251,7 @@ class _SearchEmployeesState extends State<SearchEmployees> {
       employeesData
       }) {
     if (companyData != null && employeesData != null) {
-      Database_CompanyEmployees(companyUid: widget.companyData.uidCompany)
+      Database_CompanyEmployees(companyUid: companyData.uidCompany)
           .sendInvite(
         companyData: companyData,
         employeesData: employeesData,
@@ -268,6 +266,9 @@ class _SearchEmployeesState extends State<SearchEmployees> {
 
   @override
   Widget build(BuildContext context) {
+    final routeArgs = ModalRoute.of(context).settings.arguments as Map<String, CompanyData>;
+
+    final CompanyData companyData = routeArgs['companyData'];
     // final searchEmployeesBaseData = Provider.of<List<SearchEmployeesBaseData>>(context);
     return Scaffold(
       appBar: AppBar(
@@ -293,7 +294,7 @@ class _SearchEmployeesState extends State<SearchEmployees> {
                   setState(() {
                     dropdownValue = newValue;
                     if (dropdownValue != 'Wybierz') {
-                      _getEmployees();
+                      _getEmployees(companyData: companyData);
                     }
                   });
                 },
@@ -309,7 +310,7 @@ class _SearchEmployeesState extends State<SearchEmployees> {
                   ? IconButton(
                       icon: Icon(Icons.filter_list),
                       onPressed: () {
-                        _openFilter(context);
+                        _openFilter(ctx: context, companyData: companyData);
                         print('Pokaz Filtr');
                       })
                   : SizedBox()
@@ -416,7 +417,7 @@ class _SearchEmployeesState extends State<SearchEmployees> {
                                                 ? null
                                                 : _sendInv,
                                             _employees[index],
-                                            widget.companyData);
+                                            companyData);
                                         print('Pokaz szczegoly');
                                       }),
                                   IconButton(
@@ -439,7 +440,7 @@ class _SearchEmployeesState extends State<SearchEmployees> {
                                           ? null
                                           : () {
                                               _sendInv(
-                                                  companyData: widget.companyData,
+                                                  companyData: companyData,
                                                   employeesData: _employees[index]);
                                             }),
                                 ],

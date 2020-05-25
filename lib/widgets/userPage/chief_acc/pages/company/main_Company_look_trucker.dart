@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:truckmanagement_app/models/user.dart';
+import 'package:truckmanagement_app/widgets/userPage/chief_acc/models/company_Employees.dart';
 import 'package:truckmanagement_app/widgets/userPage/chief_acc/pages/company/ColumnCompanyLookDriverTrucks.dart';
 import 'package:truckmanagement_app/widgets/userPage/chief_acc/pages/company/search_employees/search_Employees.dart';
 import 'package:truckmanagement_app/widgets/userPage/chief_acc/pages/company/top_body_CompanyLookDriverTrucks.dart';
 
 class MainCompanyLookTrucker extends StatefulWidget {
-  var companyData;
-
-  MainCompanyLookTrucker(this.companyData);
+  static const routeName = '/MainCompanyLookTrucker';
 
   @override
   _CompanyLookTruckerState createState() => _CompanyLookTruckerState();
@@ -52,21 +51,19 @@ class _CompanyLookTruckerState extends State<MainCompanyLookTrucker> {
 
 */
 
-  void _openSearchEmployees(BuildContext ctx, companyData) {
-    Navigator.of(ctx).push(MaterialPageRoute(builder: (_) {
-      return
-          /* StreamProvider<List<SearchEmployeesBaseData>>.value(
-            value:
-                Database_CompanyEmployees().getSearchEmployeesBaseData,
-            child: SearchEmployees());
-            */
-          SearchEmployees(companyData: companyData);
-    }));
+  void _openSearchEmployees(BuildContext ctx, CompanyData companyData) {
+    Navigator.of(context).pushNamed(SearchEmployees.routeName, arguments: {
+      'companyData': companyData,
+    });
   }
   
 
   @override
   Widget build(BuildContext context) {
+    final routeArgs = ModalRoute.of(context).settings.arguments as Map<String, CompanyData>;
+    
+    final CompanyData companyData = routeArgs['companyData'];
+
     final appBar = AppBar(
         title: Center(
           child: Text('Kierowcy'),
@@ -78,7 +75,7 @@ class _CompanyLookTruckerState extends State<MainCompanyLookTrucker> {
               icon: Icon(Icons.add),
               onPressed: () {
                 //showCreatorNewDriverTruck(context);
-                _openSearchEmployees(context, widget.companyData);
+                _openSearchEmployees(context, companyData);
                 print('Add new Trucker');
               },
             ),
@@ -95,7 +92,7 @@ class _CompanyLookTruckerState extends State<MainCompanyLookTrucker> {
           
           Container(
             height: (MediaQuery.of(context).size.height - appBar.preferredSize.height - MediaQuery.of(context).padding.top) * 0.83,
-            child: ColumnCompanyLookDriverTrucks(widget.companyData.uidCompany),
+            child: ColumnCompanyLookDriverTrucks(companyData.uidCompany),
           ),
         ],
       ),

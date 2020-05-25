@@ -31,7 +31,7 @@ class _SelectUserState extends State<SelectUser> {
     } else if (userData.type == 'DriverTruck') {
       return StreamProvider<DriverTruck>.value(
         value: DatabaseService(uid: userData.uid).dataDriver,
-        child: TruckerMain());
+        child: TruckerMain(userData: userData,));
     } else {
       return ErrorPage();
     }

@@ -5,12 +5,17 @@ import 'package:truckmanagement_app/widgets/userPage/trucker_acc/models/trucker.
 import 'package:truckmanagement_app/widgets/userPage/trucker_acc/services_Trucker/database_Trucker.dart';
 
 class TruckerSearchCompany extends StatelessWidget {
-  final userData;
+  // final userData;
 
-  TruckerSearchCompany(this.userData);
+  // TruckerSearchCompany(this.userData);
+
+  static const routeName = '/searchCompany';
 
   @override
   Widget build(BuildContext context) {
+    final routeArgs = ModalRoute.of(context).settings.arguments as Map<String, DriverTruck>;
+
+    final userData = routeArgs['userData'];
     final searchCompanys = Provider.of<List<BaseSearchCompany>>(context);
     return Scaffold(
       appBar: AppBar(

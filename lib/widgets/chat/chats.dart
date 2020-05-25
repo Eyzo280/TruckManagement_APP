@@ -7,9 +7,7 @@ import 'package:truckmanagement_app/models/chat.dart';
 import 'package:truckmanagement_app/models/user.dart';
 
 class Chats extends StatefulWidget {
-  var companyUid;
-
-  Chats({this.companyUid});
+  static const routeName = '/Chats';
 
   @override
   _ChatsState createState() => _ChatsState();
@@ -38,7 +36,7 @@ class _ChatsState extends State<Chats> {
     }
   }
   */
-  Widget _screen(context, PeerChat document) {
+  Widget _screen(context, PeerChat document, String userUid) {
     // _getImage();
 
     return Container(
@@ -82,7 +80,7 @@ class _ChatsState extends State<Chats> {
           ],
         ),
         onPressed: () {
-          Chat(mainUid: widget.companyUid, peopleUid: document.uid)
+          Chat(mainUid: userUid, peopleUid: document.uid)
               .searchChat(context);
         },
         color: Colors.grey,
@@ -96,6 +94,10 @@ class _ChatsState extends State<Chats> {
 
   @override
   Widget build(BuildContext context) {
+    final routeArgs =
+        ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
+    final userUid = routeArgs['userUid'];
+
     final chats = Provider.of<List<PeerChat>>(context) ?? null;
     if (chats != null) {
       print(chats[0].conversation);
@@ -118,7 +120,7 @@ class _ChatsState extends State<Chats> {
                     padding: EdgeInsets.all(10.0),
                     itemCount: chats.length,
                     itemBuilder: (context, index) =>
-                        _screen(context, chats[index]),
+                        _screen(context, chats[index], userUid),
                   ),
           )
         ]));
