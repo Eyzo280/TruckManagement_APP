@@ -22,14 +22,18 @@ class ChiefSelectPage extends StatelessWidget {
     );
   }
 
-  void openPageCompany(BuildContext ctx, String uidCompany) {
+  void openPageCompany(BuildContext ctx, String companyUid) {
     Navigator.pushReplacement(
       ctx,
       MaterialPageRoute(
         builder: (ctx) {
           return StreamProvider<CompanyData>.value(
-              value: Database_CompanyEmployees(uid: uidCompany).getCompanyData,
-              child: CompanyMain());
+              value: Database_CompanyEmployees(uid: companyUid).getCompanyData,
+              child: StreamProvider<List<Track>>.value(
+                  value:
+                      Database_CompanyEmployees(companyUid: companyUid)
+                  .streamActiveTracks,
+                  child: CompanyMain()));
         },
       ),
     );

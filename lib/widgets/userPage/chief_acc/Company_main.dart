@@ -41,7 +41,9 @@ class CompanyMain extends StatelessWidget {
                   value: Database_CompanyEmployees(uid: companyData.uidCompany)
                       .getBaseDataEmployees,
                   child: MainCompanyLookTrucker()),
-          TracksActive.routeName: (ctx) => TracksActive(companyUid: companyData.uidCompany,),
+          TracksActive.routeName: (ctx) {
+            final listTracks = Provider.of<List<Track>>(context);
+           return TracksActive(companyUid: companyData.uidCompany, listTracks: listTracks,);} ,
           TracksFinished.routeName: (ctx) => TracksFinished(companyData: companyData,),
         },
         home: StreamProvider<CompanyData>.value(
