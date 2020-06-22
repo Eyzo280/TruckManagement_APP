@@ -5,9 +5,9 @@ import 'package:truckmanagement_app/services/auth.dart';
 import 'package:truckmanagement_app/theme.dart';
 import 'package:truckmanagement_app/widgets/userPage/chief_acc/Chief_main_page.dart';
 import 'package:truckmanagement_app/widgets/userPage/chief_acc/pages/chief/create_company.dart';
-import 'package:truckmanagement_app/widgets/userPage/chief_acc/services/database_company.dart';
 import 'package:truckmanagement_app/widgets/userPage/company/Company_main.dart';
 import 'package:truckmanagement_app/widgets/userPage/company/models/company_Employees.dart';
+import 'package:truckmanagement_app/widgets/userPage/company/services/database_company.dart';
 
 class ChiefSelectPage extends StatelessWidget {
   final AuthService _auth = AuthService();
@@ -29,10 +29,10 @@ class ChiefSelectPage extends StatelessWidget {
       MaterialPageRoute(
         builder: (ctx) {
           return StreamProvider<CompanyData>.value(
-              value: Database_CompanyEmployees(uid: companyUid).getCompanyData,
+              value: Database_Company(uid: companyUid).getCompanyData,
               child: StreamProvider<List<Track>>.value(
                   value:
-                      Database_CompanyEmployees(companyUid: companyUid)
+                      Database_Company(companyUid: companyUid)
                   .streamActiveTracks,
                   child: CompanyMain()));
         },

@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:truckmanagement_app/widgets/shared/loading.dart';
-import 'package:truckmanagement_app/widgets/userPage/chief_acc/services/database_company.dart';
 import 'package:truckmanagement_app/widgets/userPage/company/models/company_Employees.dart';
 import 'package:truckmanagement_app/widgets/userPage/company/pages/invites/invitesFullData.dart';
+import 'package:truckmanagement_app/widgets/userPage/company/services/database_company.dart';
 
 class Invitations extends StatefulWidget {
   static const routeName = '/Invitations';
@@ -237,7 +237,7 @@ class _InvitationsState extends State<Invitations> {
                                 }),
                             FlatButton(
                                 onPressed: () {
-                                  Database_CompanyEmployees(companyUid: widget.companyUid).acceptInv(driverUid: _invites[index].invUid, firstName: _invites[index].firstName, lastName: _invites[index].lastName, numberPhone: _invites[index].numberPhone);
+                                  Database_Company(companyUid: widget.companyUid).acceptInv(driverUid: _invites[index].invUid, firstName: _invites[index].firstName, lastName: _invites[index].lastName, numberPhone: _invites[index].numberPhone);
                                   print('Akceptuj');
                                 },
                                 child: Text('Akceptuj'))

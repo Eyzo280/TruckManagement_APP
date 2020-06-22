@@ -5,14 +5,15 @@ import 'package:truckmanagement_app/widgets/userPage/company/main_Company/drawer
 import 'package:truckmanagement_app/widgets/userPage/company/main_Company/lastTracks.dart';
 import 'package:truckmanagement_app/widgets/userPage/company/main_Company/map.dart';
 import 'package:truckmanagement_app/widgets/userPage/company/main_Company/topBody.dart';
-import 'package:truckmanagement_app/widgets/userPage/company/main_Company_look_trucker.dart';
 import 'package:truckmanagement_app/widgets/userPage/company/models/company_Employees.dart';
+import 'package:truckmanagement_app/widgets/userPage/company/pages/search_Drivers/searchDriver.dart';
+
 
 class CompanyPage extends StatelessWidget {
   final AuthService _auth = AuthService();
 
   void openChiefLookTrucker(BuildContext ctx, CompanyData companyData) {
-    Navigator.of(ctx).pushNamed(MainCompanyLookTrucker.routeName,
+    Navigator.of(ctx).pushNamed(SearchDriver.routeName,
         arguments: {'companyData': companyData});
   }
 

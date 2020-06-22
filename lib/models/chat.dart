@@ -9,15 +9,20 @@ import 'package:truckmanagement_app/widgets/chat/conversation/conversation.dart'
 class Chat {
   final String mainUid;
   final String peopleUid;
-  final String peopleFirstName;
-  final String peopleLastName;
 
-  Chat({@required this.mainUid, @required this.peopleUid, this.peopleFirstName, this.peopleLastName});
+  Chat({
+    @required this.mainUid,
+    @required this.peopleUid,
+  });
 
   final CollectionReference messages =
       Firestore.instance.collection('Messages');
 
-  Future searchChat(context) async {
+  Future searchChat({
+    @required context,
+    @required peopleFirstName,
+    @required peopleLastName,
+  }) async {
     // bool conversation;
     try {
       //bool firstMessage;

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:truckmanagement_app/widgets/userPage/chief_acc/services/database_company.dart';
 import 'package:truckmanagement_app/widgets/userPage/company/models/company_Employees.dart';
+import 'package:truckmanagement_app/widgets/userPage/company/services/database_company.dart';
 
 class InvitesFullData extends StatelessWidget {
   final String companyUid;
@@ -82,9 +82,9 @@ class InvitesFullData extends StatelessWidget {
               children: <Widget>[
                 Text('Przejechane Km: ${inviteData.totalDistanceTraveled}'),
                 Text(
-                    'Zarejsetrowany od: ${SearchEmployeesBaseData().calculationAccountActivityTime(registerAccTime: inviteData.dateOfEmplotment)}'),
+                    'Zarejsetrowany od: ${SearchDriverData().calculationAccountActivityTime(registerAccTime: inviteData.dateOfEmplotment)}'),
                 Text(
-                    'Prawo jazdy od: ${SearchEmployeesBaseData().calculationAccountActivityTime(registerAccTime: inviteData.drivingLicenseFrom)}'),
+                    'Prawo jazdy od: ${SearchDriverData().calculationAccountActivityTime(registerAccTime: inviteData.drivingLicenseFrom)}'),
                 Text('Kursy Wschod/Zachod'),
                 Text('Pozwolenia: ADR'),
               ],
@@ -174,7 +174,7 @@ class InvitesFullData extends StatelessWidget {
                         print('Nie mozna wyslac zaproszenia.');
                       }
                       */
-                    Database_CompanyEmployees(companyUid: companyUid).acceptInv(
+                    Database_Company(companyUid: companyUid).acceptInv(
                         driverUid: inviteData.invUid,
                         firstName: inviteData.firstName,
                         lastName: inviteData.lastName,

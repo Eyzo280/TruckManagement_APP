@@ -99,7 +99,7 @@ class InvData {
   });
 }
 
-class SearchEmployeesBaseData {
+class SearchDriverData {
   final String driverUid;
   final DateTime dateOfEmplotment;
   final String drivingLicense;
@@ -111,7 +111,7 @@ class SearchEmployeesBaseData {
   final int totalDistanceTraveled;
   final String type;
 
-  SearchEmployeesBaseData({
+  SearchDriverData({
     this.driverUid,
     this.dateOfEmplotment,
     this.drivingLicense,

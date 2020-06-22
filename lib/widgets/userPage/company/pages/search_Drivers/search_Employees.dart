@@ -1,9 +1,10 @@
+/*
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:truckmanagement_app/widgets/shared/loading.dart';
-import 'package:truckmanagement_app/widgets/userPage/chief_acc/services/database_company.dart';
 import 'package:truckmanagement_app/widgets/userPage/company/models/company_Employees.dart';
-import 'package:truckmanagement_app/widgets/userPage/company/pages/search_employees/fullData/fulldata_employee.dart';
+import 'package:truckmanagement_app/widgets/userPage/company/services/database_company.dart';
 
 class SearchEmployees extends StatefulWidget {
   static const routeName = '/SearchEmployees';
@@ -14,7 +15,7 @@ class SearchEmployees extends StatefulWidget {
 
 class _SearchEmployeesState extends State<SearchEmployees> {
   Firestore _firestore = Firestore.instance;
-  List<SearchEmployeesBaseData> _employees = [];
+  List<SearchDriverData> _employees = [];
   bool _loadingEmployees = true;
   int _per_page = 8;
   DocumentSnapshot _lastDocument;
@@ -54,7 +55,7 @@ class _SearchEmployeesState extends State<SearchEmployees> {
       });
       QuerySnapshot querySnapshot = await q.getDocuments();
       _employees = querySnapshot.documents.map((doc) {
-        return SearchEmployeesBaseData(
+        return SearchDriverData(
           driverUid: doc.documentID ?? null,
           dateOfEmplotment: DateTime.fromMillisecondsSinceEpoch(
                   doc.data['dateOfEmplotment'].seconds * 1000) ??
@@ -116,7 +117,7 @@ class _SearchEmployeesState extends State<SearchEmployees> {
     _lastDocument = querySnapshot.documents[querySnapshot.documents.length - 1];
 
     _employees.addAll(querySnapshot.documents.map((doc) {
-      return SearchEmployeesBaseData(
+      return SearchDriverData(
         driverUid: doc.documentID ?? null,
         dateOfEmplotment: DateTime.fromMillisecondsSinceEpoch(
                 doc.data['dateOfEmplotment'].seconds * 1000) ??
@@ -251,7 +252,7 @@ class _SearchEmployeesState extends State<SearchEmployees> {
       employeesData
       }) {
     if (companyData != null && employeesData != null) {
-      Database_CompanyEmployees(companyUid: companyData.uidCompany)
+      Database_Company(companyUid: companyData.uidCompany)
           .sendInvite(
         companyData: companyData,
         employeesData: employeesData,
@@ -269,7 +270,7 @@ class _SearchEmployeesState extends State<SearchEmployees> {
     final routeArgs = ModalRoute.of(context).settings.arguments as Map<String, CompanyData>;
 
     final CompanyData companyData = routeArgs['companyData'];
-    // final searchEmployeesBaseData = Provider.of<List<SearchEmployeesBaseData>>(context);
+    // final SearchDriverData = Provider.of<List<SearchDriverData>>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text('Wyszukiwarka Firmy',
@@ -465,3 +466,4 @@ class _SearchEmployeesState extends State<SearchEmployees> {
     );
   }
 }
+*/

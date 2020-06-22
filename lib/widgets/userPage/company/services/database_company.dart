@@ -3,14 +3,14 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:truckmanagement_app/widgets/userPage/company/models/company_Employees.dart';
 
-class Database_CompanyEmployees {
+class Database_Company {
   final String uid;
   final String companyUid;
 
   // Filtr
   final List searchSettings;
 
-  Database_CompanyEmployees({
+  Database_Company({
     this.uid,
     this.companyUid,
     this.searchSettings,
@@ -162,12 +162,12 @@ class Database_CompanyEmployees {
 
   Future sendInvite({
     companyData,
-    employeesData,
+    driverData,
   }) async {
     final CollectionReference driver = Firestore.instance.collection('Drivers');
 
     driver
-        .document(employeesData.driverUid)
+        .document(driverData.driverUid)
         .collection('Invitations')
         .document(companyData.uidCompany)
         .setData({
@@ -182,15 +182,15 @@ class Database_CompanyEmployees {
     company
         .document(companyData.uidCompany)
         .collection('SentInvitations')
-        .document(employeesData.driverUid)
+        .document(driverData.driverUid)
         .setData({
-      'firstName': employeesData.firstName,
-      'lastName': employeesData.lastName,
-      'drivingLicenseFrom': employeesData.drivingLicenseFrom,
-      'drivingLicense': employeesData.drivingLicense,
-      'knownLanguages': employeesData.knownLanguages,
-      'totalDistanceTraveled': employeesData.totalDistanceTraveled,
-      'type': employeesData.type,
+      'firstName': driverData.firstName,
+      'lastName': driverData.lastName,
+      'drivingLicenseFrom': driverData.drivingLicenseFrom,
+      'drivingLicense': driverData.drivingLicense,
+      'knownLanguages': driverData.knownLanguages,
+      'totalDistanceTraveled': driverData.totalDistanceTraveled,
+      'type': driverData.type,
       'dateSentInv': DateTime.now(),
     });
   }
@@ -250,4 +250,8 @@ class Database_CompanyEmployees {
                   .where('Status', isEqualTo: true)
                   .snapshots().map(getActiveTracks);
   }
+
+  //                                                                                          SEARCH DRIVER                                                                               //
+
+  
  }

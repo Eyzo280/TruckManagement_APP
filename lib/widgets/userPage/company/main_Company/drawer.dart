@@ -8,7 +8,7 @@ import 'package:truckmanagement_app/widgets/chat/chats.dart';
 import 'package:truckmanagement_app/widgets/userPage/chief_acc/chief_select_page.dart';
 import 'package:truckmanagement_app/widgets/userPage/company/models/company_Employees.dart';
 import 'package:truckmanagement_app/widgets/userPage/company/pages/invites/invites.dart';
-import 'package:truckmanagement_app/widgets/userPage/company/pages/search_employees/search_Employees.dart';
+import 'package:truckmanagement_app/widgets/userPage/company/pages/search_Drivers/searchDriver.dart';
 
 
 class DrawerCompanyMain extends StatelessWidget {
@@ -48,7 +48,7 @@ class DrawerCompanyMain extends StatelessWidget {
   }
 
   void _openSearchEmployees(BuildContext ctx, CompanyData companyData) {
-    Navigator.of(ctx).pushNamed(SearchEmployees.routeName, arguments: {
+    Navigator.of(ctx).pushNamed(SearchDriver.routeName, arguments: {
       'companyData': companyData,
     });
   }

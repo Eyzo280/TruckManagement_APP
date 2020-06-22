@@ -4,15 +4,14 @@ import 'package:truckmanagement_app/models/chat.dart';
 import 'package:truckmanagement_app/models/user.dart';
 import 'package:truckmanagement_app/theme.dart';
 import 'package:truckmanagement_app/widgets/chat/chats.dart';
-import 'package:truckmanagement_app/widgets/userPage/chief_acc/services/database_company.dart';
 import 'package:truckmanagement_app/widgets/userPage/company/main_Company/Company_page.dart';
-import 'package:truckmanagement_app/widgets/userPage/company/main_Company_look_trucker.dart';
 import 'package:truckmanagement_app/widgets/userPage/company/models/company_Employees.dart';
 import 'package:truckmanagement_app/widgets/userPage/company/pages/invites/invites.dart';
 import 'package:truckmanagement_app/widgets/userPage/company/pages/management/truckers.dart';
-import 'package:truckmanagement_app/widgets/userPage/company/pages/search_employees/search_Employees.dart';
+import 'package:truckmanagement_app/widgets/userPage/company/pages/search_Drivers/searchDriver.dart';
 import 'package:truckmanagement_app/widgets/userPage/company/pages/tracks/Active/preview.dart';
 import 'package:truckmanagement_app/widgets/userPage/company/pages/tracks/Finished/preview.dart';
+import 'package:truckmanagement_app/widgets/userPage/company/services/database_company.dart';
 
 class CompanyMain extends StatelessWidget {
   @override
@@ -28,7 +27,7 @@ class CompanyMain extends StatelessWidget {
                 child: Chats(),
               ),
           // Wyszukiwarka Pracownikow
-          SearchEmployees.routeName: (ctx) => SearchEmployees(),
+          SearchDriver.routeName: (ctx) => SearchDriver(),
           // Zaproszenia
           Invitations.routeName: (ctx) {
             final routeArgs =
@@ -40,7 +39,7 @@ class CompanyMain extends StatelessWidget {
           // Podglad pracownikow firmy
           TruckerLook.routeName: (ctx) =>
               StreamProvider<List<BaseTruckDriverData>>.value(
-                  value: Database_CompanyEmployees(uid: companyData.uidCompany)
+                  value: Database_Company(uid: companyData.uidCompany)
                       .getBaseDataEmployees,
                   child: TruckerLook()),
           TracksActive.routeName: (ctx) {
@@ -55,7 +54,7 @@ class CompanyMain extends StatelessWidget {
               ),
         },
         home: StreamProvider<CompanyData>.value(
-          value: Database_CompanyEmployees(uid: companyData.uidCompany)
+          value: Database_Company(uid: companyData.uidCompany)
               .getCompanyData,
           child: CompanyPage(),
         ));

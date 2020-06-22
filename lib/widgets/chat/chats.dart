@@ -52,11 +52,12 @@ class _ChatsState extends State<Chats> {
         child: ListTile(
           onTap: () {
             Chat(
-                    mainUid: userUid,
-                    peopleUid: document.uid,
-                    peopleFirstName: document.firstName,
-                    peopleLastName: document.lastName)
-                .searchChat(context);
+              mainUid: userUid,
+              peopleUid: document.uid,
+            ).searchChat(
+                context: context,
+                peopleFirstName: document.firstName,
+                peopleLastName: document.lastName);
             print('Wlaczono Chat ' + index.toString());
           },
           leading: Icon(

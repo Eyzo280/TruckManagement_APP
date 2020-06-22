@@ -1,3 +1,5 @@
+/*
+
 import 'package:flutter/material.dart';
 import 'package:truckmanagement_app/models/chat.dart';
 import 'package:truckmanagement_app/widgets/userPage/company/models/company_Employees.dart';
@@ -113,9 +115,9 @@ class _FullDataEmployeeState extends State<FullDataEmployee> {
                 Text(
                     'Przejechane Km: ${widget.driverData.totalDistanceTraveled}'),
                 Text(
-                    'Zarejsetrowany od: ${SearchEmployeesBaseData().calculationAccountActivityTime(registerAccTime: widget.driverData.dateOfEmplotment)}'),
+                    'Zarejsetrowany od: ${SearchDriverData().calculationAccountActivityTime(registerAccTime: widget.driverData.dateOfEmplotment)}'),
                 Text(
-                    'Prawo jazdy od: ${SearchEmployeesBaseData().calculationAccountActivityTime(registerAccTime: widget.driverData.drivingLicenseFrom)}'),
+                    'Prawo jazdy od: ${SearchDriverData().calculationAccountActivityTime(registerAccTime: widget.driverData.drivingLicenseFrom)}'),
                 Text('Kursy Wschod/Zachod'),
                 Text('Pozwolenia: ADR'),
               ],
@@ -215,3 +217,4 @@ class _FullDataEmployeeState extends State<FullDataEmployee> {
     );
   }
 }
+*/

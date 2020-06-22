@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:truckmanagement_app/widgets/error_page/error_page.dart';
 import 'package:truckmanagement_app/widgets/shared/loading.dart';
-import 'package:truckmanagement_app/widgets/userPage/chief_acc/services/database_company.dart';
+import 'package:truckmanagement_app/widgets/userPage/company/services/database_company.dart';
+
 
 class AddNewTrack extends StatefulWidget {
   final companyData;
@@ -69,7 +70,7 @@ class _AddNewTrackState extends State<AddNewTrack> {
       setState(() {
         loading = true;
       });
-      await Database_CompanyEmployees(companyUid: widget.companyData.uidCompany)
+      await Database_Company(companyUid: widget.companyData.uidCompany)
           .addNewTrack(
               dodatkoweInfo: dodatkoweInfo.value.text,
               fracht: int.parse(fracht.value.text),
