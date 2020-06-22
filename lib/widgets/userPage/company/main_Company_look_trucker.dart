@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:truckmanagement_app/models/user.dart';
-import 'package:truckmanagement_app/widgets/userPage/chief_acc/models/company_Employees.dart';
-import 'package:truckmanagement_app/widgets/userPage/chief_acc/pages/company/ColumnCompanyLookDriverTrucks.dart';
-import 'package:truckmanagement_app/widgets/userPage/chief_acc/pages/company/search_employees/search_Employees.dart';
-import 'package:truckmanagement_app/widgets/userPage/chief_acc/pages/company/top_body_CompanyLookDriverTrucks.dart';
+import 'package:truckmanagement_app/widgets/userPage/company/ColumnCompanyLookDriverTrucks.dart';
+import 'package:truckmanagement_app/widgets/userPage/company/models/company_Employees.dart';
+import 'package:truckmanagement_app/widgets/userPage/company/pages/search_employees/search_Employees.dart';
+import 'package:truckmanagement_app/widgets/userPage/company/top_body_CompanyLookDriverTrucks.dart';
 
 class MainCompanyLookTrucker extends StatefulWidget {
   static const routeName = '/MainCompanyLookTrucker';

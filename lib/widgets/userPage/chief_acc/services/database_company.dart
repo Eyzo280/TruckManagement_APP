@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:truckmanagement_app/widgets/userPage/chief_acc/models/company_Employees.dart';
+import 'package:truckmanagement_app/widgets/userPage/company/models/company_Employees.dart';
 
 class Database_CompanyEmployees {
   final String uid;

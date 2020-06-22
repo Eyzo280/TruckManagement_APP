@@ -1,19 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:truckmanagement_app/models/chat.dart';
-import 'package:truckmanagement_app/widgets/userPage/chief_acc/models/company_Employees.dart';
+import 'package:truckmanagement_app/widgets/userPage/chief_acc/services/database_company.dart';
+import 'package:truckmanagement_app/widgets/userPage/company/models/company_Employees.dart';
 
-class FullDataEmployee extends StatefulWidget {
-  Function sendInv;
-  final driverData;
-  final companyData;
+class InvitesFullData extends StatelessWidget {
+  final String companyUid;
+  final inviteData;
 
-  FullDataEmployee(this.sendInv, this.driverData, this.companyData);
+  InvitesFullData(this.companyUid, this.inviteData);
 
-  @override
-  _FullDataEmployeeState createState() => _FullDataEmployeeState();
-}
-
-class _FullDataEmployeeState extends State<FullDataEmployee> {
   Widget _topContent(context) {
     return Flexible(
       // Zdj imie, nazwisko itp.
@@ -40,8 +34,8 @@ class _FullDataEmployeeState extends State<FullDataEmployee> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Text('Imie: ${widget.driverData.firstName}'),
-                Text('Nazwisko: ${widget.driverData.lastName}'),
+                Text('Imie: ${inviteData.firstName}'),
+                Text('Nazwisko: ${inviteData.lastName}'),
                 Container(
                   width: (MediaQuery.of(context).size.width -
                           MediaQuery.of(context).padding.vertical -
@@ -50,41 +44,17 @@ class _FullDataEmployeeState extends State<FullDataEmployee> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      Text('Nr Tel: ${widget.driverData.numberPhone}'),
+                      Text('Nr Tel: ${inviteData.numberPhone}'),
                       IconButton(
                           icon: Icon(
                             Icons.call,
-                            color: widget.driverData.numberPhone != null
+                            color: inviteData.numberPhone != null
                                 ? Colors.green
                                 : Colors.grey,
                           ),
-                          onPressed: () => widget.driverData.numberPhone != null
+                          onPressed: () => inviteData.numberPhone != null
                               ? print('Zadzwon')
                               : null)
-                    ],
-                  ),
-                ),
-                Container(
-                  width: (MediaQuery.of(context).size.width -
-                          MediaQuery.of(context).padding.vertical -
-                          10) *
-                      0.5,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Text('Chat: '),
-                      IconButton(
-                          icon: Icon(
-                            Icons.chat,
-                            color: Colors.blue,
-                          ),
-                          onPressed: () {
-                            Chat(
-                                    mainUid: widget.companyData.uidCompany,
-                                    peopleUid: widget.driverData.driverUid)
-                                .searchChat(context);
-                            print('Wlacz Chat');
-                          })
                     ],
                   ),
                 ),
@@ -110,12 +80,11 @@ class _FullDataEmployeeState extends State<FullDataEmployee> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
+                Text('Przejechane Km: ${inviteData.totalDistanceTraveled}'),
                 Text(
-                    'Przejechane Km: ${widget.driverData.totalDistanceTraveled}'),
+                    'Zarejsetrowany od: ${SearchEmployeesBaseData().calculationAccountActivityTime(registerAccTime: inviteData.dateOfEmplotment)}'),
                 Text(
-                    'Zarejsetrowany od: ${SearchEmployeesBaseData().calculationAccountActivityTime(registerAccTime: widget.driverData.dateOfEmplotment)}'),
-                Text(
-                    'Prawo jazdy od: ${SearchEmployeesBaseData().calculationAccountActivityTime(registerAccTime: widget.driverData.drivingLicenseFrom)}'),
+                    'Prawo jazdy od: ${SearchEmployeesBaseData().calculationAccountActivityTime(registerAccTime: inviteData.drivingLicenseFrom)}'),
                 Text('Kursy Wschod/Zachod'),
                 Text('Pozwolenia: ADR'),
               ],
@@ -172,36 +141,54 @@ class _FullDataEmployeeState extends State<FullDataEmployee> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Szczegoly - Nazwa'),
+        title: Text('Szczególy - Name'),
         centerTitle: true,
         actions: <Widget>[
           Container(
             width: MediaQuery.of(context).size.width * 0.25,
             child: Align(
                 alignment: Alignment.center,
-                child: IconButton(
-                    icon: Icon(
-                      Icons.add,
-                      color:
-                          widget.sendInv != null ? Colors.green : Colors.grey,
-                    ),
-                    onPressed: () {
+                child: FlatButton(
+                  onPressed: () {
+                    /*
                       if (widget.sendInv != null) {
                         setState(() {
                           widget.sendInv(
-                            companyData: widget.companyData,
-                            employeesData: widget.driverData,
-                          );
+                              companyData: widget.companyData.uidCompany,
+                              employeesUid: widget.driverData.driverUid,
+                              nameCompany: widget.companyData.nameCompany,
+                              yearEstablishmentCompany:
+                                  widget.companyData.yearEstablishmentCompany,
+                              firstName:
+                                  widget.driverData.firstName,
+                              lastName: widget.driverData.lastName,
+                              drivingLicenseFrom:
+                                  widget.driverData.drivingLicenseFrom,
+                              drivingLicense: widget.driverData.drivingLicense,
+                              knownLanguages: widget.driverData.knownLanguages,
+                              totalDistanceTraveled:
+                                  widget.driverData.totalDistanceTraveled);
                           widget.sendInv = null;
                         });
                       } else {
                         print('Nie mozna wyslac zaproszenia.');
                       }
-                    })),
+                      */
+                    Database_CompanyEmployees(companyUid: companyUid).acceptInv(
+                        driverUid: inviteData.invUid,
+                        firstName: inviteData.firstName,
+                        lastName: inviteData.lastName,
+                        numberPhone: inviteData.numberPhone);
+                    Navigator.of(context).pop();
+                  },
+                  child: Text(
+                    'Akceptuj',
+                    style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold),
+                  ),
+                )),
           ),
         ],
       ),
-      backgroundColor: Colors.grey,
       body: Container(
         padding: EdgeInsets.all(10),
         child: Column(

@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:truckmanagement_app/widgets/userPage/chief_acc/models/company_Employees.dart';
-import 'package:truckmanagement_app/widgets/userPage/chief_acc/services/database_company.dart';
+import 'package:truckmanagement_app/widgets/userPage/company/models/company_Employees.dart';
 
 class TracksActive extends StatefulWidget {
   static const routeName = '/TracksActive';

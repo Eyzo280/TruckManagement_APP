@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:truckmanagement_app/models/user.dart';
 import 'package:truckmanagement_app/services/auth.dart';
+import 'package:truckmanagement_app/theme.dart';
 import 'package:truckmanagement_app/widgets/userPage/chief_acc/Chief_main_page.dart';
-import 'package:truckmanagement_app/widgets/userPage/chief_acc/Company_main.dart';
-import 'package:truckmanagement_app/widgets/userPage/chief_acc/models/company_Employees.dart';
 import 'package:truckmanagement_app/widgets/userPage/chief_acc/pages/chief/create_company.dart';
 import 'package:truckmanagement_app/widgets/userPage/chief_acc/services/database_company.dart';
+import 'package:truckmanagement_app/widgets/userPage/company/Company_main.dart';
+import 'package:truckmanagement_app/widgets/userPage/company/models/company_Employees.dart';
 
 class ChiefSelectPage extends StatelessWidget {
   final AuthService _auth = AuthService();
@@ -57,6 +58,8 @@ class ChiefSelectPage extends StatelessWidget {
               openCreateCompany(context, user.uid);
             }),
         title: Center(child: Text('Wybor Firmy')),
+        centerTitle: true,
+        flexibleSpace: appBarLook(context: context),
         actions: <Widget>[
           Container(
             margin: EdgeInsets.only(right: 30),
@@ -70,6 +73,7 @@ class ChiefSelectPage extends StatelessWidget {
         ],
       ),
       body: Container(
+        decoration: bodyLook(context: context),
         width: double.infinity,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,

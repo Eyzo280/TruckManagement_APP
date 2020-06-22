@@ -70,7 +70,7 @@ class _InputConversationState extends State<InputConversation> {
     return Container(
       decoration: BoxDecoration(
           border: Border(top: BorderSide(color: Colors.black, width: 0.5)),
-          color: Colors.white),
+          color: Theme.of(context).textTheme.display1.color),
       height: 50,
       width: double.infinity,
       child: Row(
@@ -93,21 +93,10 @@ class _InputConversationState extends State<InputConversation> {
                             }
                           }
                         : null,
-                color: Colors.blue,
+                color: Theme.of(context).textTheme.display3.color,
               ),
             ),
-            color: Colors.white,
-          ),
-          Material(
-            child: new Container(
-              margin: new EdgeInsets.symmetric(horizontal: 1.0),
-              child: new IconButton(
-                icon: new Icon(Icons.face),
-                onPressed: null,
-                color: Colors.blue,
-              ),
-            ),
-            color: Colors.white,
+            color: Theme.of(context).textTheme.display1.color
           ),
           Flexible(
               fit: FlexFit.tight,
@@ -115,7 +104,8 @@ class _InputConversationState extends State<InputConversation> {
                 padding:
                     EdgeInsets.all(MediaQuery.of(context).size.width * 0.01),
                 child: TextField(
-                  decoration: InputDecoration(hintText: 'Message'),
+                  style: TextStyle(color: Theme.of(context).textTheme.display3.color),
+                  decoration: InputDecoration(hintText: 'Message', hintStyle: TextStyle(color: Theme.of(context).textTheme.display3.color.withOpacity(0.5))),
                   controller: _value_meesage,
                   onChanged: (_) {
                     setState(() {});
@@ -125,7 +115,7 @@ class _InputConversationState extends State<InputConversation> {
           Container(
             child: IconButton(
               icon: Icon(Icons.send),
-              color: Colors.blue,
+              color: Theme.of(context).textTheme.display3.color,
               onPressed: widget.conversation != false &&
                       widget.firstMessage != true &&
                       sending == false &&

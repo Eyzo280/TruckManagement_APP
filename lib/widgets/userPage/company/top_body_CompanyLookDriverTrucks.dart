@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:truckmanagement_app/widgets/userPage/chief_acc/models/company_Employees.dart';
+import 'package:truckmanagement_app/widgets/userPage/company/models/company_Employees.dart';
 
 class TopBodyCompanyLookDriverTrucks extends StatefulWidget {
   @override

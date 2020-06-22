@@ -6,9 +6,10 @@ import 'package:truckmanagement_app/services/auth.dart';
 import 'package:truckmanagement_app/services/database.dart';
 import 'package:truckmanagement_app/widgets/chat/chats.dart';
 import 'package:truckmanagement_app/widgets/userPage/chief_acc/chief_select_page.dart';
-import 'package:truckmanagement_app/widgets/userPage/chief_acc/models/company_Employees.dart';
-import 'package:truckmanagement_app/widgets/userPage/chief_acc/pages/company/invites/invites.dart';
-import 'package:truckmanagement_app/widgets/userPage/chief_acc/pages/company/search_employees/search_Employees.dart';
+import 'package:truckmanagement_app/widgets/userPage/company/models/company_Employees.dart';
+import 'package:truckmanagement_app/widgets/userPage/company/pages/invites/invites.dart';
+import 'package:truckmanagement_app/widgets/userPage/company/pages/search_employees/search_Employees.dart';
+
 
 class DrawerCompanyMain extends StatelessWidget {
   final AuthService _auth = AuthService();
@@ -130,6 +131,22 @@ class DrawerCompanyMain extends StatelessWidget {
             onTap: () {
               _openSearchEmployees(context, companyData);
               print('Szukaj Pracownikow');
+            },
+          ),
+          ListTile(
+            leading: Icon(MaterialCommunityIcons.train_car),
+            title: Text('Szukaj Kursow'),
+            onTap: () {
+              /*
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) {
+                    return ;
+                  },
+                ),
+              );
+              */
+              print('Szukaj Kursow');
             },
           ),
           ListTile(

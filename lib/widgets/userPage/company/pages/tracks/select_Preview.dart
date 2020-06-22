@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:truckmanagement_app/widgets/userPage/chief_acc/pages/company/tracks/Active/preview.dart';
-import 'package:truckmanagement_app/widgets/userPage/chief_acc/pages/company/tracks/Finished/preview.dart';
+import 'package:truckmanagement_app/widgets/userPage/company/pages/tracks/Active/preview.dart';
+import 'package:truckmanagement_app/widgets/userPage/company/pages/tracks/Finished/preview.dart';
 
 class TracksSelect extends StatelessWidget {
   final companyData;

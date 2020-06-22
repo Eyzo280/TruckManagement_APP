@@ -1,32 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:truckmanagement_app/services/auth.dart';
-import 'package:truckmanagement_app/models/user.dart';
-import 'package:truckmanagement_app/services/database.dart';
-import 'package:truckmanagement_app/widgets/userPage/chief_acc/chief_select_page.dart';
-import 'package:truckmanagement_app/widgets/userPage/chief_acc/main_Company/drawer.dart';
-import 'package:truckmanagement_app/widgets/userPage/chief_acc/main_Company/lastTracks.dart';
-import 'package:truckmanagement_app/widgets/userPage/chief_acc/main_Company/map.dart';
-import 'package:truckmanagement_app/widgets/userPage/chief_acc/main_Company/topBody.dart';
-import 'package:truckmanagement_app/widgets/userPage/chief_acc/models/company_Employees.dart';
-import 'package:truckmanagement_app/widgets//chat/chats.dart';
-import 'package:truckmanagement_app/widgets/userPage/chief_acc/pages/company/invites/invites.dart';
-import 'package:truckmanagement_app/widgets/userPage/chief_acc/pages/company/main_company_look_trucker.dart';
-import 'package:truckmanagement_app/widgets/userPage/chief_acc/pages/company/search_employees/search_Employees.dart';
-import 'package:truckmanagement_app/widgets/userPage/chief_acc/pages/company/tracks/add_New_Track.dart';
-import 'package:truckmanagement_app/widgets/userPage/chief_acc/pages/company/tracks/select_Preview.dart';
+import 'package:truckmanagement_app/widgets/userPage/company/main_Company/drawer.dart';
+import 'package:truckmanagement_app/widgets/userPage/company/main_Company/lastTracks.dart';
+import 'package:truckmanagement_app/widgets/userPage/company/main_Company/map.dart';
+import 'package:truckmanagement_app/widgets/userPage/company/main_Company/topBody.dart';
+import 'package:truckmanagement_app/widgets/userPage/company/main_Company_look_trucker.dart';
+import 'package:truckmanagement_app/widgets/userPage/company/models/company_Employees.dart';
 
 class CompanyPage extends StatelessWidget {
   final AuthService _auth = AuthService();
 
   void openChiefLookTrucker(BuildContext ctx, CompanyData companyData) {
-
-    Navigator.of(ctx).pushNamed(MainCompanyLookTrucker.routeName, arguments: {'companyData': companyData});
+    Navigator.of(ctx).pushNamed(MainCompanyLookTrucker.routeName,
+        arguments: {'companyData': companyData});
   }
-
-  
-
-  
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +55,7 @@ class CompanyPage extends StatelessWidget {
         width: double.infinity,
         child: Column(
           children: <Widget>[
-            TopBodyCompanyMain(),
+            TopBodyCompanyMain(companyData: companyData),
             LastTracksCompanyMain(),
             MapCompanyMain()
           ],

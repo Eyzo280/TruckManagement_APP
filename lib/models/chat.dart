@@ -9,8 +9,10 @@ import 'package:truckmanagement_app/widgets/chat/conversation/conversation.dart'
 class Chat {
   final String mainUid;
   final String peopleUid;
+  final String peopleFirstName;
+  final String peopleLastName;
 
-  Chat({@required this.mainUid, @required this.peopleUid});
+  Chat({@required this.mainUid, @required this.peopleUid, this.peopleFirstName, this.peopleLastName});
 
   final CollectionReference messages =
       Firestore.instance.collection('Messages');
@@ -55,6 +57,8 @@ class Chat {
             firstMessage: firstMessage ?? null,
             mainUid: mainUid,
             peopleUid: peopleUid,
+            peopleFirstName: peopleFirstName,
+            peopleLastName: peopleLastName,
             groupChatId: groupChatId,
           ); // Trzeba dodac Chat z konktetna osoba oraz wylac wartosc conversation: True
         }));

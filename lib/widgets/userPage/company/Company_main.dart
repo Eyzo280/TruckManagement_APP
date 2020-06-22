@@ -2,48 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:truckmanagement_app/models/chat.dart';
 import 'package:truckmanagement_app/models/user.dart';
+import 'package:truckmanagement_app/theme.dart';
 import 'package:truckmanagement_app/widgets/chat/chats.dart';
-import 'package:truckmanagement_app/widgets/userPage/chief_acc/main_Company/Company_page.dart';
-import 'package:truckmanagement_app/widgets/userPage/chief_acc/models/company_Employees.dart';
-import 'package:truckmanagement_app/widgets/userPage/chief_acc/pages/company/invites/invites.dart';
-import 'package:truckmanagement_app/widgets/userPage/chief_acc/pages/company/main_Company_look_trucker.dart';
-import 'package:truckmanagement_app/widgets/userPage/chief_acc/pages/company/search_employees/search_Employees.dart';
-import 'package:truckmanagement_app/widgets/userPage/chief_acc/pages/company/tracks/Active/preview.dart';
-import 'package:truckmanagement_app/widgets/userPage/chief_acc/pages/company/tracks/Finished/preview.dart';
 import 'package:truckmanagement_app/widgets/userPage/chief_acc/services/database_company.dart';
+import 'package:truckmanagement_app/widgets/userPage/company/main_Company/Company_page.dart';
+import 'package:truckmanagement_app/widgets/userPage/company/main_Company_look_trucker.dart';
+import 'package:truckmanagement_app/widgets/userPage/company/models/company_Employees.dart';
+import 'package:truckmanagement_app/widgets/userPage/company/pages/invites/invites.dart';
+import 'package:truckmanagement_app/widgets/userPage/company/pages/management/truckers.dart';
+import 'package:truckmanagement_app/widgets/userPage/company/pages/search_employees/search_Employees.dart';
+import 'package:truckmanagement_app/widgets/userPage/company/pages/tracks/Active/preview.dart';
+import 'package:truckmanagement_app/widgets/userPage/company/pages/tracks/Finished/preview.dart';
 
 class CompanyMain extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final CompanyData companyData = Provider.of<CompanyData>(context);
     return MaterialApp(
-        theme: ThemeData(
-          textTheme: TextTheme(
-            display1: TextStyle(
-              color: Color.fromRGBO(16, 32, 39, 1),
-            ),
-            display2: TextStyle(
-              color: Color.fromRGBO(98, 114, 123, 1),
-            ),
-            body1: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-            ),
-            body2: TextStyle(
-              fontWeight: FontWeight.bold,
-              shadows: [
-                Shadow(
-                  offset: Offset(2.0, 2.0),
-                  blurRadius: 10.0,
-                  color: Color.fromARGB(255, 0, 0, 0),
-                ),
-              ],
-            ),
-            button: TextStyle(
-              color: Colors.white,
-            ),
-          ),
-        ),
+        theme: basicTheme(),
         routes: {
           // Chat
           Chats.routeName: (ctx) => StreamProvider<List<PeerChat>>.value(
@@ -62,11 +38,11 @@ class CompanyMain extends StatelessWidget {
             return Invitations(companyUid: companyUid);
           },
           // Podglad pracownikow firmy
-          MainCompanyLookTrucker.routeName: (ctx) =>
+          TruckerLook.routeName: (ctx) =>
               StreamProvider<List<BaseTruckDriverData>>.value(
                   value: Database_CompanyEmployees(uid: companyData.uidCompany)
                       .getBaseDataEmployees,
-                  child: MainCompanyLookTrucker()),
+                  child: TruckerLook()),
           TracksActive.routeName: (ctx) {
             final listTracks = Provider.of<List<Track>>(context);
             return TracksActive(

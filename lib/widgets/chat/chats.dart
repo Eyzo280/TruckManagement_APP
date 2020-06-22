@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:truckmanagement_app/models/chat.dart';
 import 'package:truckmanagement_app/models/user.dart';
+import 'package:truckmanagement_app/theme.dart';
 
 class Chats extends StatefulWidget {
   static const routeName = '/Chats';
@@ -36,9 +37,55 @@ class _ChatsState extends State<Chats> {
     }
   }
   */
-  Widget _screen(context, PeerChat document, String userUid) {
+  Widget _screen({
+    @required BuildContext context,
+    @required PeerChat document,
+    @required String userUid,
+    @required int index,
+  }) {
     // _getImage();
 
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        color: (index % 2 == 0) ? Colors.white70 : Colors.grey.shade100,
+        child: ListTile(
+          onTap: () {
+            Chat(
+                    mainUid: userUid,
+                    peopleUid: document.uid,
+                    peopleFirstName: document.firstName,
+                    peopleLastName: document.lastName)
+                .searchChat(context);
+            print('Wlaczono Chat ' + index.toString());
+          },
+          leading: Icon(
+            Icons.image,
+          ),
+          title: Hero(
+            tag: 'NameChat' + index.toString(),
+            child: Text(document.firstName),
+            flightShuttleBuilder: flightShuttleBuilder,
+          ),
+          trailing: Stack(
+            children: <Widget>[
+              new Icon(Icons.notifications),
+              new Positioned(
+                // draw a red marble
+                top: 0.0,
+                right: 0.0,
+                child: new Icon(Icons.brightness_1,
+                    size: 8.0, color: Colors.redAccent),
+              )
+            ],
+          ),
+        ),
+
+        //),
+      ),
+    );
+
+/*
     return Container(
       child: FlatButton(
         child: Row(
@@ -80,8 +127,7 @@ class _ChatsState extends State<Chats> {
           ],
         ),
         onPressed: () {
-          Chat(mainUid: userUid, peopleUid: document.uid)
-              .searchChat(context);
+          Chat(mainUid: userUid, peopleUid: document.uid).searchChat(context);
         },
         color: Colors.grey,
         padding: EdgeInsets.fromLTRB(25.0, 10.0, 25.0, 10.0),
@@ -90,6 +136,7 @@ class _ChatsState extends State<Chats> {
       ),
       margin: EdgeInsets.only(bottom: 10.0, left: 5.0, right: 5.0),
     );
+    */
   }
 
   @override
@@ -106,24 +153,28 @@ class _ChatsState extends State<Chats> {
         appBar: AppBar(
           title: Text('Chats'),
           centerTitle: true,
+          flexibleSpace: appBarLook(context: context),
         ),
-        body: Stack(children: <Widget>[
-          // List
-          Container(
-            child: chats == null
-                ? Center(
-                    child: CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.grey),
-                    ),
-                  )
-                : ListView.builder(
-                    padding: EdgeInsets.all(10.0),
-                    itemCount: chats.length,
-                    itemBuilder: (context, index) =>
-                        _screen(context, chats[index], userUid),
+        body: Container(
+          height: double.infinity,
+          width: double.infinity,
+          decoration: bodyLook(context: context),
+          child: chats == null
+              ? Center(
+                  child: CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.grey),
                   ),
-          )
-        ]));
+                )
+              : ListView.builder(
+                  padding: EdgeInsets.all(10.0),
+                  itemCount: chats.length,
+                  itemBuilder: (context, index) => _screen(
+                      context: context,
+                      document: chats[index],
+                      userUid: userUid,
+                      index: index),
+                ),
+        ));
 
     /* Column(
         children: <Widget>[
