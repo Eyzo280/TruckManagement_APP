@@ -23,7 +23,7 @@ class CompanyPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Firma - ' + companyData.nameCompany),
+        title: Text(companyData.nameCompany),
         centerTitle: true,
         flexibleSpace: Container(
           decoration: BoxDecoration(

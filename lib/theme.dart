@@ -27,6 +27,7 @@ ThemeData basicTheme() {
         ],
         */
       ),
+      subhead: TextStyle(color: Colors.white), // w ListTile litery maja ten kolor
       title: TextStyle(color: Colors.white),
       button: base.button.copyWith(
         color: Colors.white,

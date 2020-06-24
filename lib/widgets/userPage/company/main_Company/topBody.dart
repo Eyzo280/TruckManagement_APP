@@ -89,7 +89,7 @@ class TopBodyCompanyMain extends StatelessWidget {
                               name: 'Ciezarowki'),
                           buttons(
                               context: context,
-                              page: 'TruckerLook',
+                              page: 'TracksManagement',
                               name: 'Kursy'),
                         ],
                       ),

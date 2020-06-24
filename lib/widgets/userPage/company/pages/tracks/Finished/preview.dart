@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:truckmanagement_app/theme.dart';
 import 'package:truckmanagement_app/widgets/userPage/company/models/company_Employees.dart';
 
 class TracksFinished extends StatefulWidget {
@@ -88,6 +89,7 @@ class _TracksFinishedState extends State<TracksFinished> {
 
   Widget _selectDate({bool selected}) {
     return RaisedButton(
+      color: Theme.of(context).textTheme.display2.color,
       onPressed: () {
         showDatePicker(
                 context: context,
@@ -121,13 +123,14 @@ class _TracksFinishedState extends State<TracksFinished> {
     final appBar = AppBar(
       title: Text('Zakonczone Kursy'),
       centerTitle: true,
+      flexibleSpace: appBarLook(context: context),
     );
     return Scaffold(
       appBar: appBar,
       body: Column(
         children: <Widget>[
           Container(
-            color: Colors.grey,
+            decoration: bodyLook(context: context),
             height: MediaQuery.of(context).size.height -
                 appBar.preferredSize.height -
                 MediaQuery.of(context).padding.vertical,
@@ -148,7 +151,7 @@ class _TracksFinishedState extends State<TracksFinished> {
                                 borderRadius: BorderRadius.only(
                                     topLeft: Radius.circular(5),
                                     topRight: Radius.circular(5)),
-                                color: Colors.blue),
+                                color: Theme.of(context).textTheme.display3.color),
                             child: Align(
                                 alignment: Alignment.centerLeft,
                                 child: Container(
@@ -242,7 +245,7 @@ class _TracksFinishedState extends State<TracksFinished> {
                                 borderRadius: BorderRadius.only(
                                     bottomLeft: Radius.circular(5),
                                     bottomRight: Radius.circular(5)),
-                                color: Colors.blue),
+                                color: Theme.of(context).textTheme.display3.color),
                           ),
                         ],
                       )

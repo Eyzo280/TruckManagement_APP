@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:truckmanagement_app/theme.dart';
 import 'package:truckmanagement_app/widgets/userPage/company/models/company_Employees.dart';
 
 class TracksActive extends StatefulWidget {
@@ -76,6 +77,7 @@ class _TracksActiveState extends State<TracksActive> {
           },
         )
       ],
+      flexibleSpace: appBarLook(context: context),
     );
     /*
     Widget SearchCard() {
@@ -117,9 +119,7 @@ class _TracksActiveState extends State<TracksActive> {
     }
     */
     Widget ListTracks() {
-      return Card(
-        elevation: 5,
-        child: Container(
+      return Container(
           height: (MediaQuery.of(context).size.height * 0.95) -
               appBar.preferredSize.height,
           padding: EdgeInsets.all(MediaQuery.of(context).size.width * 0.03),
@@ -212,10 +212,10 @@ class _TracksActiveState extends State<TracksActive> {
                                         topRight: Radius.circular(20),
                                       ),
                                       child: Container(
-                                        color: Colors.blue,
+                                        color: Theme.of(context).textTheme.display3.color,
                                         child: Center(
                                           child: Text(
-                                              '${sortListTracks[index].from} - ${sortListTracks[index].to}'),
+                                              '${sortListTracks[index].from} - ${sortListTracks[index].to}', style: TextStyle(color: Theme.of(context).textTheme.display1.color),),
                                         ),
                                       ),
                                     ),
@@ -264,18 +264,21 @@ class _TracksActiveState extends State<TracksActive> {
                       ),
                     );
                   }),
-        ),
-      );
+        )
+      ;
     }
 
     return Scaffold(
       appBar: appBar,
-      body: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            //SearchCard(),
-            ListTracks(),
-          ],
+      body: Container(
+        decoration: bodyLook(context: context),
+        child: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              //SearchCard(),
+              ListTracks(),
+            ],
+          ),
         ),
       ),
     );

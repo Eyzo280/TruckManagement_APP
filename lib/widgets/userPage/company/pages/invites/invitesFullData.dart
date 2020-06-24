@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:truckmanagement_app/models/chat.dart';
+import 'package:truckmanagement_app/theme.dart';
 import 'package:truckmanagement_app/widgets/userPage/company/models/company_Employees.dart';
 import 'package:truckmanagement_app/widgets/userPage/company/services/database_company.dart';
 
 class InvitesFullData extends StatelessWidget {
-  final String companyUid;
-  final inviteData;
+  final InvData inviteData;
 
-  InvitesFullData(this.companyUid, this.inviteData);
+  InvitesFullData(this.inviteData);
 
-  Widget _topContent(context) {
+  Widget _topContent(BuildContext context, String uidCompany) {
     return Flexible(
       // Zdj imie, nazwisko itp.
       fit: FlexFit.tight,
@@ -58,6 +60,30 @@ class InvitesFullData extends StatelessWidget {
                     ],
                   ),
                 ),
+                 Container(
+                  width: (MediaQuery.of(context).size.width -
+                          MediaQuery.of(context).padding.vertical -
+                          10) *
+                      0.5,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text('Chat: '),
+                      IconButton(
+                          icon: Icon(
+                            Icons.chat,
+                            color: Colors.blue,
+                          ),
+                          onPressed: () {
+                            Chat(
+                              mainUid: uidCompany,
+                              peopleUid: inviteData.invUid,
+                            ).searchChat(context: context, peopleFirstName: inviteData.firstName, peopleLastName: inviteData.lastName);
+                            print('Wlaczono Chat');
+                          })
+                    ],
+                  ),
+                ),
               ],
             ),
           ],
@@ -66,7 +92,7 @@ class InvitesFullData extends StatelessWidget {
     );
   }
 
-  Widget _centerContent(context) {
+  Widget _centerContent(BuildContext context) {
     return Flexible(
       // Szczegolowe informacje
       fit: FlexFit.tight,
@@ -95,7 +121,7 @@ class InvitesFullData extends StatelessWidget {
     );
   }
 
-  Widget _bottomContent(context) {
+  Widget _bottomContent(BuildContext context) {
     return Flexible(
       // Dodatkowe informacje, ktore wypisze pracownik
       fit: FlexFit.tight,
@@ -139,9 +165,11 @@ class InvitesFullData extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final CompanyData companyData = Provider.of<CompanyData>(context);
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('Szczególy - Name'),
+        title: Text('${inviteData.firstName} ${inviteData.lastName}'),
         centerTitle: true,
         actions: <Widget>[
           Container(
@@ -174,7 +202,7 @@ class InvitesFullData extends StatelessWidget {
                         print('Nie mozna wyslac zaproszenia.');
                       }
                       */
-                    Database_Company(companyUid: companyUid).acceptInv(
+                    Database_Company(companyUid: companyData.uidCompany).acceptInv(
                         driverUid: inviteData.invUid,
                         firstName: inviteData.firstName,
                         lastName: inviteData.lastName,
@@ -188,12 +216,14 @@ class InvitesFullData extends StatelessWidget {
                 )),
           ),
         ],
+        flexibleSpace: appBarLook(context: context),
       ),
       body: Container(
+        decoration: bodyLook(context: context),
         padding: EdgeInsets.all(10),
         child: Column(
           children: <Widget>[
-            _topContent(context),
+            _topContent(context, companyData.uidCompany),
             _centerContent(context),
             _bottomContent(context),
           ],

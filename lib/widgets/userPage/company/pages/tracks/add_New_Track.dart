@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:truckmanagement_app/theme.dart';
 import 'package:truckmanagement_app/widgets/error_page/error_page.dart';
 import 'package:truckmanagement_app/widgets/shared/loading.dart';
 import 'package:truckmanagement_app/widgets/userPage/company/services/database_company.dart';
@@ -244,7 +245,7 @@ class _AddNewTrackState extends State<AddNewTrack> {
               icon: Icon(Icons.arrow_downward),
               iconSize: 24,
               elevation: 16,
-              style: TextStyle(color: Colors.blue),
+              style: TextStyle(color: Theme.of(context).textTheme.display3.color),
               underline: Container(
                 height: 2,
                 color: Colors.green,
@@ -339,87 +340,91 @@ class _AddNewTrackState extends State<AddNewTrack> {
                   ? const Text('Dodano Nowy Kurs')
                   : const Text('Nowy Kurs'),
               centerTitle: true,
+              flexibleSpace: appBarLook(context: context),
             ),
-            body: GestureDetector(
-              onTap: () {
-                FocusScope.of(context).unfocus();
-              },
-              child: Column(children: <Widget>[
-                error
-                    ? ErrorPage()
-                    : _complete
-                        ? Expanded(
-                            child: Center(
-                              child: Container(
-                                padding: EdgeInsets.all(20),
-                                width: double.infinity,
-                                child: Column(
-                                  children: <Widget>[
-                                    Text('Nowy Kurs'),
-                                    Container(
-                                      height: 350,
-                                      width: double.infinity,
-                                      child: Card(
-                                        child: Container(
-                                          padding: EdgeInsets.all(15),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: <Widget>[
-                                              Text('From : ${from.value.text}'),
-                                              Text('To: ${to.value.text}'),
-                                              Text(
-                                                  'Fracht: ${fracht.value.text}'),
-                                              Text(
-                                                  'Termin: ${termin.toString()}'),
-                                              Text(
-                                                  'Wspolrzedne Dostawy: ${dlugoscGeo.value.text}, ${szerokoscGeo.value.text}'),
-                                              Text(
-                                                  'Kierowca: ${_dropdownDriver}'),
-                                            ],
+            body: Container(
+              decoration: bodyLook(context: context),
+              child: GestureDetector(
+                onTap: () {
+                  FocusScope.of(context).unfocus();
+                },
+                child: Column(children: <Widget>[
+                  error
+                      ? ErrorPage()
+                      : _complete
+                          ? Expanded(
+                              child: Center(
+                                child: Container(
+                                  padding: EdgeInsets.all(20),
+                                  width: double.infinity,
+                                  child: Column(
+                                    children: <Widget>[
+                                      Text('Nowy Kurs'),
+                                      Container(
+                                        height: 350,
+                                        width: double.infinity,
+                                        child: Card(
+                                          child: Container(
+                                            padding: EdgeInsets.all(15),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: <Widget>[
+                                                Text('From : ${from.value.text}'),
+                                                Text('To: ${to.value.text}'),
+                                                Text(
+                                                    'Fracht: ${fracht.value.text}'),
+                                                Text(
+                                                    'Termin: ${termin.toString()}'),
+                                                Text(
+                                                    'Wspolrzedne Dostawy: ${dlugoscGeo.value.text}, ${szerokoscGeo.value.text}'),
+                                                Text(
+                                                    'Kierowca: ${_dropdownDriver}'),
+                                              ],
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-                          )
-                        : Expanded(
-                            child: Stepper(
-                              steps: _getSteps(),
-                              onStepCancel: _cancel,
-                              currentStep: _currentStep,
-                              onStepContinue: _next,
-                              controlsBuilder: (BuildContext context,
-                                  {VoidCallback onStepContinue,
-                                  VoidCallback onStepCancel}) {
-                                return Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: <Widget>[
-                                      FlatButton(
-                                        color: Colors.blue,
-                                        onPressed: _formComplete == true &&
-                                                    _currentStep == 1 ||
-                                                _currentStep != 1
-                                            ? onStepContinue
-                                            : null,
-                                        child: const Text('Dalej'),
-                                      ),
-                                      _currentStep > 0
-                                          ? FlatButton(
-                                              color: Colors.grey,
-                                              onPressed: onStepCancel,
-                                              child: const Text('Powrot'),
-                                            )
-                                          : const SizedBox(),
-                                    ]);
-                              },
-                            ),
-                          )
-              ]),
+                            )
+                          : Expanded(
+                              child: Stepper(
+                                steps: _getSteps(),
+                                onStepCancel: _cancel,
+                                currentStep: _currentStep,
+                                onStepContinue: _next,
+                                controlsBuilder: (BuildContext context,
+                                    {VoidCallback onStepContinue,
+                                    VoidCallback onStepCancel}) {
+                                  return Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: <Widget>[
+                                        FlatButton(
+                                          color: Theme.of(context).textTheme.display3.color,
+                                          onPressed: _formComplete == true &&
+                                                      _currentStep == 1 ||
+                                                  _currentStep != 1
+                                              ? onStepContinue
+                                              : null,
+                                          child: const Text('Dalej'),
+                                        ),
+                                        _currentStep > 0
+                                            ? FlatButton(
+                                                color: Colors.grey,
+                                                onPressed: onStepCancel,
+                                                child: const Text('Powrot'),
+                                              )
+                                            : const SizedBox(),
+                                      ]);
+                                },
+                              ),
+                            )
+                ]),
+              ),
             ));
   }
 }

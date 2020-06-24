@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:truckmanagement_app/theme.dart';
 import 'package:truckmanagement_app/widgets/shared/loading.dart';
 import 'package:truckmanagement_app/widgets/userPage/company/models/company_Employees.dart';
 import 'package:truckmanagement_app/widgets/userPage/company/pages/invites/invitesFullData.dart';
@@ -17,6 +18,7 @@ class Invitations extends StatefulWidget {
 }
 
 class _InvitationsState extends State<Invitations> {
+
   Firestore _firestore = Firestore.instance;
 
   List<InvData> _invites = [];
@@ -33,43 +35,43 @@ class _InvitationsState extends State<Invitations> {
 
   bool _moreInvitesAbailable = true;
 
-  _getEmployees() async {   
-      Query q = _firestore.collection('Companys')
-          .document(widget.companyUid)
+  _getEmployees() async {
+    Query q = _firestore
+        .collection('Companys')
+        .document(widget.companyUid)
         .collection('Invitations')
-          .limit(_per_page);
+        .limit(_per_page);
 
-      setState(() {
-        _loadingInvites = true;
-      });
-      QuerySnapshot querySnapshot = await q.getDocuments();
-      _invites = querySnapshot.documents.map((doc) {
-        return InvData(
+    setState(() {
+      _loadingInvites = true;
+    });
+    QuerySnapshot querySnapshot = await q.getDocuments();
+    _invites = querySnapshot.documents.map((doc) {
+      return InvData(
         invUid: doc.documentID,
         dateSentInv: DateTime.fromMillisecondsSinceEpoch(
                 doc.data['dateSentInv'].seconds * 1000) ??
             null,
         dateOfEmplotment: DateTime.fromMillisecondsSinceEpoch(
-              doc.data['dateOfEmplotment'].seconds * 1000) ?? null,
-      drivingLicense: doc.data['drivingLicense'] ?? null,
-      drivingLicenseFrom: DateTime.fromMillisecondsSinceEpoch(
-              doc.data['drivingLicenseFrom'].seconds * 1000) ??
-          null,
-      firstName: doc.data['firstName'] ?? null,
-      knownLanguages: doc.data['knownLanguages'] ?? null,
-      lastName: doc.data['lastName'] ?? null,
-      numberPhone: doc.data['numberPhone'] ?? null,
-      totalDistanceTraveled: doc.data['totalDistanceTraveled'] ?? null,
-      type: doc.data['type'] ?? null,
+                doc.data['dateOfEmplotment'].seconds * 1000) ??
+            null,
+        drivingLicense: doc.data['drivingLicense'] ?? null,
+        drivingLicenseFrom: DateTime.fromMillisecondsSinceEpoch(
+                doc.data['drivingLicenseFrom'].seconds * 1000) ??
+            null,
+        firstName: doc.data['firstName'] ?? null,
+        knownLanguages: doc.data['knownLanguages'] ?? null,
+        lastName: doc.data['lastName'] ?? null,
+        numberPhone: doc.data['numberPhone'] ?? null,
+        totalDistanceTraveled: doc.data['totalDistanceTraveled'] ?? null,
+        type: doc.data['type'] ?? null,
       );
-      }).toList();
-      _lastDocument =
-          querySnapshot.documents[querySnapshot.documents.length - 1];
+    }).toList();
+    _lastDocument = querySnapshot.documents[querySnapshot.documents.length - 1];
 
-      setState(() {
-        _loadingInvites = false;
-      });
-    
+    setState(() {
+      _loadingInvites = false;
+    });
   }
 
   _getMoreEmployees() async {
@@ -86,8 +88,9 @@ class _InvitationsState extends State<Invitations> {
 
     _gettingMoreInvites = true;
 
-    Query q = _firestore.collection('Companys')
-          .document(widget.companyUid)
+    Query q = _firestore
+        .collection('Companys')
+        .document(widget.companyUid)
         .collection('Invitations')
         .startAfter([_lastDocument.data['totalDistanceTraveled']]).limit(
             _per_page);
@@ -107,17 +110,18 @@ class _InvitationsState extends State<Invitations> {
                 doc.data['dateSentInv'].seconds * 1000) ??
             null,
         dateOfEmplotment: DateTime.fromMillisecondsSinceEpoch(
-              doc.data['dateOfEmplotment'].seconds * 1000) ?? null,
-      drivingLicense: doc.data['drivingLicense'] ?? null,
-      drivingLicenseFrom: DateTime.fromMillisecondsSinceEpoch(
-              doc.data['drivingLicenseFrom'].seconds * 1000) ??
-          null,
-      firstName: doc.data['firstName'] ?? null,
-      knownLanguages: doc.data['knownLanguages'] ?? null,
-      lastName: doc.data['lastName'] ?? null,
-      numberPhone: doc.data['numberPhone'] ?? null,
-      totalDistanceTraveled: doc.data['totalDistanceTraveled'] ?? null,
-      type: doc.data['type'] ?? null,
+                doc.data['dateOfEmplotment'].seconds * 1000) ??
+            null,
+        drivingLicense: doc.data['drivingLicense'] ?? null,
+        drivingLicenseFrom: DateTime.fromMillisecondsSinceEpoch(
+                doc.data['drivingLicenseFrom'].seconds * 1000) ??
+            null,
+        firstName: doc.data['firstName'] ?? null,
+        knownLanguages: doc.data['knownLanguages'] ?? null,
+        lastName: doc.data['lastName'] ?? null,
+        numberPhone: doc.data['numberPhone'] ?? null,
+        totalDistanceTraveled: doc.data['totalDistanceTraveled'] ?? null,
+        type: doc.data['type'] ?? null,
       );
     }).toList());
 
@@ -142,116 +146,110 @@ class _InvitationsState extends State<Invitations> {
     });
   }
 
-  void _openInvitesFullData(ctx, companyUid, inviteData) {
-    Navigator.of(context).push(MaterialPageRoute(builder: (ctx){
-      return InvitesFullData(companyUid, inviteData);
-    }));
-  }
-
   @override
   Widget build(BuildContext context) {
     final appBar = AppBar(
       title: Text('Zaproszenia'),
       centerTitle: true,
+      flexibleSpace: appBarLook(context: context),
     );
-    return _invites == null ? Loading() : Scaffold(
-      appBar: appBar,
-      body: ListView.builder(
-        itemCount: _invites.length,
-        itemBuilder: (context, index) {
-        return Container(
-          height:
-              MediaQuery.of(context).size.height - appBar.preferredSize.height,
-          width: double.infinity,
-          padding: EdgeInsets.all(5),
-          child: Column(
-            children: <Widget>[
-              Align(
-                alignment: Alignment.bottomLeft,
-                child: Container(
-                  width: MediaQuery.of(context).size.width * 0.5,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(5),
-                        topRight: Radius.circular(20)),
-                    child: Container(
-                      color: Colors.blue,
-                      child: Center(
-                        child: Text('nazwa'),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              Container(
-                child: Column(
-                  children: <Widget>[
-                    Card(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(0),
-                        topRight: Radius.circular(5),
-                        bottomLeft: Radius.circular(5),
-                        bottomRight: Radius.circular(5),
-                      )),
-                      margin: EdgeInsets.only(top: 0),
-                      elevation: 5,
-                      color: Colors.grey,
-                      child: ListTile(
-                        leading: Icon(Icons.add_a_photo),
-                        title: Container(
-                          color: Colors.blueGrey,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: <Widget>[
-                              Column(
-                                children: <Widget>[
-                                  Text('Salary:'),
-                                  Text('dsadsa'),
-                                ],
-                              ),
-                              Column(
-                                children: <Widget>[
-                                  Text('Znaj j.Obcych:'),
-                                  Text('Nie'),
-                                ],
-                              ),
-                              Column(
-                                children: <Widget>[
-                                  Text('Kursy:'), // do jakich krajow sa kursy
-                                  Text('PL, DE'),
-                                ],
-                              ),
-                            ],
+    return _invites == null
+        ? Loading()
+        : Scaffold(
+            appBar: appBar,
+            body: Container(
+              decoration: bodyLook(context: context),
+              height: MediaQuery.of(context).size.height,
+              child: ListView.builder(
+                  itemCount: _invites.length,
+                  itemBuilder: (context, index) {
+                    return InkWell(
+                      onTap: () async {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) {
+                          return InvitesFullData(_invites[index]);
+                        }));
+                      },
+                      child: Container(
+                        margin: EdgeInsets.all(
+                            MediaQuery.of(context).size.width * 0.01),
+                        child: Card(
+                          child: ListTile(
+                            leading: Hero(
+                              tag: 'img_Employee' + index.toString(),
+                              child: Image.asset('images/image-512.png'),
+                            ),
+                            title: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Text(
+                                      '${_invites[index].firstName} ${_invites[index].lastName}',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    Row(
+                                      children: <Widget>[
+                                        Text(
+                                          'Przejechane km: ',
+                                        ),
+                                        Hero(
+                                          tag: 'PrzejechaneKM' +
+                                              index.toString(),
+                                          flightShuttleBuilder:
+                                              flightShuttleBuilder,
+                                          child: Text(
+                                            _invites[index].totalDistanceTraveled.toString(),
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Row(
+                                      children: <Widget>[
+                                        Text(
+                                          'Konto od: '
+                                        ),
+                                        Text(
+                                          (DateTime.now().year - _invites[index].dateOfEmplotment.year).toString() + ' lat',
+                                          style: TextStyle(fontWeight: FontWeight.bold),
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: <Widget>[
+                                        Text(
+                                          'Glowne trasy - ',
+                                        ),
+                                        Image.asset(
+                                          'icons/flags/png/nl.png',
+                                          package: 'country_icons',
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.03,
+                                        ),
+                                      ],
+                                    )
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                        trailing: FittedBox(
-                            child: Column(
-                          children: <Widget>[
-                            IconButton(
-                                icon: Icon(Icons.open_in_new),
-                                onPressed: () {
-                                  _openInvitesFullData(context, widget.companyUid, _invites[index]);
-                                  print('Pokaz szczegoly');
-                                }),
-                            FlatButton(
-                                onPressed: () {
-                                  Database_Company(companyUid: widget.companyUid).acceptInv(driverUid: _invites[index].invUid, firstName: _invites[index].firstName, lastName: _invites[index].lastName, numberPhone: _invites[index].numberPhone);
-                                  print('Akceptuj');
-                                },
-                                child: Text('Akceptuj'))
-                          ],
-                        )),
                       ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        );
-      }),
-    );
+                    );
+                  }),
+            ),
+          );
   }
 }

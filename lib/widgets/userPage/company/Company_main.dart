@@ -11,6 +11,7 @@ import 'package:truckmanagement_app/widgets/userPage/company/pages/management/tr
 import 'package:truckmanagement_app/widgets/userPage/company/pages/search_Drivers/searchDriver.dart';
 import 'package:truckmanagement_app/widgets/userPage/company/pages/tracks/Active/preview.dart';
 import 'package:truckmanagement_app/widgets/userPage/company/pages/tracks/Finished/preview.dart';
+import 'package:truckmanagement_app/widgets/userPage/company/pages/tracks/select_Preview.dart';
 import 'package:truckmanagement_app/widgets/userPage/company/services/database_company.dart';
 
 class CompanyMain extends StatelessWidget {
@@ -30,18 +31,18 @@ class CompanyMain extends StatelessWidget {
           SearchDriver.routeName: (ctx) => SearchDriver(),
           // Zaproszenia
           Invitations.routeName: (ctx) {
-            final routeArgs =
-                ModalRoute.of(ctx).settings.arguments as Map<String, String>;
-
-            final companyUid = routeArgs['companyUid'];
-            return Invitations(companyUid: companyUid);
+            return Invitations(companyUid: companyData.uidCompany);
           },
           // Podglad pracownikow firmy
           TruckerLook.routeName: (ctx) =>
               StreamProvider<List<BaseTruckDriverData>>.value(
-                  value: Database_Company(uid: companyData.uidCompany)
-                      .getBaseDataEmployees,
-                  child: TruckerLook()),
+                value: Database_Company(uid: companyData.uidCompany)
+                    .getBaseDataEmployees,
+                child: TruckerLook(),
+              ),
+              TracksManagement.routeName: (ctx) {
+                return TracksManagement();
+              },
           TracksActive.routeName: (ctx) {
             final listTracks = Provider.of<List<Track>>(context);
             return TracksActive(
@@ -54,8 +55,7 @@ class CompanyMain extends StatelessWidget {
               ),
         },
         home: StreamProvider<CompanyData>.value(
-          value: Database_Company(uid: companyData.uidCompany)
-              .getCompanyData,
+          value: Database_Company(uid: companyData.uidCompany).getCompanyData,
           child: CompanyPage(),
         ));
   }

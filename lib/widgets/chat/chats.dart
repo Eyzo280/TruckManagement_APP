@@ -65,7 +65,7 @@ class _ChatsState extends State<Chats> {
           ),
           title: Hero(
             tag: 'NameChat' + index.toString(),
-            child: Text(document.firstName),
+            child: Text(document.firstName, style: TextStyle(color: Theme.of(context).textTheme.body2.color),),
             flightShuttleBuilder: flightShuttleBuilder,
           ),
           trailing: Stack(
