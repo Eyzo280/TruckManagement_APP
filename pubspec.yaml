@@ -59,6 +59,7 @@ flutter:
     - images/top_login_page.jpg
     - images/maps.JPG
     - images/image-512.png
+    - images/Background-Image.jpg
   #  - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

@@ -27,123 +27,146 @@ class _SignInState extends State<SignIn> {
 
   @override
   Widget build(BuildContext context) {
-    return loading ? Loading() : Scaffold(
-      appBar: AppBar(
-        title: Text('TruckerManagement - Login'),
-        actions: <Widget>[
-          FlatButton(
-            onPressed: () {
-              widget.toggleView();
-            },
-            child: Text(
-              'Register',
-              style: TextStyle(color: Colors.white),
-            ),
-          ),
-        ],
-      ),
-      body: Column(
-        children: <Widget>[
-          Flexible(
-            flex: 1,
-            fit: FlexFit.tight,
-            child: Container(
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: new AssetImage("images/top_login_page.jpg"),
+    Size deviceSize = MediaQuery.of(context).size;
+    return loading
+        ? Loading()
+        : Scaffold(
+            body: SingleChildScrollView(
+              child: Container(
+                height: deviceSize.height,
+                decoration: const BoxDecoration(
+                  image: const DecorationImage(
+                      image: const AssetImage("images/Background-Image.jpg"),
+                      fit: BoxFit.cover),
                 ),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(12.0),
-              ),
-            ),
-          ),
-          Flexible(
-            flex: 2,
-            fit: FlexFit.tight,
-            child: Container(
-              color: Colors.grey[500],
-              child: Column(
-                children: <Widget>[
-                  Form(
-                    key: _formkey,
-                    child: Container(
-                      padding: EdgeInsets.symmetric(
-                          vertical: 20.0, horizontal: 80.0),
-                      child: Column(
-                        children: <Widget>[
-                          SizedBox(
-                            height: 50,
-                          ),
-                          TextFormField(
-                            decoration: textInputDecoration.copyWith(hintText: 'Email'),
-                            validator: (val) =>
-                                val.isEmpty ? 'Prosze podac email' : null,
-                            onChanged: (val) {
-                              setState(() {
-                                email = val;
-                              });
-                            },
-                          ),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          TextFormField(
-                            decoration: textInputDecoration.copyWith(hintText: 'Password'),
-                            validator: (val) => val.isEmpty
-                                ? 'Prosze podac haslo'
-                                : null,
-                            obscureText: true,
-                            onChanged: (val) {
-                              setState(() {
-                                password = val;
-                              });
-                            },
-                          ),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          RaisedButton(
-                            onPressed: () async {
-                              if (_formkey.currentState.validate()) {
-                                setState(() {
-                                  loading = true;
-                                });
-                                dynamic result = await _auth.signInWithEmailAndPassword(email: email,password: password);
-                                if (result == null) {
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: <Widget>[
+                    Form(
+                      key: _formkey,
+                      child: Card(
+                        color: Color.fromRGBO(0, 0, 0, 0.3),
+                        margin: EdgeInsets.all(25),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 5.0, horizontal: 15.0),
+                          child: Column(
+                            children: <Widget>[
+                              Container(
+                                margin:
+                                    const EdgeInsets.symmetric(vertical: 25),
+                                child: const Text(
+                                  'Login',
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 30,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                              TextFormField(
+                                decoration: textInputDecoration.copyWith(
+                                    hintText: 'Email'),
+                                validator: (val) =>
+                                    val.isEmpty ? 'Prosze podac email' : null,
+                                onChanged: (val) {
                                   setState(() {
-                                    error = 'Prosze sparwdzic poprawnosc danych';
-                                    loading = false;
+                                    email = val;
                                   });
-                                }
-                              }
-                            },
-                            child: Text('Zaloguj'),
+                                },
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              TextFormField(
+                                decoration: textInputDecoration.copyWith(
+                                    hintText: 'Password'),
+                                validator: (val) =>
+                                    val.isEmpty ? 'Prosze podac haslo' : null,
+                                obscureText: true,
+                                onChanged: (val) {
+                                  setState(() {
+                                    password = val;
+                                  });
+                                },
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              RaisedButton(
+                                onPressed: () async {
+                                  if (_formkey.currentState.validate()) {
+                                    setState(() {
+                                      loading = true;
+                                    });
+                                    dynamic result =
+                                        await _auth.signInWithEmailAndPassword(
+                                            email: email, password: password);
+                                    if (result == null) {
+                                      setState(() {
+                                        error =
+                                            'Prosze sparwdzic poprawnosc danych';
+                                        loading = false;
+                                      });
+                                    }
+                                  }
+                                },
+                                child: const Text('Zaloguj'),
+                              ),
+                              Container(
+                                margin:
+                                    const EdgeInsets.symmetric(vertical: 15),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    const Text(
+                                      'Don\' have an account? ',
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    FlatButton(
+                                      onPressed: () {
+                                        widget.toggleView();
+                                      },
+                                      child: const Text(
+                                        'Sign Up',
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
-                          SizedBox(height: 20,),
-                          Text(error, style: TextStyle(color: Colors.red),),
-                        ],
+                        ),
                       ),
                     ),
-                  ),
-                  Flexible(
-                    fit: FlexFit.tight,
-                    child: Align(
+                    SizedBox(
+                      height: deviceSize.height * 0.075,
+                    ),
+                    Align(
                       alignment: Alignment.bottomLeft,
                       child: FlatButton(
-                        child: Text('Kontakt'),
+                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        color: const Color.fromRGBO(0, 0, 0, 0.3),
+                        child: const Text(
+                          'Kontakt',
+                          style: const TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
                         onPressed: () {
                           print('Kontakt');
                         },
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
-      ),
-    );
+          );
   }
 }
