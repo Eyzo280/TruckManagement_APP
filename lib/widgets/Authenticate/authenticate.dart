@@ -18,10 +18,11 @@ class _AuthenticateState extends State<Authenticate> {
 
   @override
   Widget build(BuildContext context) {
+    Size deviceSize = MediaQuery.of(context).size;
     if (showSignIn == true) {
-      return SignIn(toggleView: toggleView);
+      return SignIn(toggleView: toggleView, deviceSize: deviceSize,);
     } else {
-      return SelectRegister(toggleView: toggleView);
+      return SelectRegister(toggleView: toggleView, deviceSize: deviceSize,);
     }
   }
 }

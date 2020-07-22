@@ -5,8 +5,12 @@ import 'package:truckmanagement_app/widgets/shared/loading.dart';
 
 class SignIn extends StatefulWidget {
   final Function toggleView;
+  final Size deviceSize;
 
-  SignIn({this.toggleView});
+  SignIn({
+    this.toggleView,
+    this.deviceSize,
+  });
 
   @override
   _SignInState createState() => _SignInState();
@@ -27,13 +31,12 @@ class _SignInState extends State<SignIn> {
 
   @override
   Widget build(BuildContext context) {
-    Size deviceSize = MediaQuery.of(context).size;
     return loading
         ? Loading()
         : Scaffold(
             body: SingleChildScrollView(
               child: Container(
-                height: deviceSize.height,
+                height: widget.deviceSize.height,
                 decoration: const BoxDecoration(
                   image: const DecorationImage(
                       image: const AssetImage("images/Background-Image.jpg"),
@@ -145,7 +148,7 @@ class _SignInState extends State<SignIn> {
                       ),
                     ),
                     SizedBox(
-                      height: deviceSize.height * 0.075,
+                      height: widget.deviceSize.height * 0.075,
                     ),
                     Align(
                       alignment: Alignment.bottomLeft,
