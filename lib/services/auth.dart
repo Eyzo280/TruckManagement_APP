@@ -8,7 +8,9 @@ class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   User _userFromFirebaseUser(FirebaseUser user) {
-    return user != null ? User(uid: user.uid, displayName: user.displayName) : null;
+    return user != null
+        ? User(uid: user.uid, displayName: user.displayName)
+        : null;
   }
 
   Stream<User> get user {
@@ -33,17 +35,26 @@ class AuthService {
 
   Future signInWithEmailAndPassword({String email, String password}) async {
     try {
-      AuthResult result = await _auth.signInWithEmailAndPassword(email: email, password: password);
+      AuthResult result = await _auth.signInWithEmailAndPassword(
+          email: email, password: password);
       FirebaseUser user = result.user;
       return user;
     } catch (e) {
       print(e);
+      throw e;
     }
   }
 
   // Rejestracja za pomoca email i hasla
 
-  Future registerWithEmailAndPassword({String email, String displayName, String nameCompany, String firstName, String lastName, String password, String type}) async {
+  Future registerWithEmailAndPassword(
+      {String email,
+      String displayName,
+      String nameCompany,
+      String firstName,
+      String lastName,
+      String password,
+      String type}) async {
     try {
       AuthResult result = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
@@ -51,7 +62,11 @@ class AuthService {
       UserUpdateInfo userUpdateInfo = new UserUpdateInfo();
       userUpdateInfo.displayName = displayName;
       await user.updateProfile(userUpdateInfo);
-      await DatabaseService(uid: user.uid).updateUserData(nameCompany: nameCompany,firstName: firstName, lastName: lastName, type: type);
+      await DatabaseService(uid: user.uid).updateUserData(
+          nameCompany: nameCompany,
+          firstName: firstName,
+          lastName: lastName,
+          type: type);
       return user;
     } catch (e) {
       print(e);
@@ -63,14 +78,14 @@ class AuthService {
   Future signOut(context) async {
     try {
       await Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (ctx) {
-                      _auth.signOut();
-                      return MyApp();
-                    },
-                  ),
-                );
+        context,
+        MaterialPageRoute(
+          builder: (ctx) {
+            _auth.signOut();
+            return MyApp();
+          },
+        ),
+      );
       // return await _auth.signOut();
     } catch (e) {
       print('Wystapil blad przy wylogowywaniu.');

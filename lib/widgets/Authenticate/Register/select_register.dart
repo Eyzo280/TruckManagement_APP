@@ -84,9 +84,9 @@ class _SelectRegisterState extends State<SelectRegister> {
 */
 
 import 'package:flutter/material.dart';
-import 'package:flutter_icons/flutter_icons.dart';
-import 'package:truckmanagement_app/widgets/shared/constants.dart';
-import '../../../models/register.dart';
+import 'package:truckmanagement_app/widgets/Authenticate/Register/register_chief.dart';
+import 'package:truckmanagement_app/widgets/Authenticate/Register/register_forwarder.dart';
+import 'package:truckmanagement_app/widgets/Authenticate/Register/register_trucker.dart';
 
 class SelectRegister extends StatefulWidget {
   final Function toggleView;
@@ -102,6 +102,41 @@ class SelectRegister extends StatefulWidget {
 }
 
 class _SelectRegisterState extends State<SelectRegister> {
+  String typeRegister = '';
+
+  Widget buttonTypeRegister(BuildContext context, String type) {
+    return Container(
+      height: widget.deviceSize.width * 0.15,
+      width: widget.deviceSize.width * 0.4,
+      margin: EdgeInsets.all(25),
+      child: FlatButton(
+        color: Colors.white,
+        onPressed: () {
+          if (type == 'Chief') {
+            setState(() {
+              typeRegister = 'Chief';
+            });
+          } else if (type == 'Forwarder') {
+            setState(() {
+              typeRegister = 'Forwarder';
+            });
+          } else if (type == 'Trucker') {
+            setState(() {
+              typeRegister = 'Trucker';
+            });
+          }
+        },
+        child: Text(
+          type,
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -114,26 +149,48 @@ class _SelectRegisterState extends State<SelectRegister> {
                 image: const AssetImage("images/Background-Image.jpg"),
                 fit: BoxFit.cover),
           ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              FlatButton(
-                color: Colors.white,
-                onPressed: () {},
-                child: Text('Company'),
-              ),
-              FlatButton(
-                color: Colors.white,
-                onPressed: () {},
-                child: Text('Trucker'),
-              ),
-              FlatButton(
-                color: Colors.white,
-                onPressed: () {},
-                child: Text('Forwarder'),
-              ),
-            ],
-          ),
+          child: typeRegister == 'Chief'
+              ? RegisterChief(
+                  deviceSize: widget.deviceSize,
+                  toggleView: widget.toggleView,
+                )
+              : typeRegister == 'Forwarder'
+                  ? RegisterForwarder(
+                      deviceSize: widget.deviceSize,
+                      toggleView: widget.toggleView,
+                    )
+                  : typeRegister == 'Trucker'
+                      ? RegisterTrucker(
+                          deviceSize: widget.deviceSize,
+                          toggleView: widget.toggleView,
+                        )
+                      : Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Container(
+                              child: Card(
+                                color: Color.fromRGBO(0, 0, 0, 0.3),
+                                child: Column(
+                                  children: <Widget>[
+                                    buttonTypeRegister(context, 'Chief'),
+                                    buttonTypeRegister(context, 'Forwarder'),
+                                    buttonTypeRegister(context, 'Trucker'),
+                                    Container(
+                                      margin: EdgeInsets.all(25),
+                                      child: FlatButton(
+                                        color: Colors.white,
+                                        onPressed: () {
+                                          widget.toggleView();
+                                        },
+                                        child: Icon(Icons.arrow_back),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
         ),
       ),
     );
