@@ -10,121 +10,89 @@ class DatabaseService {
   // final CollectionReference user = Firestore.instance.collection('Users');
 
   // Tworzenie bazy danych resjestrujacych sie Uzytkownikow
-  Future updateUserData(
-      {String nameCompany,
-      String firstName,
-      String lastName,
-      String type}) async {
-    if (type == 'Chief') {
-      final chiefData = Firestore.instance.collection('Chiefs').document(uid);
-      final companyData =
-          Firestore.instance.collection('Companys').document(uid + '_1');
-      //                                                           Chief
-      return await chiefData.setData({
-        'firstName': firstName, // Imie szefa
-        'lastName': lastName, // Nazwisko szefa
-        'numberPhone': '2131123213', // numer telefonu szefa
-        'type': type, // Typ konta uzytkownika
-      }).whenComplete(() {
-        chiefData.collection('Companys').document(uid + '_1').setData({
-          'active': false, // dzien wyplaty
-        });
-        companyData.setData({
-          'advertisement': false,
-          'nameCompany': nameCompany, // NazwaFirmy
-          'type': 'Company',
-          'yearEstablishmentCompany': DateTime.now(), // rok zalozenia firmy
-          'employees': 0,
-        }).whenComplete(() {
-          ////////////////////////////////////////////////////////////// To pozniej mozna usunac ale teraz zeby miec obraz zostawiam
-          companyData
-              .collection('DriverTrucks')
-              .document('testDriver')
-              .setData({
-            'firstName': 'TestoweImie', // imie
-            'lastName': 'TestoweNazwisko', // nazwisko
-            'salary': 0, // pensja
-            'earned': 0, // Zarobione pieniadze od dnia zaczecia pracy
-            'paid': 0, // Zaplacone pieniadze
-            'distanceTraveled': 0, // Przejechane kilometry w firmie
-            'statusDriver':
-                true, // status okresla czy kierowca jest w trasie czy nie
-            'costDriver': 0, // koszty utrzymania kierowcy
-            'numberPhone': '42424242', // numer telefonu
-            'dateOfEmplotment': DateTime.now(), // Data zatrudnienia
-            'payday': DateTime.now(), // dzien wyplaty
-          });
-        }).whenComplete(() {
-          companyData
-              .collection('Forwarders')
-              .document('testForwarder')
-              .setData({
-            'name': 'TestowaNazwaSpedytora',
-          });
-        }).whenComplete(() {
-          //////////////////////////////////////////////////////////////
-          companyData
-              .collection('SentInvitations')
-              .document('testInvitation')
-              .setData({
-            'name': 'TestowaNazwaZaproszonegoPracownika',
-          });
-        }).whenComplete(() {
-          companyData
-              .collection('Invitations')
-              .document('testInvitation')
-              .setData({
-            'idUserInvitation':
-                'TestUserInvitations', // id wysylajacego zaproszenie
-            'firstName': 'ImieZapraszajacego', // imie wysylajacego zaproszenie
-            'lastName':
-                'NazwiskoZapraszajacego', // nazwisko wysylajacego zaproszenie
-            'totalDistanceTraveled':
-                '', // przejechane km wysylajacego zaproszenie
-            'drivingLicense': 'C', // jakie prawo jazdy posiada
-            'drivingLicenseFrom':
-                DateTime.now(), // od kiedy posiada prawo jazdy
-            'knownLanguages': 'English, Polish', // jakie zna jezyki
-          });
-        });
-      });
-    } else if (type == 'DriverTruck') {
-      final userdata = Firestore.instance.collection('Drivers').document(uid);
-      //                                                DriverTruck
-      return await userdata.setData({
-        'firstName': 'TestoweImie', // imie
-        'lastName': 'TestoweNazwisko', // nazwisko
-        'type': type, // Typ konta uzytkownika
-        'salary': 0, // pensja
-        'drivingLicense': 'C', // jakie prawo jazdy posiada
-        'drivingLicenseFrom': DateTime.now(), // od kiedy posiada prawo jazdy
-        'knownLanguages': 'English, Polish', // jakie zna jezyki
-        'nameCompany':
-            'TestowaNazwaFirmy', // Nazwa Firmy w ktorej pracuje kierowca
-        'earned': 0, // Zarobione pieniadze od dnia zaczecia pracy
-        'totalDistanceTraveled': 0, // Calkowita ilosc przejechanych kilometrow
-        'numberPhone': '42424242', // numer telefonu
-        'dateOfEmplotment': DateTime.now(), // Data zatrudnienia
-        'payday': DateTime.now(), // dzien wyplaty
-      }).whenComplete(() {
-        userdata
-            .collection('SentInvitations')
-            .document('testInvitation')
-            .setData({
-          'idSentInvitationToCompany' // id do ktorej wyslano zaproszenie
-              'firstName': firstName, // Imie szefa
-          'lastName': lastName, // Nazwisko szefa
-          'salary': 0, // pensja kierowcy w firmie
-          'nameCompany': 'NazwaFirmy', // nazwa firmy
-          'amountEmployees': 3, // ilosc pracownikow w firmie
-          'numberPhone': '321332131', // numer tel do firmy
-          'yearEstablishmentCompany': DateTime.now(), // rok zalozenia firmy
-        });
-      }).whenComplete(() {
-        userdata.collection('Invitations').document('testInvitation').setData({
-          'name': 'TestowaNazwaZaproszenia',
-        });
-      });
+
+  Future registerChiefDatabase({
+    String nameCompany,
+    String nickName,
+    String createdDate,
+  }) async {
+    try {
+      final companyUid =
+          Firestore.instance.collection('Companys').document().documentID;
+      await Firestore.instance
+          .collection('Users')
+          .document(uid)
+          .setData(
+            {
+              'nickName': nickName,
+              'createDate': createdDate,
+              'type': 'Chief',
+            },
+          )
+          .whenComplete(
+            () => Firestore.instance
+                .collection('Users')
+                .document(uid)
+                .collection('Companys')
+                .document(companyUid)
+                .setData(
+              {
+                'nameCompany': nameCompany,
+              },
+            ),
+          )
+          .whenComplete(
+            () => Firestore.instance
+                .collection('Companys')
+                .document(companyUid)
+                .setData(
+              {
+                'chief': uid,
+                'nameCompany': nameCompany,
+                'createDate': createdDate,
+                'status': false, // Nieaktywna
+              },
+            ),
+          );
+    } catch (err) {
+      print(err);
+      throw err;
+    }
+  }
+
+  Future registerForwarderDatabase({
+    String nickName,
+    String createdDate,
+  }) async {
+    try {
+      await Firestore.instance.collection('Users').document(uid).setData(
+        {
+          'nickName': nickName,
+          'createDate': createdDate,
+          'type': 'Forwarder',
+        },
+      );
+    } catch (err) {
+      print(err);
+      throw err;
+    }
+  }
+
+  Future registerTruckerDatabase({
+    String nickName,
+    String createdDate,
+  }) async {
+    try {
+      await Firestore.instance.collection('Users').document(uid).setData(
+        {
+          'nickName': nickName,
+          'createDate': createdDate,
+          'type': 'Trucker',
+        },
+      );
+    } catch (err) {
+      print(err);
+      throw err;
     }
   }
   // dane uzytkownika ze snapshot
@@ -225,7 +193,8 @@ class DatabaseService {
     return DriverTruck(
       driverUid: snapshot.documentID,
       dateOfEmplotment: DateTime.fromMillisecondsSinceEpoch(
-              snapshot.data['dateOfEmplotment'].seconds * 1000) ?? null,
+              snapshot.data['dateOfEmplotment'].seconds * 1000) ??
+          null,
       drivingLicense: snapshot.data['drivingLicense'] ?? null,
       drivingLicenseFrom: DateTime.fromMillisecondsSinceEpoch(
               snapshot.data['drivingLicenseFrom'].seconds * 1000) ??

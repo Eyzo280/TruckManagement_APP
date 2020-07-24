@@ -49,7 +49,7 @@ class _SignInState extends State<SignIn> {
               email: loginData.email, password: loginData.password)
           .catchError((err) {
         setState(() {
-          error = 'Prosze sparwdzic poprawnosc danych';
+          error = 'Prosze sprawdzic poprawnosc danych';
           loading = false;
         });
       });

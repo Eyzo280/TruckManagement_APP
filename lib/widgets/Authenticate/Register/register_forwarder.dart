@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:truckmanagement_app/widgets/shared/constants.dart';
+import 'package:truckmanagement_app/widgets/shared/widgets/checkboxformfield.dart';
 import '../../../models/Authenticate.dart';
+import '../../../services/auth.dart' as auth;
 
 class RegisterForwarder extends StatefulWidget {
   final Function toggleView;
@@ -40,7 +42,11 @@ class _RegisterForwarderState extends State<RegisterForwarder> {
     });
     if (_formkey.currentState.validate()) {
       _formkey.currentState.save();
-      // Function Register
+      await auth.AuthService().registerChief(
+        email: data.email,
+        nickName: data.nickname,
+        password: data.password,
+      );
     } else {
       setState(() {
         loading = false;
@@ -200,36 +206,4 @@ class _RegisterForwarderState extends State<RegisterForwarder> {
       ),
     );
   }
-}
-
-class CheckboxFormField extends FormField<bool> {
-  CheckboxFormField(
-      {Widget title,
-      FormFieldSetter<bool> onSaved,
-      FormFieldValidator<bool> validator,
-      bool initialValue = false,
-      bool autovalidate = false})
-      : super(
-          onSaved: onSaved,
-          validator: validator,
-          initialValue: initialValue,
-          autovalidate: autovalidate,
-          builder: (FormFieldState<bool> state) {
-            return CheckboxListTile(
-              dense: state.hasError,
-              title: title,
-              value: state.value,
-              onChanged: state.didChange,
-              subtitle: state.hasError
-                  ? Builder(
-                      builder: (BuildContext context) => Text(
-                        state.errorText,
-                        style: TextStyle(color: Theme.of(context).errorColor),
-                      ),
-                    )
-                  : null,
-              controlAffinity: ListTileControlAffinity.leading,
-            );
-          },
-        );
 }

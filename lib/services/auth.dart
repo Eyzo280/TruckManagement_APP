@@ -19,19 +19,7 @@ class AuthService {
         .map(_userFromFirebaseUser);
   }
 
-  // logowanie anonimowe
-  Future signInAnon() async {
-    try {
-      AuthResult result = await _auth.signInAnonymously();
-      FirebaseUser user = result.user;
-      return _userFromFirebaseUser(user);
-    } catch (e) {
-      print(e.toString());
-      return null;
-    }
-  }
-
-  // Logowanie za pomoca email i hasla
+  // Logowanie
 
   Future signInWithEmailAndPassword({String email, String password}) async {
     try {
@@ -45,31 +33,76 @@ class AuthService {
     }
   }
 
-  // Rejestracja za pomoca email i hasla
+  // Rejestracja
 
-  Future registerWithEmailAndPassword(
-      {String email,
-      String displayName,
-      String nameCompany,
-      String firstName,
-      String lastName,
-      String password,
-      String type}) async {
+  Future registerChief({
+    String email,
+    String nameCompany,
+    String nickName,
+    String password,
+  }) async {
     try {
+      String createdDate = DateTime.now().toIso8601String();
       AuthResult result = await _auth.createUserWithEmailAndPassword(
-          email: email, password: password);
+        email: email,
+        password: password,
+      );
       FirebaseUser user = result.user;
-      UserUpdateInfo userUpdateInfo = new UserUpdateInfo();
-      userUpdateInfo.displayName = displayName;
-      await user.updateProfile(userUpdateInfo);
-      await DatabaseService(uid: user.uid).updateUserData(
-          nameCompany: nameCompany,
-          firstName: firstName,
-          lastName: lastName,
-          type: type);
+      await DatabaseService(uid: user.uid).registerChiefDatabase(
+        nameCompany: nameCompany,
+        nickName: nickName,
+        createdDate: createdDate,
+      );
       return user;
-    } catch (e) {
-      print(e);
+    } catch (err) {
+      print(err);
+      throw err;
+    }
+  }
+
+  Future registerForwarder({
+    String email,
+    String nickName,
+    String password,
+  }) async {
+    try {
+      String createdDate = DateTime.now().toIso8601String();
+      AuthResult result = await _auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      FirebaseUser user = result.user;
+      await DatabaseService(uid: user.uid).registerForwarderDatabase(
+        nickName: nickName,
+        createdDate: createdDate,
+      );
+      return user;
+    } catch (err) {
+      print(err);
+      throw err;
+    }
+  }
+
+  Future registerTrucker({
+    String email,
+    String nickName,
+    String password,
+  }) async {
+    try {
+      String createdDate = DateTime.now().toIso8601String();
+      AuthResult result = await _auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      FirebaseUser user = result.user;
+      await DatabaseService(uid: user.uid).registerTruckerDatabase(
+        nickName: nickName,
+        createdDate: createdDate,
+      );
+      return user;
+    } catch (err) {
+      print(err);
+      throw err;
     }
   }
 
