@@ -1,25 +1,17 @@
 import 'package:flutter/cupertino.dart';
 
-class User {
+class LoginUser {
   final String uid; // uid od logujacego sie uzytkownika
-  final String displayName; // name uzytkownika
 
-  User({this.uid, this.displayName});
+  LoginUser({this.uid});
 }
 
 class UserData {
-  final String uid; // identyfikator
-  final String firstName; // Imie Uzytkownika
-  final String lastName; // Nazwisko Uzytkownika
-  final String nameCompany; // NazwaFirmy
-  final String type; // Typ konta uzytkownika
+  final data;
 
-  UserData(
-      {@required this.uid,
-      @required this.firstName,
-      @required this.lastName,
-      this.nameCompany,
-      @required this.type});
+  UserData({
+    @required this.data,
+  });
 }
 
 class ChiefUidCompanys {
@@ -67,6 +59,6 @@ class PeerChat {
   final String lastName;
   final String type;
 
-  PeerChat({this.uid, this.conversation , this.firstName, this.lastName, this.type});
-
+  PeerChat(
+      {this.uid, this.conversation, this.firstName, this.lastName, this.type});
 }

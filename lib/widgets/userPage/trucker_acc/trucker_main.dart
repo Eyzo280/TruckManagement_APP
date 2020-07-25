@@ -10,27 +10,26 @@ import 'package:truckmanagement_app/widgets/userPage/trucker_acc/trucker_page.da
 import 'package:truckmanagement_app/widgets/userPage/trucker_acc/trucker_search_company.dart';
 
 class TruckerMain extends StatelessWidget {
-final UserData userData;
+  final userData;
 
   TruckerMain({this.userData});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        routes: {
-          TruckerSearchCompany.routeName: (ctx) =>
-              StreamProvider<List<BaseSearchCompany>>.value(
-                value: DataBase_Trucker().getBaseSearchCompany,
-                child: TruckerSearchCompany(),
-              ),
-          Chats.routeName: (ctx) => StreamProvider<List<PeerChat>>.value(
-                value:
-                    Chat(mainUid: userData.uid, peopleUid: null).getUserChats(),
-                child: Chats(),
-              ),
-        },
-        home: StreamProvider<DriverTruck>.value(
-            value: DatabaseService(uid: userData.uid).dataDriver,
-            child: TruckerPage()));
+      routes: {
+        TruckerSearchCompany.routeName: (ctx) =>
+            StreamProvider<List<BaseSearchCompany>>.value(
+              value: DataBase_Trucker().getBaseSearchCompany,
+              child: TruckerSearchCompany(),
+            ),
+        Chats.routeName: (ctx) => StreamProvider<List<PeerChat>>.value(
+              value:
+                  Chat(mainUid: userData.uid, peopleUid: null).getUserChats(),
+              child: Chats(),
+            ),
+      },
+      home: TruckerPage(),
+    );
   }
 }

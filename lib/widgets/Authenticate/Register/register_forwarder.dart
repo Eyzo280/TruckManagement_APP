@@ -42,7 +42,7 @@ class _RegisterForwarderState extends State<RegisterForwarder> {
     });
     if (_formkey.currentState.validate()) {
       _formkey.currentState.save();
-      await auth.AuthService().registerChief(
+      await auth.AuthService().registerForwarder(
         email: data.email,
         nickName: data.nickname,
         password: data.password,

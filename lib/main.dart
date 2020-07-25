@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:truckmanagement_app/services/auth.dart';
 import 'package:provider/provider.dart';
 import 'package:truckmanagement_app/models/user.dart';
+import 'package:truckmanagement_app/services/database.dart';
 import 'package:truckmanagement_app/theme.dart';
-import 'package:truckmanagement_app/widgets/wrapper.dart';
+import 'package:truckmanagement_app/widgets/Authenticate/authenticate.dart';
+import 'package:truckmanagement_app/widgets/userPage/select_user.dart';
 
 void main() => runApp(MyApp());
 
@@ -27,10 +29,25 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
-    return StreamProvider<User>.value(
-      value: AuthService().user,
-      child: MaterialApp(
-        home: Wrapper(),
+    return MultiProvider(
+      providers: [
+        StreamProvider<LoginUser>.value(
+          value: AuthService().user,
+        ),
+      ],
+      child: Consumer<LoginUser>(
+        builder: (context, loginUser, _) {
+          return loginUser == null
+              ? MaterialApp(
+                  home: Authenticate(),
+                )
+              : StreamProvider<UserData>.value(
+                  value: DatabaseService(uid: loginUser.uid).userData,
+                  child: MaterialApp(
+                    home: SelectUser(),
+                  ),
+                );
+        },
       ),
     );
   }

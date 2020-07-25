@@ -1,4 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:truckmanagement_app/models/chief.dart';
+import 'package:truckmanagement_app/models/forwarder.dart';
+import 'package:truckmanagement_app/models/trucker.dart';
 import 'package:truckmanagement_app/models/user.dart';
 
 class DatabaseService {
@@ -19,41 +22,29 @@ class DatabaseService {
     try {
       final companyUid =
           Firestore.instance.collection('Companys').document().documentID;
-      await Firestore.instance
-          .collection('Users')
-          .document(uid)
-          .setData(
-            {
-              'nickName': nickName,
-              'createDate': createdDate,
-              'type': 'Chief',
-            },
-          )
-          .whenComplete(
-            () => Firestore.instance
-                .collection('Users')
-                .document(uid)
-                .collection('Companys')
-                .document(companyUid)
-                .setData(
-              {
-                'nameCompany': nameCompany,
-              },
-            ),
-          )
-          .whenComplete(
-            () => Firestore.instance
-                .collection('Companys')
-                .document(companyUid)
-                .setData(
-              {
-                'chief': uid,
-                'nameCompany': nameCompany,
-                'createDate': createdDate,
-                'status': false, // Nieaktywna
-              },
-            ),
-          );
+      final List<Map<String, Object>> companyMap = [
+        {companyUid: nameCompany}
+      ];
+      await Firestore.instance.collection('Users').document(uid).setData(
+        {
+          'nickName': nickName,
+          'createDate': createdDate,
+          'type': 'Chief',
+          'companys': companyMap,
+        },
+      ).whenComplete(
+        () => Firestore.instance
+            .collection('Companys')
+            .document(companyUid)
+            .setData(
+          {
+            'chief': uid,
+            'nameCompany': nameCompany,
+            'createDate': createdDate,
+            'status': false, // Nieaktywna
+          },
+        ),
+      );
     } catch (err) {
       print(err);
       throw err;
@@ -95,60 +86,66 @@ class DatabaseService {
       throw err;
     }
   }
-  // dane uzytkownika ze snapshot
 
-  UserData _userDataFromsnapshot(DocumentSnapshot snapshot) {
-    if (snapshot.data['type'] == 'Chief') {
-      return UserData(
-        uid: uid,
-        firstName: snapshot.data['firstName'],
-        lastName: snapshot.data['lastName'],
-        type: snapshot.data['type'],
-      );
-    } else if (snapshot.data['type'] == 'DriverTruck') {
-      // Trzeba dodac obiekty reszte uzytkownikow Forwarder i DriverTruck
-      return UserData(
-        uid: uid,
-        firstName: snapshot.data['firstName'],
-        lastName: snapshot.data['lastName'],
-        nameCompany: snapshot.data['nameCompany'],
-        type: snapshot.data['type'],
-      );
-    } else {
-      // Trzeba dodac obiekty reszte uzytkownikow Forwarder i DriverTruck
-      return null;
+  // Pobieranie danych uzytkownika
+
+  Chief _chiefDataFromsnapshot(DocumentSnapshot snapshot) {
+    List<Map<String, Object>> companys = [];
+
+    for (var data in snapshot.data['companys']) {
+      companys.add(data);
     }
+
+    return Chief(
+      uid: uid,
+      nickName: snapshot.data['nickName'] ?? null,
+      createDate: snapshot.data['createDate'] ?? null,
+      companys: companys ?? null,
+      type: snapshot.data['type'] ?? null,
+    );
   }
 
-  // pobieranie danych uzytkownika takich jak type
-  Stream<UserData> get userData async* {
-    List listCollectionsUsers = ['Chiefs', 'Drivers', 'Forwarders'];
-    var userType = null;
-    var complete = false;
+  Forwarder _forwarderDataFromsnapshot(DocumentSnapshot snapshot) {
+    // pobieranie firm trzeba dodac
+    return Forwarder(
+      uid: uid,
+      nickName: snapshot.data['nickName'] ?? null,
+      createDate: snapshot.data['createDate'] ?? null,
+      type: snapshot.data['type'] ?? null,
+    );
+  }
 
-    for (var i in listCollectionsUsers) {
-      void wlacz() {
-        userType = Firestore.instance
-            .collection(i.toString())
-            .document(uid)
-            .snapshots()
-            .map(_userDataFromsnapshot);
-      }
+  Trucker _truckerDataFromsnapshot(DocumentSnapshot snapshot) {
+    return Trucker(
+      uid: uid,
+      nickName: snapshot.data['nickName'] ?? null,
+      createDate: snapshot.data['createDate'] ?? null,
+      type: snapshot.data['type'] ?? null,
+    );
+  }
 
-      final collection = await Firestore.instance
-          .collection(i.toString())
-          .document(uid)
-          .get()
-          .then((val) {
-        if (val.exists) {
-          wlacz();
-        }
-      });
-    }
-    if (userType != null && complete == false) {
-      yield* userType;
-      complete = true;
-    }
+  Stream<UserData> get userData {
+    return Firestore.instance.collection('Users').document(uid).snapshots().map(
+      (snap) {
+        if (snap.data['type'] == 'Chief') {
+          return UserData(
+            // Potrzebne bylo poniewaz nie moglem uzyc StreamProvider<dynamic>
+            data: _chiefDataFromsnapshot(snap),
+          );
+        } else if (snap.data['type'] == 'Forwarder') {
+          return UserData(
+            data: _forwarderDataFromsnapshot(snap),
+          );
+        } else if (snap.data['type'] == 'Trucker') {
+          return UserData(
+            data: _truckerDataFromsnapshot(snap),
+          );
+        } else
+          return UserData(
+            data: null,
+          );
+      },
+    );
   }
 
   // Pobieranie uid Companys
@@ -188,7 +185,7 @@ class DatabaseService {
   */
 
   // Pobieranie Danych DriverTruck
-
+  /*
   DriverTruck _getDataDriver(DocumentSnapshot snapshot) {
     return DriverTruck(
       driverUid: snapshot.documentID,
@@ -213,6 +210,6 @@ class DatabaseService {
 
     return driver.document(uid).snapshots().map(_getDataDriver);
   }
-
+  */
   //
 }

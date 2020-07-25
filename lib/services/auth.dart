@@ -7,13 +7,13 @@ import 'package:flutter/material.dart';
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  User _userFromFirebaseUser(FirebaseUser user) {
+  LoginUser _userFromFirebaseUser(FirebaseUser user) {
     return user != null
-        ? User(uid: user.uid, displayName: user.displayName)
+        ? LoginUser(uid: user.uid)
         : null;
   }
 
-  Stream<User> get user {
+  Stream<LoginUser> get user {
     return _auth.onAuthStateChanged
         //.map((FirebaseUser user) => _userFromFirebaseUser(user)); // mozna tez tak zapisac
         .map(_userFromFirebaseUser);

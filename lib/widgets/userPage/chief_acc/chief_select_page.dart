@@ -12,28 +12,16 @@ import 'package:truckmanagement_app/widgets/userPage/company/services/database_c
 class ChiefSelectPage extends StatelessWidget {
   final AuthService _auth = AuthService();
 
-  void openChiefMain(BuildContext ctx, user) {
-    Navigator.pushReplacement(
-      ctx,
-      MaterialPageRoute(
-        builder: (ctx) {
-          return ChiefMainPage(user);
-        },
-      ),
-    );
-  }
-
   void openPageCompany(BuildContext ctx, String companyUid) {
-    Navigator.pushReplacement(
+    Navigator.push(
       ctx,
       MaterialPageRoute(
         builder: (ctx) {
           return StreamProvider<CompanyData>.value(
               value: Database_Company(uid: companyUid).getCompanyData,
               child: StreamProvider<List<Track>>.value(
-                  value:
-                      Database_Company(companyUid: companyUid)
-                  .streamActiveTracks,
+                  value: Database_Company(companyUid: companyUid)
+                      .streamActiveTracks,
                   child: CompanyMain()));
         },
       ),
@@ -48,7 +36,7 @@ class ChiefSelectPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<User>(context);
+    final user = Provider.of<LoginUser>(context);
     final uidCompanys = Provider.of<List<ChiefUidCompanys>>(context) ?? [];
     return Scaffold(
       appBar: AppBar(
@@ -83,7 +71,14 @@ class ChiefSelectPage extends StatelessWidget {
               fit: FlexFit.loose,
               child: RaisedButton(
                 onPressed: () {
-                  openChiefMain(context, user);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return ChiefMainPage();
+                      },
+                    ),
+                  );
                 },
                 child: Text('Glowny Panel'),
               ),

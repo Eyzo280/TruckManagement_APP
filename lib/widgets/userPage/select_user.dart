@@ -3,35 +3,37 @@ import 'package:provider/provider.dart';
 import 'package:truckmanagement_app/models/user.dart';
 import 'package:truckmanagement_app/services/database.dart';
 import 'package:truckmanagement_app/widgets/error_page/error_page.dart';
+import 'package:truckmanagement_app/widgets/shared/loading.dart';
 import 'package:truckmanagement_app/widgets/userPage/chief_acc/chief_select_page.dart';
 import 'package:truckmanagement_app/widgets/userPage/forwarder_acc/forwarder_main.dart';
 import 'package:truckmanagement_app/widgets/userPage/trucker_acc/trucker_main.dart';
 
 class SelectUser extends StatefulWidget {
-  final UserData data;
+  //final data;
 
-  SelectUser(this.data);
+  //SelectUser(this.data);
   @override
   _SelectUserState createState() => _SelectUserState();
 }
 
 class _SelectUserState extends State<SelectUser> {
-
   @override
   Widget build(BuildContext context) {
-    final UserData userData = widget.data;
+    final user = Provider.of<UserData>(context) ?? null;
 
     print('Problem');
-    if (userData.type == 'Chief') {
+    if (user == null) {
+      return Loading();
+    } else if (user.data.type == 'Chief') {
       return StreamProvider<List<ChiefUidCompanys>>.value(
-        value: DatabaseService(uid: userData.uid).getUidCompanys,
-        child: ChiefSelectPage());
-    } else if (userData.type == 'Forwarder') {
+          value: DatabaseService(uid: user.data.uid).getUidCompanys,
+          child: ChiefSelectPage());
+    } else if (user.data.type == 'Forwarder') {
       return ForwarderMain();
-    } else if (userData.type == 'DriverTruck') {
-      return StreamProvider<DriverTruck>.value(
-        value: DatabaseService(uid: userData.uid).dataDriver,
-        child: TruckerMain(userData: userData,));
+    } else if (user.data.type == 'Trucker') {
+      return TruckerMain(
+        userData: user.data,
+      );
     } else {
       return ErrorPage();
     }

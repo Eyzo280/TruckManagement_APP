@@ -43,7 +43,7 @@ class _RegisterTruckerState extends State<RegisterTrucker> {
     });
     if (_formkey.currentState.validate()) {
       _formkey.currentState.save();
-      await auth.AuthService().registerChief(
+      await auth.AuthService().registerTrucker(
         email: data.email,
         nickName: data.nickname,
         password: data.password,

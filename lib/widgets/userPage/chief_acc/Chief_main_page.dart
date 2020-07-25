@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:truckmanagement_app/models/chief.dart';
 import 'package:truckmanagement_app/models/user.dart';
 import 'package:truckmanagement_app/services/auth.dart';
 import 'package:truckmanagement_app/services/database.dart';
@@ -9,34 +10,25 @@ import 'package:truckmanagement_app/widgets/userPage/chief_acc/pages/chief/previ
 import 'package:truckmanagement_app/widgets/userPage/chief_acc/services/database_chief.dart';
 
 class ChiefMainPage extends StatelessWidget {
-  final user;
-
-  ChiefMainPage(this.user);
-
   final AuthService _auth = AuthService();
-  
+
   void openPagePreviewCompany(BuildContext ctx, userUid) {
-    Navigator.of(ctx).push(MaterialPageRoute(builder: (_){
+    Navigator.of(ctx).push(MaterialPageRoute(builder: (_) {
       return StreamProvider<List<BaseCompanyData>>.value(
-        value: DataBase_Chief(uid: userUid).getBaseCompanyData,
-        child: PreviewCompany(chiefUid: userUid));
+          value: DataBase_Chief(uid: userUid).getBaseCompanyData,
+          child: PreviewCompany(chiefUid: userUid));
     }));
   }
 
   // Powrot do wyboru firmy
   void openSelectPage(BuildContext ctx, uid) {
-    Navigator.pushReplacement(ctx, MaterialPageRoute(
-      builder: (ctx) {
-        return StreamProvider<List<ChiefUidCompanys>>.value(
-          value: DatabaseService(uid: uid).getUidCompanys,
-          child: ChiefSelectPage(),
-        );
-      },
-    ));
+    Navigator.pop(ctx);
+    Navigator.pop(ctx);
   }
 
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<LoginUser>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text('Chief Main'),
@@ -65,8 +57,8 @@ class ChiefMainPage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   FittedBox(
-                                      child: Text(
-                      user.displayName ,
+                    child: Text(
+                      's',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 20,
@@ -76,7 +68,16 @@ class ChiefMainPage extends StatelessWidget {
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.01,
                   ),
-                  Container(width: MediaQuery.of(context).size.height * 0.1, height: MediaQuery.of(context).size.height * 0.1, decoration: BoxDecoration(image: DecorationImage(image: NetworkImage('https://i.imgur.com/BoN9kdC.png'), fit: BoxFit.fill), shape: BoxShape.circle),),
+                  Container(
+                    width: MediaQuery.of(context).size.height * 0.1,
+                    height: MediaQuery.of(context).size.height * 0.1,
+                    decoration: BoxDecoration(
+                        image: DecorationImage(
+                            image:
+                                NetworkImage('https://i.imgur.com/BoN9kdC.png'),
+                            fit: BoxFit.fill),
+                        shape: BoxShape.circle),
+                  ),
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.01,
                   ),
