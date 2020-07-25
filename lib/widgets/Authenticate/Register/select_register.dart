@@ -139,60 +139,47 @@ class _SelectRegisterState extends State<SelectRegister> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: Container(
-          height: widget.deviceSize.height,
-          width: widget.deviceSize.width,
-          decoration: const BoxDecoration(
-            image: const DecorationImage(
-                image: const AssetImage("images/Background-Image.jpg"),
-                fit: BoxFit.cover),
-          ),
-          child: typeRegister == 'Chief'
-              ? RegisterChief(
-                  deviceSize: widget.deviceSize,
-                  toggleView: widget.toggleView,
-                )
-              : typeRegister == 'Forwarder'
-                  ? RegisterForwarder(
-                      deviceSize: widget.deviceSize,
-                      toggleView: widget.toggleView,
-                    )
-                  : typeRegister == 'Trucker'
-                      ? RegisterTrucker(
-                          deviceSize: widget.deviceSize,
-                          toggleView: widget.toggleView,
-                        )
-                      : Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Container(
-                              child: Card(
-                                color: Color.fromRGBO(0, 0, 0, 0.3),
-                                child: Column(
-                                  children: <Widget>[
-                                    buttonTypeRegister(context, 'Chief'),
-                                    buttonTypeRegister(context, 'Forwarder'),
-                                    buttonTypeRegister(context, 'Trucker'),
-                                    Container(
-                                      margin: EdgeInsets.all(25),
-                                      child: FlatButton(
-                                        color: Colors.white,
-                                        onPressed: () {
-                                          widget.toggleView();
-                                        },
-                                        child: Icon(Icons.arrow_back),
-                                      ),
-                                    ),
-                                  ],
+    return typeRegister == 'Chief'
+        ? RegisterChief(
+            deviceSize: widget.deviceSize,
+            toggleView: widget.toggleView,
+          )
+        : typeRegister == 'Forwarder'
+            ? RegisterForwarder(
+                deviceSize: widget.deviceSize,
+                toggleView: widget.toggleView,
+              )
+            : typeRegister == 'Trucker'
+                ? RegisterTrucker(
+                    deviceSize: widget.deviceSize,
+                    toggleView: widget.toggleView,
+                  )
+                : Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Container(
+                        child: Card(
+                          color: Color.fromRGBO(0, 0, 0, 0.3),
+                          child: Column(
+                            children: <Widget>[
+                              buttonTypeRegister(context, 'Chief'),
+                              buttonTypeRegister(context, 'Forwarder'),
+                              buttonTypeRegister(context, 'Trucker'),
+                              Container(
+                                margin: EdgeInsets.all(25),
+                                child: FlatButton(
+                                  color: Colors.white,
+                                  onPressed: () {
+                                    widget.toggleView();
+                                  },
+                                  child: Icon(Icons.arrow_back),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-        ),
-      ),
-    );
+                      ),
+                    ],
+                  );
   }
 }

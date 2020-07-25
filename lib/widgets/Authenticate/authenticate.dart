@@ -19,10 +19,30 @@ class _AuthenticateState extends State<Authenticate> {
   @override
   Widget build(BuildContext context) {
     Size deviceSize = MediaQuery.of(context).size;
-    if (showSignIn == true) {
-      return SignIn(toggleView: toggleView, deviceSize: deviceSize,);
-    } else {
-      return SelectRegister(toggleView: toggleView, deviceSize: deviceSize,);
-    }
+    return Scaffold(
+      body: SingleChildScrollView(
+        child: Container(
+          height: deviceSize.height,
+          width: deviceSize.width,
+          decoration: const BoxDecoration(
+            image: const DecorationImage(
+              image: const AssetImage("images/Background-Image.jpg"),
+              fit: BoxFit.cover,
+            ),
+          ),
+          child: showSignIn == true
+              ? SignIn(
+                  toggleView: toggleView,
+                  deviceSize: deviceSize,
+                )
+              : Card(
+                child: SelectRegister(
+                    toggleView: toggleView,
+                    deviceSize: deviceSize,
+                  ),
+              ),
+        ),
+      ),
+    );
   }
 }
