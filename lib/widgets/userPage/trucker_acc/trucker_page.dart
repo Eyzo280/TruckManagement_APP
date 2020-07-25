@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:truckmanagement_app/models/trucker.dart';
 import 'package:truckmanagement_app/models/user.dart';
 import 'package:truckmanagement_app/services/auth.dart';
 import 'package:truckmanagement_app/widgets/chat/chats.dart';
@@ -28,10 +29,10 @@ class TruckerPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<DriverTruck>(context) ?? null;
+    final Trucker user = Provider.of<UserData>(context).data ?? null;
     return Scaffold(
         appBar: AppBar(
-          title: Text('Kierowca - Nazwa'),
+          title: Text('Kierowca - ${user.nickName}'),
           actions: <Widget>[
             Container(
               margin: EdgeInsets.only(right: 30),
@@ -58,7 +59,7 @@ class TruckerPage extends StatelessWidget {
                   children: <Widget>[
                     FittedBox(
                       child: Text(
-                        user.firstName + ' ' + user.lastName,
+                        user.nickName,
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 20,
@@ -81,7 +82,7 @@ class TruckerPage extends StatelessWidget {
                     SizedBox(
                       height: MediaQuery.of(context).size.height * 0.01,
                     ),
-                    Text('ID: ${user.driverUid}'),
+                    Text('ID: ${user.uid}'),
                   ],
                 ),
               ),
@@ -89,7 +90,7 @@ class TruckerPage extends StatelessWidget {
                 leading: Icon(Icons.add_box),
                 title: Text('Szukaj Firmy'),
                 onTap: () {
-                  openSearchCompany(context, user);
+                  //openSearchCompany(context, user);
                 },
               ),
               ListTile(
@@ -101,7 +102,7 @@ class TruckerPage extends StatelessWidget {
                 leading: Icon(Icons.chat),
                 title: Text('Chat'),
                 onTap: () {
-                  _openChats(context, user.driverUid);
+                  //_openChats(context, user.driverUid);
                 },
               ),
               ListTile(
@@ -124,17 +125,14 @@ class TruckerPage extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         user != null
-                            ? Text('Imie: ${user.firstName}')
+                            ? Text('Nickname: ${user.nickName}')
                             : CircularProgressIndicator(),
                         user != null
-                            ? Text('Nazwisko: ${user.lastName}')
-                            : CircularProgressIndicator(),
-                        user != null
-                            ? Text('Prawo jazdy: ${user.drivingLicense}')
+                            ? Text('Prawo jazdy: -')
                             : CircularProgressIndicator(),
                         user != null
                             ? Text(
-                                'Przejechane km: ${user.totalDistanceTraveled}')
+                                'Przejechane km: 0')
                             : CircularProgressIndicator(),
                       ],
                     ),
