@@ -202,7 +202,7 @@ class InvitesFullData extends StatelessWidget {
                         print('Nie mozna wyslac zaproszenia.');
                       }
                       */
-                    Database_Company(companyUid: companyData.uidCompany).acceptInv(
+                    Database_Company(companyUid: companyData.uid).acceptInv(
                         driverUid: inviteData.invUid,
                         firstName: inviteData.firstName,
                         lastName: inviteData.lastName,
@@ -223,7 +223,7 @@ class InvitesFullData extends StatelessWidget {
         padding: EdgeInsets.all(10),
         child: Column(
           children: <Widget>[
-            _topContent(context, companyData.uidCompany),
+            _topContent(context, companyData.uid),
             _centerContent(context),
             _bottomContent(context),
           ],

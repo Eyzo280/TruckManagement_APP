@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:truckmanagement_app/models/chief.dart';
 import 'package:truckmanagement_app/models/user.dart';
 import 'package:truckmanagement_app/services/auth.dart';
 import 'package:truckmanagement_app/theme.dart';
@@ -12,6 +13,7 @@ import 'package:truckmanagement_app/widgets/userPage/company/services/database_c
 class ChiefSelectPage extends StatelessWidget {
   final AuthService _auth = AuthService();
 
+  /*
   void openPageCompany(BuildContext ctx, String companyUid) {
     Navigator.push(
       ctx,
@@ -27,6 +29,7 @@ class ChiefSelectPage extends StatelessWidget {
       ),
     );
   }
+  */
 
   void openCreateCompany(BuildContext ctx, chiefUid) {
     Navigator.of(ctx).push(MaterialPageRoute(builder: (ctx) {
@@ -34,10 +37,7 @@ class ChiefSelectPage extends StatelessWidget {
     }));
   }
 
-  @override
-  Widget build(BuildContext context) {
-    final user = Provider.of<LoginUser>(context);
-    final uidCompanys = Provider.of<List<ChiefUidCompanys>>(context) ?? [];
+  Widget selectHome({BuildContext context, Chief user}) {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -84,31 +84,35 @@ class ChiefSelectPage extends StatelessWidget {
               ),
             ),
             Flexible(
-              fit: uidCompanys != [] ? FlexFit.tight : FlexFit.loose,
-              child: uidCompanys != []
+              fit: user.companys != [] ? FlexFit.tight : FlexFit.loose,
+              child: user.companys != []
                   ? SingleChildScrollView(
                       child: Container(
                         width: 200, //
                         height: 500, // trzeba ustawic responsywnosc itp
                         child: ListView.builder(
-                          itemCount: uidCompanys.length,
+                          itemCount: user.companys.length,
                           itemBuilder: (context, index) {
                             return RaisedButton(
-                              onPressed: uidCompanys[index].active == true
-                                  ? () {
-                                      openPageCompany(context,
-                                          uidCompanys[index].uidCompanys);
-                                    }
-                                  : null,
+                              onPressed: () {
+                                //openPageCompany(context, user.companys[index][key]);
+                                Navigator.of(context).pushNamed(
+                                  CompanyMain.routeName,
+                                  arguments: {
+                                    'uid': user.companys[index].keys.first
+                                        .toString(),
+                                  },
+                                );
+                              },
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceAround,
                                 children: <Widget>[
                                   Text(
-                                      'Nazwa Firmy - ${uidCompanys[index].nameCompany}'),
+                                      'Nazwa Firmy - '), // ${user.companys[index].values.first}
                                   Icon(
                                     Icons.radio_button_checked,
-                                    color: uidCompanys[index].active == true
+                                    color: user.companys[index][key] == true
                                         ? Colors.green
                                         : Colors.red,
                                     size: 15,
@@ -132,6 +136,27 @@ class ChiefSelectPage extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final Chief user = Provider.of<UserData>(context).data;
+    // final uidCompanys = Provider.of<List<ChiefUidCompanys>>(context) ?? [];
+    return MaterialApp(
+      routes: {
+        '/chief/': (ctx) => ChiefMainPage(),
+        '/company/': (ctx) {
+          final routeArgs =
+              ModalRoute.of(ctx).settings.arguments as Map<String, dynamic>;
+          final uid = routeArgs['uid'];
+          return StreamProvider<CompanyData>.value(
+            value: Database_Company(uid: uid).getCompanyData,
+            child: CompanyMain(),
+          );
+        },
+      },
+      home: selectHome(context: context, user: user),
     );
   }
 }

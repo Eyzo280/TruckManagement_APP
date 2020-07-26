@@ -54,20 +54,20 @@ class BaseTruckDriverData {
 }
 
 class CompanyData {
-  final String uidCompany; // uid Select Company
-  final bool advertisement; // ogloszenie
+  final String uid; // uid Selected Company
+  final List forwardersFromCompany; // spedytorzy w firmie
+  final List truckersFromCompany; // kierowcy w firmie
   final String nameCompany; // nazwa firmy
-  final int employees; // ilosc pracownikow
-  final DateTime yearEstablishmentCompany; // rok zalozenia firmy
-  final String type;
+  final String createDate; // rok zalozenia firmy
+  final bool status;
 
   CompanyData({
-    @required this.uidCompany,
-    @required this.advertisement,
+    @required this.uid,
+    @required this.forwardersFromCompany,
+    @required this.truckersFromCompany,
     @required this.nameCompany,
-    @required this.employees,
-    @required this.yearEstablishmentCompany,
-    @required this.type,
+    @required this.createDate,
+    @required this.status,
   });
 }
 

@@ -115,7 +115,7 @@ class _SearchingListState extends State<SearchingList> {
       {@required CompanyData companyData,
       @required SearchDriverData driverData}) {
     if (companyData != null && driverData != null) {
-      Database_Company(companyUid: companyData.uidCompany).sendInvite(
+      Database_Company(companyUid: companyData.uid).sendInvite(
         companyData: companyData,
         driverData: driverData,
       );
@@ -178,7 +178,7 @@ class _SearchingListState extends State<SearchingList> {
               if (sentInvitations.isEmpty) {
                 await Firestore.instance
                     .collection('Companys')
-                    .document(companyData.uidCompany)
+                    .document(companyData.uid)
                     .collection('DriverTrucks')
                     .where('dateOfEmplotment',
                         isLessThan:
@@ -192,7 +192,7 @@ class _SearchingListState extends State<SearchingList> {
                 });
                 await Firestore.instance
                     .collection('Companys')
-                    .document(companyData.uidCompany)
+                    .document(companyData.uid)
                     .collection('SentInvitations')
                     .getDocuments()
                     .then((QuerySnapshot snapshot) {

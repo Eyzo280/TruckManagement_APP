@@ -39,6 +39,8 @@ class DatabaseService {
             .setData(
           {
             'chief': uid,
+            'forwardersFromCompany': [],
+            'truckersFromCompany': [],
             'nameCompany': nameCompany,
             'createDate': createdDate,
             'status': false, // Nieaktywna

@@ -8,8 +8,11 @@ import 'package:truckmanagement_app/widgets/userPage/company/main_Company/topBod
 import 'package:truckmanagement_app/widgets/userPage/company/models/company_Employees.dart';
 import 'package:truckmanagement_app/widgets/userPage/company/pages/search_Drivers/searchDriver.dart';
 
-
 class CompanyPage extends StatelessWidget {
+  final CompanyData companyData;
+
+  CompanyPage({this.companyData});
+
   final AuthService _auth = AuthService();
 
   void openChiefLookTrucker(BuildContext ctx, CompanyData companyData) {
@@ -19,8 +22,6 @@ class CompanyPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final CompanyData companyData = Provider.of<CompanyData>(context);
-
     return Scaffold(
       appBar: AppBar(
         title: Text(companyData.nameCompany),

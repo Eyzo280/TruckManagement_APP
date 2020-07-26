@@ -77,15 +77,14 @@ class Database_Company {
   // Pobieranie danych o firmie
 
   CompanyData _getCompanyData(DocumentSnapshot doc) {
+    print(doc.data['status']);
     return CompanyData(
-      uidCompany: doc.documentID,
-      advertisement: doc.data['advertisement'] ?? '',
-      nameCompany: doc.data['nameCompany'] ?? '',
-      employees: doc.data['employees'] ?? 0,
-      yearEstablishmentCompany: DateTime.fromMillisecondsSinceEpoch(
-              doc.data['yearEstablishmentCompany'].seconds * 1000) ??
-          DateTime.now(),
-      type: doc.data['type'] ?? '',
+      uid: doc.documentID,
+      forwardersFromCompany: doc.data['forwardersFromCompany'] ?? [],
+      truckersFromCompany: doc.data['truckersFromCompany'] ?? [],
+      nameCompany: doc.data['nameCompany'] ?? [],
+      createDate: doc.data['createDate'] ?? '',
+      status: doc.data['status'] ?? false,
     );
   }
 
@@ -231,8 +230,9 @@ class Database_Company {
           fracht: doc.data['Fracht'] ?? null,
           from: doc.data['From'] ?? null,
           status: doc.data['Status'] ?? null,
-          termin:  DateTime.fromMillisecondsSinceEpoch(
-          doc.data['Termin'].seconds * 1000) ?? null,
+          termin: DateTime.fromMillisecondsSinceEpoch(
+                  doc.data['Termin'].seconds * 1000) ??
+              null,
           to: doc.data['To'] ?? null,
           wspolrzedneDostawy: doc.data['WspolrzedneDostawy'] ?? null,
         );
@@ -244,14 +244,14 @@ class Database_Company {
 
   Stream<List<Track>> get streamActiveTracks {
     return Firestore.instance
-                  .collection('Companys')
-                  .document(companyUid)
-                  .collection('Tracks')
-                  .where('Status', isEqualTo: true)
-                  .snapshots().map(getActiveTracks);
+        .collection('Companys')
+        .document(companyUid)
+        .collection('Tracks')
+        .where('Status', isEqualTo: true)
+        .snapshots()
+        .map(getActiveTracks);
   }
 
   //                                                                                          SEARCH DRIVER                                                                               //
 
-  
- }
+}

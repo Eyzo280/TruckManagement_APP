@@ -3,34 +3,8 @@ import 'package:flutter/material.dart';
 ThemeData basicTheme() {
   TextTheme _basicTextTheme(TextTheme base) {
     return base.copyWith(
-      display1: base.display1.copyWith(
-        color: Color.fromRGBO(16, 32, 39, 1),
-      ),
-      display2: base.display2.copyWith(
-        color: Color.fromRGBO(98, 114, 123, 1),
-      ),
-      display3: TextStyle(color: Color.fromRGBO(255, 193, 7, 1)),
-      body1: base.body1.copyWith(
-        color: Colors.white,
-        fontWeight: FontWeight.bold,
-      ),
-      body2: base.body2.copyWith(
-        fontWeight: FontWeight.bold,
-        
-        /*
-        shadows: [
-          Shadow(
-            offset: Offset(2.0, 2.0),
-            blurRadius: 10.0,
-            color: Color.fromARGB(255, 0, 0, 0),
-          ),
-        ],
-        */
-      ),
-      subhead: TextStyle(color: Colors.white), // w ListTile litery maja ten kolor
-      title: TextStyle(color: Colors.white),
       button: base.button.copyWith(
-        color: Colors.white,
+        color: Colors.black,
       ),
     );
   }
@@ -39,6 +13,7 @@ ThemeData basicTheme() {
   return base.copyWith(
     primaryColor: Color.fromRGBO(255, 193, 7, 1),
     cardColor: Color.fromRGBO(98, 114, 123, 0.8),
+    dividerColor: Colors.black45,
     disabledColor: Colors.grey,
     textTheme: _basicTextTheme(base.textTheme),
   );
@@ -77,14 +52,14 @@ bodyLook({@required BuildContext context}) {
 }
 
 Widget flightShuttleBuilder(
-    BuildContext flightContext,
-    Animation<double> animation,
-    HeroFlightDirection flightDirection,
-    BuildContext fromHeroContext,
-    BuildContext toHeroContext,
-  ) {
-    return DefaultTextStyle(
-      style: DefaultTextStyle.of(toHeroContext).style,
-      child: toHeroContext.widget,
-    );
-  }
+  BuildContext flightContext,
+  Animation<double> animation,
+  HeroFlightDirection flightDirection,
+  BuildContext fromHeroContext,
+  BuildContext toHeroContext,
+) {
+  return DefaultTextStyle(
+    style: DefaultTextStyle.of(toHeroContext).style,
+    child: toHeroContext.widget,
+  );
+}

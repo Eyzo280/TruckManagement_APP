@@ -102,7 +102,7 @@ class DrawerCompanyMain extends StatelessWidget {
             leading: Icon(Icons.chrome_reader_mode),
             title: Text('Zmien Zarzadzanie'),
             onTap: () {
-              _openSelectPage(context, companyData.uidCompany);
+              _openSelectPage(context, companyData.uid);
               print('Zmien Zarzadzanie');
             },
           ),
@@ -113,7 +113,7 @@ class DrawerCompanyMain extends StatelessWidget {
               'Zaproszenia',
             ),
             onTap: () {
-              _openInvitations(context, companyData.uidCompany);
+              _openInvitations(context, companyData.uid);
               print('Zaproszenia');
             },
           ),
@@ -121,7 +121,7 @@ class DrawerCompanyMain extends StatelessWidget {
             leading: Icon(Icons.chat),
             title: Text('Chat'),
             onTap: () {
-              _openChats(context, companyData.uidCompany);
+              _openChats(context, companyData.uid);
               print('Chat');
             },
           ),

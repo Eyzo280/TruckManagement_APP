@@ -10,6 +10,8 @@ import 'package:truckmanagement_app/widgets/userPage/chief_acc/pages/chief/previ
 import 'package:truckmanagement_app/widgets/userPage/chief_acc/services/database_chief.dart';
 
 class ChiefMainPage extends StatelessWidget {
+  static const routeName = '/chief/';
+
   final AuthService _auth = AuthService();
 
   void openPagePreviewCompany(BuildContext ctx, userUid) {
