@@ -8,11 +8,11 @@ class Authenticate extends StatefulWidget {
 }
 
 class _AuthenticateState extends State<Authenticate> {
-  bool showSignIn = true;
+  String showPage = 'SignIn';
 
-  void toggleView() {
+  void toggleView(String val) {
     setState(() {
-      showSignIn = !showSignIn;
+      showPage = val;
     });
   }
 
@@ -30,17 +30,68 @@ class _AuthenticateState extends State<Authenticate> {
               fit: BoxFit.cover,
             ),
           ),
-          child: showSignIn == true
-              ? SignIn(
-                  toggleView: toggleView,
-                  deviceSize: deviceSize,
-                )
-              : Card(
-                child: SelectRegister(
-                    toggleView: toggleView,
-                    deviceSize: deviceSize,
+          child: Stack(
+            children: <Widget>[
+              Positioned(
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Card(
+                    color: Color.fromRGBO(0, 0, 0, 0.3),
+                    margin: const EdgeInsets.all(25),
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.easeIn,
+                      height: showPage == 'SignIn'
+                          ? 430
+                          : showPage == 'Register'
+                              ? 460
+                              : showPage == 'Chief' ? 650 : 550,
+                      width: showPage == 'SignIn'
+                          ? 350
+                          : showPage == 'Register' ? 300 : 350,
+                      child: ListView(
+                        children: <Widget>[
+                          showPage == 'SignIn'
+                              ? SignIn(
+                                  toggleView: toggleView,
+                                  deviceSize: deviceSize,
+                                )
+                              : SelectRegister(
+                                  toggleView: toggleView,
+                                  deviceSize: deviceSize,
+                                ),
+                        ],
+                      ),
+                    ),
                   ),
+                ),
               ),
+              Positioned(
+                child: Align(
+                  alignment: Alignment.bottomLeft,
+                  child: AnimatedOpacity(
+                    duration: const Duration(milliseconds: 300),
+                    opacity: showPage == 'SignIn' ? 1 : 0,
+                    child: FlatButton(
+                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      color: const Color.fromRGBO(0, 0, 0, 0.3),
+                      child: const Text(
+                        'Kontakt',
+                        style: const TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                      onPressed: showPage != 'SignIn'
+                          ? null
+                          : () {
+                              print('Kontakt');
+                            },
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
