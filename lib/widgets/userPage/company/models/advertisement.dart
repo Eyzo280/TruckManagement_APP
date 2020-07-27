@@ -1,0 +1,4 @@
+enum SelectedAdvertisement {
+  Active,
+  Finished,
+}

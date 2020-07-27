@@ -9,7 +9,7 @@ import 'package:truckmanagement_app/widgets/userPage/chief_acc/chief_select_page
 import 'package:truckmanagement_app/widgets/userPage/company/models/company_Employees.dart';
 import 'package:truckmanagement_app/widgets/userPage/company/pages/invites/invites.dart';
 import 'package:truckmanagement_app/widgets/userPage/company/pages/search_Drivers/searchDriver.dart';
-
+import '../pages/advertisement.dart';
 
 class DrawerCompanyMain extends StatelessWidget {
   final AuthService _auth = AuthService();
@@ -147,6 +147,14 @@ class DrawerCompanyMain extends StatelessWidget {
               );
               */
               print('Szukaj Kursow');
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.calendar_today),
+            title: Text('Ogloszenia'),
+            onTap: () {
+              print('Ogloszenia');
+              Navigator.of(context).popAndPushNamed(Advertisement.routeName);
             },
           ),
           ListTile(

@@ -14,6 +14,7 @@ import 'package:truckmanagement_app/widgets/userPage/company/pages/tracks/Active
 import 'package:truckmanagement_app/widgets/userPage/company/pages/tracks/Finished/preview.dart';
 import 'package:truckmanagement_app/widgets/userPage/company/pages/tracks/select_Preview.dart';
 import 'package:truckmanagement_app/widgets/userPage/company/services/database_company.dart';
+import '../company/pages/advertisement.dart';
 
 class CompanyMain extends StatelessWidget {
   static const routeName = '/company/';
@@ -24,6 +25,9 @@ class CompanyMain extends StatelessWidget {
     return MaterialApp(
       theme: basicTheme(),
       routes: {
+        // Advertisement
+        '/advertisement/': (ctx) => Advertisement(),
+
         // Chat
         Chats.routeName: (ctx) => StreamProvider<List<PeerChat>>.value(
               value: Chat(mainUid: companyData.uid, peopleUid: null)
