@@ -4,6 +4,7 @@ ThemeData basicTheme() {
   TextTheme _basicTextTheme(TextTheme base) {
     return base.copyWith(
       bodyText1: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),
+      bodyText2: TextStyle(color: Color.fromRGBO(178, 223, 219, 1), fontWeight: FontWeight.bold, fontSize: 20),
       button: base.button.copyWith(
         color: Colors.black,
       ),

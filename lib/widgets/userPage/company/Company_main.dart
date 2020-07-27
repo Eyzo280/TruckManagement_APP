@@ -7,6 +7,7 @@ import 'package:truckmanagement_app/widgets/chat/chats.dart';
 import 'package:truckmanagement_app/widgets/shared/loading.dart';
 import 'package:truckmanagement_app/widgets/userPage/company/main_Company/Company_page.dart';
 import 'package:truckmanagement_app/widgets/userPage/company/models/company_Employees.dart';
+import 'package:truckmanagement_app/widgets/userPage/company/pages/advertisement/addNew.dart';
 import 'package:truckmanagement_app/widgets/userPage/company/pages/invites/invites.dart';
 import 'package:truckmanagement_app/widgets/userPage/company/pages/management/truckers.dart';
 import 'package:truckmanagement_app/widgets/userPage/company/pages/search_Drivers/searchDriver.dart';
@@ -14,7 +15,7 @@ import 'package:truckmanagement_app/widgets/userPage/company/pages/tracks/Active
 import 'package:truckmanagement_app/widgets/userPage/company/pages/tracks/Finished/preview.dart';
 import 'package:truckmanagement_app/widgets/userPage/company/pages/tracks/select_Preview.dart';
 import 'package:truckmanagement_app/widgets/userPage/company/services/database_company.dart';
-import '../company/pages/advertisement.dart';
+import 'pages/advertisement/advertisement.dart';
 
 class CompanyMain extends StatelessWidget {
   static const routeName = '/company/';
@@ -27,6 +28,7 @@ class CompanyMain extends StatelessWidget {
       routes: {
         // Advertisement
         '/advertisement/': (ctx) => Advertisement(),
+        '/advertisement/AddAdvertisement': (ctx) => AddAdvertisement(),
 
         // Chat
         Chats.routeName: (ctx) => StreamProvider<List<PeerChat>>.value(

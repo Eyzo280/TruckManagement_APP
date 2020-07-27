@@ -9,7 +9,7 @@ import 'package:truckmanagement_app/widgets/userPage/chief_acc/chief_select_page
 import 'package:truckmanagement_app/widgets/userPage/company/models/company_Employees.dart';
 import 'package:truckmanagement_app/widgets/userPage/company/pages/invites/invites.dart';
 import 'package:truckmanagement_app/widgets/userPage/company/pages/search_Drivers/searchDriver.dart';
-import '../pages/advertisement.dart';
+import '../pages/advertisement/advertisement.dart';
 
 class DrawerCompanyMain extends StatelessWidget {
   final AuthService _auth = AuthService();
