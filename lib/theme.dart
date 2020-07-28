@@ -3,8 +3,13 @@ import 'package:flutter/material.dart';
 ThemeData basicTheme() {
   TextTheme _basicTextTheme(TextTheme base) {
     return base.copyWith(
-      bodyText1: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),
-      bodyText2: TextStyle(color: Color.fromRGBO(178, 223, 219, 1), fontWeight: FontWeight.bold, fontSize: 20),
+      bodyText1: TextStyle(
+          color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),
+      bodyText2: TextStyle(
+          color: Color.fromRGBO(38, 50, 56, 1),
+          // color: Color.fromRGBO(178, 223, 219, 1),
+          fontWeight: FontWeight.bold,
+          fontSize: 20),
       button: base.button.copyWith(
         color: Colors.black,
       ),
@@ -14,10 +19,15 @@ ThemeData basicTheme() {
   final ThemeData base = ThemeData.light();
   return base.copyWith(
     primaryColor: Color.fromRGBO(38, 50, 56, 1), // #263238
-    canvasColor: Color.fromRGBO(178, 223, 219, 1), // #b2dfdb
-    cardColor: Color.fromRGBO(98, 114, 123, 0.8),
-    dividerColor: Colors.black45,
-    disabledColor: Colors.grey,
+    canvasColor: Color.fromRGBO(82, 199, 184, 1), // #b2dfdb
+    cardColor: Color.fromRGBO(82, 199, 184, 1),
+    iconTheme: IconThemeData(
+      color: Color.fromRGBO(82, 199, 184, 1),
+    ),
+    indicatorColor: Color.fromRGBO(82, 199, 184, 1),
+    backgroundColor: Color.fromRGBO(38, 50, 56, 1),
+    scaffoldBackgroundColor: Color.fromRGBO(38, 50, 56, 1),
+
     textTheme: _basicTextTheme(base.textTheme),
   );
 }
