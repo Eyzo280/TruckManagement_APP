@@ -29,7 +29,7 @@ class ItemAdvertisement extends StatelessWidget {
             onChanged: (String selectedValue) {
               // Zarzadzanie ogloszeniem
             },
-            iconEnabledColor: Theme.of(context).primaryColor,
+            iconEnabledColor: Theme.of(context).buttonColor,
             items: <String>[
               'Przedluz',
               'Edytuj',

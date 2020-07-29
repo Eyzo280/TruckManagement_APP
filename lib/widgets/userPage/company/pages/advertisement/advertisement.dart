@@ -15,6 +15,7 @@ class Advertisement extends StatelessWidget {
       centerTitle: true,
       actions: <Widget>[
         IconButton(
+          color: Theme.of(context).buttonColor,
           icon: Icon(Icons.add_circle_outline),
           onPressed: () {
             print('Add new advertisement.');

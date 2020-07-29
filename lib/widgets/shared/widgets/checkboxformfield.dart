@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:truckmanagement_app/theme.dart';
 
 class CheckboxFormField extends FormField<bool> {
   CheckboxFormField(
@@ -16,6 +17,8 @@ class CheckboxFormField extends FormField<bool> {
             return CheckboxListTile(
               dense: state.hasError,
               title: title,
+              activeColor: basicTheme().canvasColor,
+              checkColor: Colors.black,
               value: state.value,
               onChanged: state.didChange,
               subtitle: state.hasError
