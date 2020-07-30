@@ -17,7 +17,7 @@ class CheckboxFormField extends FormField<bool> {
             return CheckboxListTile(
               dense: state.hasError,
               title: title,
-              activeColor: basicTheme().canvasColor,
+              activeColor: basicTheme().accentColor,
               checkColor: Colors.black,
               value: state.value,
               onChanged: state.didChange,

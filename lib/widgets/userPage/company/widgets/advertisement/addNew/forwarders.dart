@@ -169,7 +169,7 @@ class _NewAdvertisementForwardersState
                   ),
                 ),
                 RaisedButton(
-                  color: Theme.of(context).canvasColor,
+                  color: Theme.of(context).accentColor,
                   onPressed: () {
                     if (company.uid == null) {
                       return;

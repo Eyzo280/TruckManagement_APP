@@ -151,7 +151,7 @@ class _NewAdvertisementTruckerState extends State<NewAdvertisementTrucker> {
                   ),
                 ),
                 RaisedButton(
-                  color: Theme.of(context).canvasColor,
+                  color: Theme.of(context).accentColor,
                   onPressed: () {
                     if (company.uid == null) {
                       return;

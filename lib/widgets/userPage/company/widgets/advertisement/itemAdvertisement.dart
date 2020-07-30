@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:truckmanagement_app/widgets/shared/screens/advertisementTrucker.dart';
 
 class ItemAdvertisement extends StatelessWidget {
   @override
@@ -6,7 +7,19 @@ class ItemAdvertisement extends StatelessWidget {
     return Column(
       children: <Widget>[
         ListTile(
-          onTap: () {},
+          onTap: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(builder: (ctx) {
+                return PreviewAdvertisementTrucker(
+                  uid: 'Uid',
+                  title: 'Szukam kierowcy Polska/Wlochy',
+                  requirements: {'Karta Kierowcy': true},
+                  description:
+                      'Witam szukam doświadczonego kierowcy, który będzie pracował w wymiarze 3/1. Kursy w których się specjalizujemy to Polska/Wlochy.',
+                );
+              }),
+            );
+          },
           contentPadding: EdgeInsets.all(15),
           leading: Text('Logo'),
           title: Container(
@@ -41,7 +54,10 @@ class ItemAdvertisement extends StatelessWidget {
                     ? Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: <Widget>[
-                          Icon(Icons.delete_outline),
+                          Icon(
+                            Icons.delete_outline,
+                            color: Colors.white,
+                          ),
                           Text(value),
                         ],
                       )
@@ -49,12 +65,22 @@ class ItemAdvertisement extends StatelessWidget {
                         ? Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: <Widget>[
-                              Icon(Icons.edit),
+                              Icon(
+                                Icons.edit,
+                                color: Colors.white,
+                              ),
                               Text(value),
                             ],
                           )
-                        : Center(
-                            child: Text(value),
+                        : Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: <Widget>[
+                              Icon(
+                                Icons.replay,
+                                color: Colors.white,
+                              ),
+                              Text(value),
+                            ],
                           ),
               );
             }).toList(),

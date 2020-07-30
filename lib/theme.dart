@@ -13,8 +13,9 @@ ThemeData basicTheme() {
 
   final ThemeData base = ThemeData.light();
   return base.copyWith(
+    accentColor: Color.fromRGBO(82, 199, 184, 1),
     primaryColor: Color.fromRGBO(38, 50, 56, 1), // #263238
-    canvasColor: Color.fromRGBO(82, 199, 184, 1),
+    //canvasColor: Color.fromRGBO(82, 199, 184, 1),
     cardColor: Color.fromRGBO(82, 199, 184, 1),
     iconTheme: IconThemeData(
       color: Color.fromRGBO(82, 199, 184, 1),
@@ -23,6 +24,9 @@ ThemeData basicTheme() {
     backgroundColor: Color.fromRGBO(38, 50, 56, 1),
     buttonColor: Color.fromRGBO(82, 199, 184, 1),
     scaffoldBackgroundColor: Color.fromRGBO(38, 50, 56, 1),
+    floatingActionButtonTheme: FloatingActionButtonThemeData(
+      backgroundColor: Color.fromRGBO(38, 50, 56, 1),
+    ),
 
     textTheme: _basicTextTheme(base.textTheme),
   );
