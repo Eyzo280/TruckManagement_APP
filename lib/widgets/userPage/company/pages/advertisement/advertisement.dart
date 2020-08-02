@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:truckmanagement_app/widgets/userPage/company/pages/advertisement/addNew.dart';
 import 'package:truckmanagement_app/widgets/userPage/company/widgets/advertisement/buttonsView.dart';
 import 'package:truckmanagement_app/widgets/userPage/company/widgets/advertisement/itemAdvertisement.dart';
-import '../../models/advertisement.dart';
+import '../../models/adventisement.dart';
 
 class Advertisement extends StatelessWidget {
   static const routeName = '/advertisement/';

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:truckmanagement_app/widgets/userPage/company/models/advertisement.dart';
+import 'package:truckmanagement_app/widgets/userPage/company/models/adventisement.dart';
 
 class ButtonsView extends StatefulWidget {
   @override

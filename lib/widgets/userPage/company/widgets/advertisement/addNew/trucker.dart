@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:truckmanagement_app/widgets/shared/screens/advertisementTrucker.dart';
 import 'package:truckmanagement_app/widgets/shared/widgets/checkboxformfield.dart';
-import 'package:truckmanagement_app/widgets/userPage/company/models/advertisement.dart';
+import 'package:truckmanagement_app/widgets/userPage/company/models/adventisement.dart';
 import 'package:truckmanagement_app/widgets/userPage/company/models/company_Employees.dart';
+import 'package:truckmanagement_app/widgets/userPage/company/providers/advetisement.dart';
 
 class NewAdvertisementTrucker extends StatefulWidget {
   @override
@@ -17,7 +18,10 @@ class _NewAdvertisementTruckerState extends State<NewAdvertisementTrucker> {
   Advertisement _advertisement = Advertisement(
     companyUid: '',
     title: '',
-    requirements: {},
+    requirements: RequirementsAdvertisementTrucker(
+      kartaKierowcy: false,
+      zaswiadczenieoniekaralnosci: false,
+    ),
     description: '',
     type: 'Trucker',
   );
@@ -86,15 +90,14 @@ class _NewAdvertisementTruckerState extends State<NewAdvertisementTrucker> {
                 CheckboxFormField(
                   title: Text('Karta Kierowcy'),
                   onSaved: (val) {
-                    Map<String, bool> requirementbox =
-                        _advertisement.requirements;
-
-                    requirementbox.putIfAbsent('karta kierowcy', () => val);
-
                     _advertisement = Advertisement(
                       companyUid: _advertisement.companyUid,
                       title: _advertisement.title,
-                      requirements: requirementbox,
+                      requirements: RequirementsAdvertisementTrucker(
+                        kartaKierowcy: val,
+                        zaswiadczenieoniekaralnosci: _advertisement
+                            .requirements.zaswiadczenieoniekaralnosci,
+                      ),
                       description: _advertisement.description,
                       type: _advertisement.type,
                     );
@@ -103,16 +106,14 @@ class _NewAdvertisementTruckerState extends State<NewAdvertisementTrucker> {
                 CheckboxFormField(
                   title: Text('Zaswiadczenie o niekaralnosci'),
                   onSaved: (val) {
-                    Map<String, bool> requirementbox =
-                        _advertisement.requirements;
-
-                    requirementbox.putIfAbsent(
-                        'zaswiadczenie o niekaralnosci', () => val);
-
                     _advertisement = Advertisement(
                       companyUid: _advertisement.companyUid,
                       title: _advertisement.title,
-                      requirements: requirementbox,
+                      requirements: RequirementsAdvertisementTrucker(
+                        kartaKierowcy:
+                            _advertisement.requirements.kartaKierowcy,
+                        zaswiadczenieoniekaralnosci: val,
+                      ),
                       description: _advertisement.description,
                       type: _advertisement.type,
                     );
@@ -153,6 +154,14 @@ class _NewAdvertisementTruckerState extends State<NewAdvertisementTrucker> {
                 RaisedButton(
                   color: Theme.of(context).accentColor,
                   onPressed: () {
+                    Provider.of<CompanyAdvertisements>(context, listen: false)
+                        .viewTrucker();
+                    print(Provider.of<CompanyAdvertisements>(context,
+                            listen: false)
+                        .truckers[0]
+                        .companyInfo
+                        .logoUrl
+                        .toString());
                     if (company.uid == null) {
                       return;
                     }
@@ -177,6 +186,7 @@ class _NewAdvertisementTruckerState extends State<NewAdvertisementTrucker> {
                         }),
                       );
                       */
+
                     }
                   },
                   child: Text(

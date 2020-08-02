@@ -15,7 +15,7 @@ ThemeData basicTheme() {
   return base.copyWith(
     accentColor: Color.fromRGBO(82, 199, 184, 1),
     primaryColor: Color.fromRGBO(38, 50, 56, 1), // #263238
-    //canvasColor: Color.fromRGBO(82, 199, 184, 1),
+    canvasColor: Color.fromRGBO(82, 199, 184, 1),
     cardColor: Color.fromRGBO(82, 199, 184, 1),
     iconTheme: IconThemeData(
       color: Color.fromRGBO(82, 199, 184, 1),

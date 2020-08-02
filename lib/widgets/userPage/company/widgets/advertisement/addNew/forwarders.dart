@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:truckmanagement_app/widgets/shared/widgets/checkboxformfield.dart';
-import 'package:truckmanagement_app/widgets/userPage/company/models/advertisement.dart';
+import 'package:truckmanagement_app/widgets/userPage/company/models/adventisement.dart';
 import 'package:truckmanagement_app/widgets/userPage/company/models/company_Employees.dart';
 
 class NewAdvertisementForwarders extends StatefulWidget {
@@ -17,7 +17,11 @@ class _NewAdvertisementForwardersState
   Advertisement _advertisement = Advertisement(
     companyUid: '',
     title: '',
-    requirements: {},
+    requirements: RequirementsAdvertisementForwarder(
+      doswiadczenie: false,
+      zaswiadczenieoniekaralnosci: false,
+      umiejetnoscianalityczne: false,
+    ),
     description: '',
     type: 'Forwarder',
   );
@@ -86,33 +90,34 @@ class _NewAdvertisementForwardersState
                 CheckboxFormField(
                   title: Text('Doświadczenie w branży'),
                   onSaved: (val) {
-                    Map<String, bool> requirementbox =
-                        _advertisement.requirements;
-
-                    requirementbox.putIfAbsent(
-                        'doswiadczenie w branzy', () => val);
-
                     _advertisement = Advertisement(
                       companyUid: _advertisement.companyUid,
                       title: _advertisement.title,
-                      requirements: requirementbox,
+                      requirements: RequirementsAdvertisementForwarder(
+                        doswiadczenie: val,
+                        zaswiadczenieoniekaralnosci: _advertisement
+                            .requirements.zaswiadczenieoniekaralnosci,
+                        umiejetnoscianalityczne:
+                            _advertisement.requirements.umiejetnoscianalityczne,
+                      ),
                       description: _advertisement.description,
+                      type: _advertisement.type,
                     );
                   },
                 ),
                 CheckboxFormField(
                   title: Text('Zaświadczenie o niekaralności'),
                   onSaved: (val) {
-                    Map<String, bool> requirementbox =
-                        _advertisement.requirements;
-
-                    requirementbox.putIfAbsent(
-                        'zaswiadczenie o niekaralnosci', () => val);
-
                     _advertisement = Advertisement(
                       companyUid: _advertisement.companyUid,
                       title: _advertisement.title,
-                      requirements: requirementbox,
+                      requirements: RequirementsAdvertisementForwarder(
+                        doswiadczenie:
+                            _advertisement.requirements.doswiadczenie,
+                        zaswiadczenieoniekaralnosci: val,
+                        umiejetnoscianalityczne:
+                            _advertisement.requirements.umiejetnoscianalityczne,
+                      ),
                       description: _advertisement.description,
                       type: _advertisement.type,
                     );
@@ -121,16 +126,16 @@ class _NewAdvertisementForwardersState
                 CheckboxFormField(
                   title: Text('Umiejętności analityczne'),
                   onSaved: (val) {
-                    Map<String, bool> requirementbox =
-                        _advertisement.requirements;
-
-                    requirementbox.putIfAbsent(
-                        'umiejetności analityczne', () => val);
-
                     _advertisement = Advertisement(
                       companyUid: _advertisement.companyUid,
                       title: _advertisement.title,
-                      requirements: requirementbox,
+                      requirements: RequirementsAdvertisementForwarder(
+                        doswiadczenie:
+                            _advertisement.requirements.doswiadczenie,
+                        zaswiadczenieoniekaralnosci: _advertisement
+                            .requirements.zaswiadczenieoniekaralnosci,
+                        umiejetnoscianalityczne: val,
+                      ),
                       description: _advertisement.description,
                       type: _advertisement.type,
                     );

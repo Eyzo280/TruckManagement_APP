@@ -41,6 +41,33 @@ class ItemAdvertisement extends StatelessWidget {
             ),
             onChanged: (String selectedValue) {
               // Zarzadzanie ogloszeniem
+              if (selectedValue == 'Usun') {
+                showDialog<void>(
+                  context: context,
+                  barrierDismissible: false, // user must tap button!
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: Center(
+                        child: Text('Czy usunąć tytul?'),
+                      ),
+                      actions: <Widget>[
+                        FlatButton(
+                          child: Text('Tak'),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                        FlatButton(
+                          child: Text('Nie'),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      ],
+                    );
+                  },
+                );
+              }
             },
             iconEnabledColor: Theme.of(context).buttonColor,
             items: <String>[
@@ -52,32 +79,38 @@ class ItemAdvertisement extends StatelessWidget {
                 value: value,
                 child: value == 'Usun'
                     ? Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: <Widget>[
-                          Icon(
-                            Icons.delete_outline,
-                            color: Colors.white,
+                          Container(
+                            width: 50,
+                            child: Icon(
+                              Icons.delete_outline,
+                              color: Colors.white,
+                            ),
                           ),
                           Text(value),
                         ],
                       )
                     : value == 'Edytuj'
                         ? Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: <Widget>[
-                              Icon(
-                                Icons.edit,
-                                color: Colors.white,
+                              Container(
+                                width: 50,
+                                child: Icon(
+                                  Icons.edit,
+                                  color: Colors.white,
+                                ),
                               ),
                               Text(value),
                             ],
                           )
                         : Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: <Widget>[
-                              Icon(
-                                Icons.replay,
-                                color: Colors.white,
+                              Container(
+                                width: 50,
+                                child: Icon(
+                                  Icons.replay,
+                                  color: Colors.white,
+                                ),
                               ),
                               Text(value),
                             ],
