@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:truckmanagement_app/widgets/shared/screens/advertisementTrucker.dart';
+import 'package:truckmanagement_app/widgets/userPage/company/models/adventisement.dart';
 
 class ItemAdvertisement extends StatelessWidget {
+  final Advertisement advertisement;
+
+  ItemAdvertisement({
+    this.advertisement,
+  });
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -11,27 +18,38 @@ class ItemAdvertisement extends StatelessWidget {
             Navigator.of(context).push(
               MaterialPageRoute(builder: (ctx) {
                 return PreviewAdvertisementTrucker(
-                  uid: 'Uid',
-                  title: 'Szukam kierowcy Polska/Wlochy',
+                  advertisement: advertisement,
+                  /*
+                  uid: advertisement.companyUid,
+                  companyName: advertisement.companyInfo.name,
+                  title: advertisement.title,
                   requirements: {'Karta Kierowcy': true},
-                  description:
-                      'Witam szukam doświadczonego kierowcy, który będzie pracował w wymiarze 3/1. Kursy w których się specjalizujemy to Polska/Wlochy.',
+                  description: advertisement.description,
+                  logoUrl: advertisement.companyInfo.logoUrl,
+                  */
                 );
               }),
             );
           },
           contentPadding: EdgeInsets.all(15),
-          leading: Text('Logo'),
+          leading: advertisement.companyInfo.logoUrl == ''
+              ? Image.asset('images/default.jpg')
+              : Image.network(advertisement.companyInfo.logoUrl),
           title: Container(
             margin: EdgeInsets.only(bottom: 5),
             child: Text(
-              'Kierowca Wlochy/Niemcy',
+              advertisement.title,
               style: Theme.of(context).textTheme.bodyText1.copyWith(
                     color: Colors.black,
                   ),
             ),
           ),
-          subtitle: Text('End: 20.08.2020'),
+          subtitle: advertisement.endDate == ''
+              ? Text(
+                  'Zakonczone',
+                  style: TextStyle(color: Theme.of(context).errorColor),
+                )
+              : Text('Do: ${advertisement.endDate}'),
           trailing: DropdownButton(
             underline: Container(
               height: 0,

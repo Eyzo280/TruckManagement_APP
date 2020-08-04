@@ -154,14 +154,6 @@ class _NewAdvertisementTruckerState extends State<NewAdvertisementTrucker> {
                 RaisedButton(
                   color: Theme.of(context).accentColor,
                   onPressed: () {
-                    Provider.of<CompanyAdvertisements>(context, listen: false)
-                        .viewTrucker();
-                    print(Provider.of<CompanyAdvertisements>(context,
-                            listen: false)
-                        .truckers[0]
-                        .companyInfo
-                        .logoUrl
-                        .toString());
                     if (company.uid == null) {
                       return;
                     }

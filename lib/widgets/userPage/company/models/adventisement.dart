@@ -70,7 +70,7 @@ class Advertisement {
   final requirements; // mapa z wymaganiami np. {'Karta kierowcy': true}
   final String description;
   final String type; // typ ogloszenia np. 'Trucker'
-  final bool status;
+  final String endDate; // kiedy konczy sie ogloszenie
 
   Advertisement({
     this.companyUid,
@@ -79,6 +79,6 @@ class Advertisement {
     this.requirements,
     this.description,
     this.type,
-    this.status,
+    this.endDate,
   });
 }

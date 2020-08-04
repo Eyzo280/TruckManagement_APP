@@ -1,25 +1,42 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:truckmanagement_app/models/user.dart';
+import 'package:truckmanagement_app/widgets/userPage/company/models/adventisement.dart';
 
 class PreviewAdvertisementTrucker extends StatelessWidget {
+  Advertisement advertisement;
+  /*
   final String uid; // uid uzytkownika
+  final String companyName;
   final String title;
   final Map<String, bool>
       requirements; // mapa wymagań np. {'karta kierowcy': true}
   final String description;
   final String userType;
+  
+  final String logoUrl;
+  */
   //final bool newPreview; // jezeli true to jest to podglad przy tworzeniu nowego ogloszenia lub edytowaniu
 
   PreviewAdvertisementTrucker({
+    this.advertisement,
+    /*
     this.uid,
+    this.companyName,
     this.title,
     this.requirements,
     this.description,
     this.userType,
+    
+    this.logoUrl,
+    */
     //this.newPreview,
   });
 
   @override
   Widget build(BuildContext context) {
+    var userData = Provider.of<UserData>(context);
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Szukam kierowcy Polska/Wlochy'),
@@ -39,7 +56,9 @@ class PreviewAdvertisementTrucker extends StatelessWidget {
                   children: <Widget>[
                     Flexible(
                       fit: FlexFit.tight,
-                      child: Image.asset('images/image-512.png'),
+                      child: advertisement.companyInfo.logoUrl == ''
+                          ? Image.asset('images/default.jpg')
+                          : Image.network(advertisement.companyInfo.logoUrl),
                     ),
                     Flexible(
                       fit: FlexFit.tight,
@@ -50,7 +69,7 @@ class PreviewAdvertisementTrucker extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Text(
-                              'Stefania Trans',
+                              advertisement.companyInfo.name,
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyText1
@@ -103,11 +122,21 @@ class PreviewAdvertisementTrucker extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
                                   Text(
-                                    '\u2022 Karta Kierowcy: Tak',
+                                    '\u2022 Karta Kierowcy: ' +
+                                        (advertisement.requirements
+                                                    .kartaKierowcy ==
+                                                true
+                                            ? 'Tak'
+                                            : 'Nie'),
                                     style: TextStyle(fontSize: 20),
                                   ),
                                   Text(
-                                    '\u2022 Zaswiadczenie o niekaralnosci: Tak',
+                                    '\u2022 Zaswiadczenie o niekaralnosci: ' +
+                                        (advertisement.requirements
+                                                    .zaswiadczenieoniekaralnosci ==
+                                                true
+                                            ? 'Tak'
+                                            : 'Nie'),
                                     style: TextStyle(fontSize: 20),
                                   ),
                                 ],
@@ -147,8 +176,11 @@ class PreviewAdvertisementTrucker extends StatelessWidget {
                                     SizedBox(
                                       height: 15,
                                     ),
-                                    Text(
-                                        'Witam, nasza firma poszukuję kierowcy międzynarodowego, który chciałby pracować w systemie 3/1.'),
+                                    advertisement.description == ''
+                                        ? Center(
+                                            child: Text('Brak'),
+                                          )
+                                        : Text(advertisement.description),
                                   ],
                                 ),
                               ),
@@ -165,7 +197,7 @@ class PreviewAdvertisementTrucker extends StatelessWidget {
         ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: userType != 'Trucker'
+      floatingActionButton: userData.data.type != 'Trucker'
           ? null
           : FloatingActionButton.extended(
               onPressed: () {
