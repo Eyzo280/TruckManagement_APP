@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:truckmanagement_app/widgets/userPage/company/models/adventisement.dart';
 
 class ButtonsView extends StatefulWidget {
+  final Function changeSelectedAdvertisement;
+
+  ButtonsView({this.changeSelectedAdvertisement});
+
   @override
   _ButtonsViewState createState() => _ButtonsViewState();
 }
@@ -21,6 +25,9 @@ class _ButtonsViewState extends State<ButtonsView> {
                 setState(() {
                   view = SelectedAdvertisement.Active;
                 });
+                widget.changeSelectedAdvertisement(
+                  selectedAdvertisement: SelectedAdvertisement.Active,
+                );
                 print('Aktywne');
               },
               child: Padding(
@@ -44,6 +51,9 @@ class _ButtonsViewState extends State<ButtonsView> {
                 setState(() {
                   view = SelectedAdvertisement.Finished;
                 });
+                widget.changeSelectedAdvertisement(
+                  selectedAdvertisement: SelectedAdvertisement.Finished,
+                );
                 print('Zakonczone');
               },
               child: Padding(

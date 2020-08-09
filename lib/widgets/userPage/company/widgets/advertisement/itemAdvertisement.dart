@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:truckmanagement_app/widgets/shared/screens/advertisementForwarder.dart';
 import 'package:truckmanagement_app/widgets/shared/screens/advertisementTrucker.dart';
 import 'package:truckmanagement_app/widgets/userPage/company/models/adventisement.dart';
 
@@ -17,17 +18,15 @@ class ItemAdvertisement extends StatelessWidget {
           onTap: () {
             Navigator.of(context).push(
               MaterialPageRoute(builder: (ctx) {
-                return PreviewAdvertisementTrucker(
-                  advertisement: advertisement,
-                  /*
-                  uid: advertisement.companyUid,
-                  companyName: advertisement.companyInfo.name,
-                  title: advertisement.title,
-                  requirements: {'Karta Kierowcy': true},
-                  description: advertisement.description,
-                  logoUrl: advertisement.companyInfo.logoUrl,
-                  */
-                );
+                if (advertisement.type == 'Trucker') {
+                  return PreviewAdvertisementTrucker(
+                    advertisement: advertisement,
+                  );
+                } else {
+                  return PreviewAdvertisementForwarder(
+                    advertisement: advertisement,
+                  );
+                }
               }),
             );
           },

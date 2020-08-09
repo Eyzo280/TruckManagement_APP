@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:truckmanagement_app/widgets/userPage/company/models/adventisement.dart';
 
 class CompanyAdvertisements with ChangeNotifier {
-  CollectionReference advertisements =
+  CollectionReference advertisementsCollection =
       Firestore.instance.collection('Advetisement');
 
   // Advertisement Settings
@@ -29,47 +29,96 @@ class CompanyAdvertisements with ChangeNotifier {
   Future<void> viewCompanyAdvertisement({
     @required String uidCompany,
     bool fetch = false,
+    @required SelectedAdvertisement selectedAdvertisement,
   }) async {
-    var activeAdv;
-    if (activeAdvertisement.isEmpty) {
-      activeAdv = await advertisements
-          .where('uidCompany', isEqualTo: uidCompany)
-          .limit(_perPage)
-          .getDocuments();
-      _lastDocumentActiveAdver =
-          activeAdv.documents[activeAdv.documents.length - 1];
-    } else if (fetch) {
-      activeAdv = await advertisements
-          .orderBy('endDate')
-          .startAfter([_lastDocumentActiveAdver.data['endDate']])
-          .where('uidCompany', isEqualTo: uidCompany)
-          .limit(_perPage)
-          .getDocuments();
-      _lastDocumentActiveAdver =
-          activeAdv.documents[activeAdv.documents.length - 1];
+    var advertisements;
+
+    if (selectedAdvertisement == SelectedAdvertisement.Active) {
+      if (activeAdvertisement.isEmpty) {
+        advertisements = await advertisementsCollection
+            .where('uidCompany', isEqualTo: uidCompany)
+            .where('status', isEqualTo: true)
+            .limit(_perPage)
+            .getDocuments();
+        _lastDocumentActiveAdver =
+            advertisements.documents[advertisements.documents.length - 1];
+      } else if (fetch) {
+        advertisements = await advertisementsCollection
+            .orderBy('endDate')
+            .startAfter([_lastDocumentActiveAdver.data['endDate']])
+            .where('uidCompany', isEqualTo: uidCompany)
+            .where('endDate', isEqualTo: true)
+            .limit(_perPage)
+            .getDocuments();
+        _lastDocumentActiveAdver =
+            advertisements.documents[advertisements.documents.length - 1];
+      } else {
+        return;
+      }
     } else {
-      return;
+      if (finishedAdvertisement.isEmpty) {
+        advertisements = await advertisementsCollection
+            .where('uidCompany', isEqualTo: uidCompany)
+            .where('endDate', isEqualTo: '')
+            .limit(_perPage)
+            .getDocuments();
+        _lastDocumentFinishedAdver =
+            advertisements.documents[advertisements.documents.length - 1];
+      } else if (fetch) {
+        advertisements = await advertisementsCollection
+            .orderBy('endDate')
+            .startAfter([_lastDocumentFinishedAdver.data['endDate']])
+            .where('uidCompany', isEqualTo: uidCompany)
+            .where('endDate', isEqualTo: false)
+            .limit(_perPage)
+            .getDocuments();
+        _lastDocumentFinishedAdver =
+            advertisements.documents[advertisements.documents.length - 1];
+      } else {
+        return;
+      }
     }
     try {
-      for (var doc in activeAdv.documents) {
-        activeAdvertisement.add(
-          Advertisement(
-            companyUid: doc.data['companyUid'],
-            companyInfo:
-                CompanyInfoAdvertisement.fromMap(doc.data['companyData']) ??
-                    null,
-            title: doc.data['title'] ?? null,
-            description: doc.data['description'] ?? null,
-            requirements: doc.data['type'] == 'Trucker'
-                ? RequirementsAdvertisementTrucker.fromMap(
-                    doc.data['requirements'])
-                : RequirementsAdvertisementForwarder.fromMap(
-                        doc.data['requirements']) ??
-                    null,
-            endDate: doc.data['endDate'] ?? null,
-            type: doc.data['type'] ?? null,
-          ),
-        );
+      for (var doc in advertisements.documents) {
+        if (selectedAdvertisement == SelectedAdvertisement.Active) {
+          activeAdvertisement.add(
+            Advertisement(
+              companyUid: doc.data['companyUid'],
+              companyInfo:
+                  CompanyInfoAdvertisement.fromMap(doc.data['companyData']) ??
+                      null,
+              title: doc.data['title'] ?? null,
+              description: doc.data['description'] ?? null,
+              requirements: doc.data['type'] == 'Trucker'
+                  ? RequirementsAdvertisementTrucker.fromMap(
+                      doc.data['requirements'])
+                  : RequirementsAdvertisementForwarder.fromMap(
+                          doc.data['requirements']) ??
+                      null,
+              endDate: doc.data['endDate'] ?? null,
+              type: doc.data['type'] ?? null,
+            ),
+          );
+        } else {
+          finishedAdvertisement.add(
+            Advertisement(
+              companyUid: doc.data['companyUid'],
+              companyInfo:
+                  CompanyInfoAdvertisement.fromMap(doc.data['companyData']) ??
+                      null,
+              title: doc.data['title'] ?? null,
+              description: doc.data['description'] ?? null,
+              requirements: doc.data['type'] == 'Trucker'
+                  ? RequirementsAdvertisementTrucker.fromMap(
+                      doc.data['requirements'])
+                  : RequirementsAdvertisementForwarder.fromMap(
+                          doc.data['requirements']) ??
+                      null,
+              endDate: doc.data['endDate'] ?? null,
+              type: doc.data['type'] ?? null,
+            ),
+          );
+        }
       }
 
       notifyListeners();
@@ -84,7 +133,10 @@ class CompanyAdvertisements with ChangeNotifier {
     SelectedAdvertisement selectedAdvertisement,
   }) async {
     clear(selectedAdvertisement).whenComplete(
-      () => viewCompanyAdvertisement(uidCompany: uidCompany),
+      () => viewCompanyAdvertisement(
+        uidCompany: uidCompany,
+        selectedAdvertisement: selectedAdvertisement,
+      ),
     );
   }
 

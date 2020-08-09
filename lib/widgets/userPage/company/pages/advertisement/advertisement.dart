@@ -20,13 +20,29 @@ class _AdvertisementState extends State<Advertisement> {
   bool _isData = false;
   ScrollController _scrollController = ScrollController();
   String _uidCompany;
-  
+  model.SelectedAdvertisement _selectedAdvertisement =
+      model.SelectedAdvertisement.Active;
+
+  void changeSelectedAdvertisement({
+    model.SelectedAdvertisement selectedAdvertisement,
+  }) {
+    Provider.of<CompanyAdvertisements>(context, listen: false)
+        .viewCompanyAdvertisement(
+      uidCompany: _uidCompany,
+      selectedAdvertisement: selectedAdvertisement,
+    );
+    setState(() {
+      _selectedAdvertisement = selectedAdvertisement;
+    });
+  }
+
   void didChangeDependencies() {
     if (!_isData) {
       _uidCompany = Provider.of<CompanyData>(context).uid;
       Provider.of<CompanyAdvertisements>(context, listen: false)
           .viewCompanyAdvertisement(
         uidCompany: _uidCompany,
+        selectedAdvertisement: _selectedAdvertisement,
       );
       setState(() {
         _isData = true;
@@ -48,19 +64,23 @@ class _AdvertisementState extends State<Advertisement> {
       if (maxScroll - currentScroll <= delta) {
         Provider.of<CompanyAdvertisements>(context, listen: false)
             .viewCompanyAdvertisement(
-          uidCompany: _uidCompany,
-          fetch: true,
-        );
+                uidCompany: _uidCompany,
+                fetch: true,
+                selectedAdvertisement: _selectedAdvertisement);
       }
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    List<model.Advertisement> companyAdvertisements =
+    List<model.Advertisement> companyActiveAdvertisements =
         Provider.of<CompanyAdvertisements>(context, listen: true)
             .activeAdvertisement
-            .where((element) => element.endDate != '')
+            .toList();
+
+    List<model.Advertisement> companyFinishedAdvertisements =
+        Provider.of<CompanyAdvertisements>(context, listen: true)
+            .finishedAdvertisement
             .toList();
 
     final appBar = AppBar(
@@ -83,12 +103,42 @@ class _AdvertisementState extends State<Advertisement> {
         MediaQuery.of(context).size.height - appBar.preferredSize.height;
     final bodyWidth = MediaQuery.of(context).size.width;
 
+    Widget advertisements({
+      BuildContext context,
+      List<model.Advertisement> selectedAdvertisementData,
+    }) {
+      return selectedAdvertisementData.isEmpty
+          ? ListView(
+              children: <Widget>[
+                Align(
+                  alignment: Alignment.topCenter,
+                  child: Container(
+                    margin: EdgeInsets.all(50),
+                    child: CircularProgressIndicator(),
+                  ),
+                ),
+              ],
+            )
+          : ListView.builder(
+              physics: AlwaysScrollableScrollPhysics(),
+              controller: _scrollController,
+              itemCount: selectedAdvertisementData.length,
+              itemBuilder: (context, index) {
+                return ItemAdvertisement(
+                  advertisement: selectedAdvertisementData[index],
+                );
+              },
+            );
+    }
+
     return Scaffold(
       appBar: appBar,
       body: Container(
         child: Column(
           children: <Widget>[
-            ButtonsView(),
+            ButtonsView(
+              changeSelectedAdvertisement: changeSelectedAdvertisement,
+            ),
             Flexible(
               fit: FlexFit.loose,
               child: ClipRRect(
@@ -105,30 +155,18 @@ class _AdvertisementState extends State<Advertisement> {
                             listen: false)
                         .refreshAdvertisement(
                       uidCompany: _uidCompany,
-                      selectedAdvertisement: model.SelectedAdvertisement.Active,
+                      selectedAdvertisement: _selectedAdvertisement,
                     ),
-                    child: companyAdvertisements.isEmpty
-                        ? ListView(
-                            children: <Widget>[
-                              Align(
-                                alignment: Alignment.topCenter,
-                                child: Container(
-                                  margin: EdgeInsets.all(50),
-                                  child: CircularProgressIndicator(),
-                                ),
-                              ),
-                            ],
-                          )
-                        : ListView.builder(
-                            physics: AlwaysScrollableScrollPhysics(),
-                            controller: _scrollController,
-                            itemCount: companyAdvertisements.length,
-                            itemBuilder: (context, index) {
-                              return ItemAdvertisement(
-                                advertisement: companyAdvertisements[index],
-                              );
-                            },
-                          ),
+                    child: _selectedAdvertisement ==
+                            model.SelectedAdvertisement.Active
+                        ? advertisements(
+                            context: context,
+                            selectedAdvertisementData:
+                                companyActiveAdvertisements)
+                        : advertisements(
+                            context: context,
+                            selectedAdvertisementData:
+                                companyFinishedAdvertisements),
                   ),
                 ),
               ),
