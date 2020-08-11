@@ -117,28 +117,35 @@ class PreviewAdvertisementForwarder extends StatelessWidget {
                               ),
                             ),
                             SizedBox(height: 15),
-                            FittedBox(
+                            Container(
+                              width: double.infinity,
+                              margin: EdgeInsets.symmetric(horizontal: 10),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
-                                  Text(
-                                    '\u2022 Karta Kierowcy: ' +
-                                        (advertisement.requirements
-                                                    .kartaKierowcy ==
-                                                true
-                                            ? 'Tak'
-                                            : 'Nie'),
-                                    style: TextStyle(fontSize: 20),
-                                  ),
-                                  Text(
-                                    '\u2022 Zaswiadczenie o niekaralnosci: ' +
-                                        (advertisement.requirements
-                                                    .zaswiadczenieoniekaralnosci ==
-                                                true
-                                            ? 'Tak'
-                                            : 'Nie'),
-                                    style: TextStyle(fontSize: 20),
-                                  ),
+                                  advertisement.requirements.doswiadczenie ==
+                                          true
+                                      ? Text(
+                                          '\u2022 Doswiadczenie',
+                                          style: TextStyle(fontSize: 20),
+                                        )
+                                      : SizedBox(),
+                                  advertisement.requirements
+                                              .zaswiadczenieoniekaralnosci ==
+                                          true
+                                      ? Text(
+                                          '\u2022 Zaswiadczenie o niekaralnosci',
+                                          style: TextStyle(fontSize: 20),
+                                        )
+                                      : SizedBox(),
+                                  advertisement.requirements
+                                              .umiejetnoscianalityczne ==
+                                          true
+                                      ? Text(
+                                          '\u2022 Umiejetnosci Analityczne',
+                                          style: TextStyle(fontSize: 20),
+                                        )
+                                      : SizedBox(),
                                 ],
                               ),
                             ),
@@ -197,14 +204,15 @@ class PreviewAdvertisementForwarder extends StatelessWidget {
         ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: userData.data.type != 'Trucker' && userData.data.type != 'Forwarder'
-          ? null
-          : FloatingActionButton.extended(
-              onPressed: () {
-                // funkcja zgloszenia się na ogloszenie
-              },
-              label: Text('Report back'),
-            ),
+      floatingActionButton:
+          userData.data.type != 'Trucker' && userData.data.type != 'Forwarder'
+              ? null
+              : FloatingActionButton.extended(
+                  onPressed: () {
+                    // funkcja zgloszenia się na ogloszenie
+                  },
+                  label: Text('Report back'),
+                ),
     );
   }
 }

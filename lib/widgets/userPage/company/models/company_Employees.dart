@@ -55,6 +55,7 @@ class BaseTruckDriverData {
 
 class CompanyData {
   final String uid; // uid Selected Company
+  final String logoUrl;
   final List forwardersFromCompany; // spedytorzy w firmie
   final List truckersFromCompany; // kierowcy w firmie
   final String nameCompany; // nazwa firmy
@@ -63,6 +64,7 @@ class CompanyData {
 
   CompanyData({
     @required this.uid,
+    @required this.logoUrl,
     @required this.forwardersFromCompany,
     @required this.truckersFromCompany,
     @required this.nameCompany,

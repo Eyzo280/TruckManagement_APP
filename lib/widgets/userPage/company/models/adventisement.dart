@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:truckmanagement_app/widgets/userPage/company/providers/advetisement.dart';
 
 enum SelectedAdvertisement {
@@ -73,12 +74,12 @@ class Advertisement {
   final String endDate; // kiedy konczy sie ogloszenie
 
   Advertisement({
-    this.companyUid,
-    this.companyInfo,
-    this.title,
-    this.requirements,
-    this.description,
-    this.type,
-    this.endDate,
+    @required this.companyUid,
+    @required this.companyInfo,
+    @required this.title,
+    @required this.requirements,
+    @required this.description,
+    @required this.type,
+    @required this.endDate,
   });
 }

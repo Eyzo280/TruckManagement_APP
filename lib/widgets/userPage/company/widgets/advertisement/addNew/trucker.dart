@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:truckmanagement_app/widgets/shared/screens/advertisementTrucker.dart';
 import 'package:truckmanagement_app/widgets/shared/widgets/checkboxformfield.dart';
 import 'package:truckmanagement_app/widgets/userPage/company/models/adventisement.dart';
 import 'package:truckmanagement_app/widgets/userPage/company/models/company_Employees.dart';
@@ -15,20 +14,32 @@ class NewAdvertisementTrucker extends StatefulWidget {
 class _NewAdvertisementTruckerState extends State<NewAdvertisementTrucker> {
   final _formKey = GlobalKey<FormState>();
 
-  Advertisement _advertisement = Advertisement(
-    companyUid: '',
-    title: '',
-    requirements: RequirementsAdvertisementTrucker(
-      kartaKierowcy: false,
-      zaswiadczenieoniekaralnosci: false,
-    ),
-    description: '',
-    type: 'Trucker',
-  );
+  Advertisement _advertisement;
+
+  @override
+  void didChangeDependencies() {
+    CompanyData companyData = Provider.of<CompanyData>(context, listen: false);
+    _advertisement = Advertisement(
+      companyInfo: CompanyInfoAdvertisement(
+        logoUrl: companyData.logoUrl,
+        name: companyData.nameCompany,
+        phone: '', // Trzeba dodac numer kontaktowy do ogłoszenia
+      ),
+      companyUid: companyData.uid,
+      title: '',
+      requirements: RequirementsAdvertisementTrucker(
+        kartaKierowcy: false,
+        zaswiadczenieoniekaralnosci: false,
+      ),
+      description: '',
+      endDate: '', // obecnie jest na stale 7 dni od utworzenia
+      type: 'Trucker',
+    );
+    super.didChangeDependencies();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final CompanyData company = Provider.of<CompanyData>(context);
     return Form(
       key: _formKey,
       child: ClipRRect(
@@ -71,9 +82,11 @@ class _NewAdvertisementTruckerState extends State<NewAdvertisementTrucker> {
                     onSaved: (val) {
                       _advertisement = Advertisement(
                         companyUid: _advertisement.companyUid,
+                        companyInfo: _advertisement.companyInfo,
                         title: val,
                         requirements: _advertisement.requirements,
                         description: _advertisement.description,
+                        endDate: _advertisement.endDate,
                         type: _advertisement.type,
                       );
                     },
@@ -92,6 +105,7 @@ class _NewAdvertisementTruckerState extends State<NewAdvertisementTrucker> {
                   onSaved: (val) {
                     _advertisement = Advertisement(
                       companyUid: _advertisement.companyUid,
+                      companyInfo: _advertisement.companyInfo,
                       title: _advertisement.title,
                       requirements: RequirementsAdvertisementTrucker(
                         kartaKierowcy: val,
@@ -99,6 +113,7 @@ class _NewAdvertisementTruckerState extends State<NewAdvertisementTrucker> {
                             .requirements.zaswiadczenieoniekaralnosci,
                       ),
                       description: _advertisement.description,
+                      endDate: _advertisement.endDate,
                       type: _advertisement.type,
                     );
                   },
@@ -108,6 +123,7 @@ class _NewAdvertisementTruckerState extends State<NewAdvertisementTrucker> {
                   onSaved: (val) {
                     _advertisement = Advertisement(
                       companyUid: _advertisement.companyUid,
+                      companyInfo: _advertisement.companyInfo,
                       title: _advertisement.title,
                       requirements: RequirementsAdvertisementTrucker(
                         kartaKierowcy:
@@ -115,6 +131,7 @@ class _NewAdvertisementTruckerState extends State<NewAdvertisementTrucker> {
                         zaswiadczenieoniekaralnosci: val,
                       ),
                       description: _advertisement.description,
+                      endDate: _advertisement.endDate,
                       type: _advertisement.type,
                     );
                   },
@@ -143,9 +160,11 @@ class _NewAdvertisementTruckerState extends State<NewAdvertisementTrucker> {
                     onSaved: (val) {
                       _advertisement = Advertisement(
                         companyUid: _advertisement.companyUid,
+                        companyInfo: _advertisement.companyInfo,
                         title: _advertisement.title,
                         requirements: _advertisement.requirements,
                         description: val,
+                        endDate: _advertisement.endDate,
                         type: _advertisement.type,
                       );
                     },
@@ -154,18 +173,30 @@ class _NewAdvertisementTruckerState extends State<NewAdvertisementTrucker> {
                 RaisedButton(
                   color: Theme.of(context).accentColor,
                   onPressed: () {
-                    if (company.uid == null) {
+                    if (_advertisement.companyUid == null) {
                       return;
                     }
                     _advertisement = Advertisement(
-                      companyUid: company.uid,
+                      companyUid: _advertisement.companyUid,
+                      companyInfo: _advertisement.companyInfo,
                       title: _advertisement.title,
                       requirements: _advertisement.requirements,
                       description: _advertisement.description,
+                      endDate: _advertisement.endDate,
                       type: _advertisement.type,
                     );
                     if (_formKey.currentState.validate()) {
                       _formKey.currentState.save();
+                      Provider.of<CompanyAdvertisements>(context, listen: false)
+                          .addAdvertisement(
+                        uidCompany: _advertisement.companyUid,
+                        companyInfo: _advertisement.companyInfo,
+                        description: _advertisement.description,
+                        requirementsAdvertisementTrucker:
+                            _advertisement.requirements,
+                        title: _advertisement.title,
+                        type: _advertisement.type,
+                      );
                       /*
                       Navigator.of(context).push(
                         MaterialPageRoute(builder: (ctx) {

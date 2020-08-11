@@ -80,6 +80,7 @@ class Database_Company {
     print(doc.data['status']);
     return CompanyData(
       uid: doc.documentID,
+      logoUrl: doc.data['logoUrl'] ?? null,
       forwardersFromCompany: doc.data['forwardersFromCompany'] ?? [],
       truckersFromCompany: doc.data['truckersFromCompany'] ?? [],
       nameCompany: doc.data['nameCompany'] ?? [],
