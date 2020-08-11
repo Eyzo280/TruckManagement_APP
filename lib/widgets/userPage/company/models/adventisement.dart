@@ -65,15 +65,17 @@ class RequirementsAdvertisementTrucker {
 }
 
 class Advertisement {
+  final String advertisementUid;
   final String companyUid; // uid firmy do ktorej nalezy ogloszenie
   final CompanyInfoAdvertisement companyInfo;
   final String title;
   final requirements; // mapa z wymaganiami np. {'Karta kierowcy': true}
   final String description;
   final String type; // typ ogloszenia np. 'Trucker'
-  final String endDate; // kiedy konczy sie ogloszenie
+  String endDate; // kiedy konczy sie ogloszenie
 
   Advertisement({
+    @required this.advertisementUid,
     @required this.companyUid,
     @required this.companyInfo,
     @required this.title,

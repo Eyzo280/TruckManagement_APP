@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:truckmanagement_app/widgets/shared/screens/advertisementForwarder.dart';
 import 'package:truckmanagement_app/widgets/shared/screens/advertisementTrucker.dart';
 import 'package:truckmanagement_app/widgets/userPage/company/models/adventisement.dart';
+import '../../providers/advetisement.dart';
 
 class ItemAdvertisement extends StatelessWidget {
   final Advertisement advertisement;
+  final SelectedAdvertisement selectedAdvertisement;
 
   ItemAdvertisement({
     this.advertisement,
+    this.selectedAdvertisement,
   });
 
   @override
@@ -56,9 +60,34 @@ class ItemAdvertisement extends StatelessWidget {
             icon: Icon(
               Icons.more_vert,
             ),
-            onChanged: (String selectedValue) {
+            onChanged: (String selectedValue) async {
               // Zarzadzanie ogloszeniem
-              if (selectedValue == 'Usun') {
+              if (selectedValue == 'Przedluz') {
+                try {
+                  await Provider.of<CompanyAdvertisements>(context,
+                          listen: false)
+                      .reconditioningAdvertisement(
+                    advUid: advertisement.advertisementUid,
+                    type: advertisement.type,
+                    selectedAdvertisement: selectedAdvertisement,
+                  )
+                      .then((_) {
+                    Scaffold.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Odnowiono czas ${advertisement.title}.'),
+                      ),
+                    );
+                  });
+                } catch (err) {
+                  Scaffold.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Problem z odnowieniem ogloszenia.'),
+                      backgroundColor: Theme.of(context).errorColor,
+                    ),
+                  );
+                }
+              } else if (selectedValue == 'Edytuj') {
+              } else if (selectedValue == 'Usun') {
                 showDialog<void>(
                   context: context,
                   barrierDismissible: false, // user must tap button!

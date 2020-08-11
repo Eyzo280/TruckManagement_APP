@@ -12,10 +12,10 @@ class CompanyAdvertisements with ChangeNotifier {
 
   //
 
-  List<Advertisement> activeAdvertisement = [];
+  Map<String, Advertisement> _activeAdvertisement = {};
   DocumentSnapshot _lastDocumentActiveAdver;
 
-  List<Advertisement> finishedAdvertisement = [];
+  Map<String, Advertisement> _finishedAdvertisement = {};
   DocumentSnapshot _lastDocumentFinishedAdver;
 
   Future<void> addNew() async {
@@ -24,6 +24,26 @@ class CompanyAdvertisements with ChangeNotifier {
       print(err);
       throw err;
     }
+  }
+
+  List<Advertisement> get fetchActiveAdvertisement {
+    List<Advertisement> _listAdvertisements = [];
+
+    _activeAdvertisement.forEach((key, value) {
+      _listAdvertisements.add(value);
+    });
+
+    return _listAdvertisements;
+  }
+
+  List<Advertisement> get fetchFinishedAdvertisement {
+    List<Advertisement> _listAdvertisements = [];
+
+    _finishedAdvertisement.forEach((key, value) {
+      _listAdvertisements.add(value);
+    });
+
+    return _listAdvertisements;
   }
 
   Future<void> viewCompanyAdvertisement({
@@ -35,7 +55,7 @@ class CompanyAdvertisements with ChangeNotifier {
 
     // Sprawdzenie wybranego okna na stronie
     if (selectedAdvertisement == SelectedAdvertisement.Active) {
-      if (activeAdvertisement.isEmpty) {
+      if (_activeAdvertisement.isEmpty) {
         advertisements = await _advertisementsCollection
             .where('uidCompany', isEqualTo: uidCompany)
             .where('status', isEqualTo: true)
@@ -57,7 +77,7 @@ class CompanyAdvertisements with ChangeNotifier {
         return;
       }
     } else {
-      if (finishedAdvertisement.isEmpty) {
+      if (_finishedAdvertisement.isEmpty) {
         advertisements = await _advertisementsCollection
             .where('uidCompany', isEqualTo: uidCompany)
             .where('endDate', isEqualTo: '')
@@ -81,10 +101,12 @@ class CompanyAdvertisements with ChangeNotifier {
     }
     try {
       // Pobieranie i dodawanie danych do advertisements
-      for (var doc in advertisements.documents) {
+      for (DocumentSnapshot doc in advertisements.documents) {
         if (selectedAdvertisement == SelectedAdvertisement.Active) {
-          activeAdvertisement.add(
-            Advertisement(
+          _activeAdvertisement.putIfAbsent(
+            doc.documentID,
+            () => Advertisement(
+              advertisementUid: doc.documentID,
               companyUid: doc.data['companyUid'],
               companyInfo:
                   CompanyInfoAdvertisement.fromMap(doc.data['companyData']) ??
@@ -102,8 +124,10 @@ class CompanyAdvertisements with ChangeNotifier {
             ),
           );
         } else {
-          finishedAdvertisement.add(
-            Advertisement(
+          _finishedAdvertisement.putIfAbsent(
+            doc.documentID,
+            () => Advertisement(
+              advertisementUid: doc.documentID,
               companyUid: doc.data['companyUid'],
               companyInfo:
                   CompanyInfoAdvertisement.fromMap(doc.data['companyData']) ??
@@ -190,6 +214,7 @@ class CompanyAdvertisements with ChangeNotifier {
     }
   }
 
+  // Odswiezenie ogloszen.
   Future<void> refreshAdvertisement({
     String uidCompany,
     SelectedAdvertisement selectedAdvertisement,
@@ -202,12 +227,49 @@ class CompanyAdvertisements with ChangeNotifier {
     );
   }
 
+  // Odnowienie ogloszenia
+  Future reconditioningAdvertisement({
+    String advUid,
+    String type,
+    SelectedAdvertisement selectedAdvertisement,
+  }) async {
+    try {
+      String time = DateTime.now().add(Duration(days: 7)).toIso8601String();
+
+      if (selectedAdvertisement == SelectedAdvertisement.Active) {
+        _advertisementsCollection.document(advUid).updateData({
+          'endDate': time,
+        });
+        _activeAdvertisement.update(advUid, (value) {
+          value.endDate = time;
+          return value;
+        });
+
+        //selectedAdv.endDate = time;
+      } else {
+        _advertisementsCollection.document(advUid).updateData({
+          'endDate': time,
+        });
+        _finishedAdvertisement[advUid].endDate = time;
+        // Usuwanie z listy zakonczonych ogloszen do aktywnych
+
+        _activeAdvertisement.putIfAbsent(
+            advUid, () => _finishedAdvertisement[advUid]);
+        _finishedAdvertisement.removeWhere((key, value) => key == advUid);
+      }
+      notifyListeners();
+    } catch (err) {
+      print(err);
+      throw err;
+    }
+  }
+
   Future<void> clear(SelectedAdvertisement selectedAdvertisement) async {
     if (selectedAdvertisement == SelectedAdvertisement.Active) {
-      activeAdvertisement.clear();
+      _activeAdvertisement.clear();
       _lastDocumentActiveAdver = null;
     } else {
-      finishedAdvertisement.clear();
+      _finishedAdvertisement.clear();
       _lastDocumentFinishedAdver = null;
     }
     notifyListeners();

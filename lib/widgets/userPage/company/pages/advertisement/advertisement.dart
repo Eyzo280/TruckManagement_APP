@@ -75,13 +75,11 @@ class _AdvertisementState extends State<Advertisement> {
   Widget build(BuildContext context) {
     List<model.Advertisement> companyActiveAdvertisements =
         Provider.of<CompanyAdvertisements>(context, listen: true)
-            .activeAdvertisement
-            .toList();
+            .fetchActiveAdvertisement;
 
     List<model.Advertisement> companyFinishedAdvertisements =
         Provider.of<CompanyAdvertisements>(context, listen: true)
-            .finishedAdvertisement
-            .toList();
+            .fetchFinishedAdvertisement;
 
     final appBar = AppBar(
       elevation: 0,
@@ -126,6 +124,7 @@ class _AdvertisementState extends State<Advertisement> {
               itemBuilder: (context, index) {
                 return ItemAdvertisement(
                   advertisement: selectedAdvertisementData[index],
+                  selectedAdvertisement: _selectedAdvertisement,
                 );
               },
             );
