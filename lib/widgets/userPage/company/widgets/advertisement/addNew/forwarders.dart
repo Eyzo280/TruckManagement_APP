@@ -223,11 +223,10 @@ class _NewAdvertisementForwardersState
                       _formKey.currentState.save();
                       Provider.of<CompanyAdvertisements>(context, listen: false)
                           .addAdvertisement(
-                        uidCompany: _advertisement.companyUid,
+                        companyUid: _advertisement.companyUid,
                         companyInfo: _advertisement.companyInfo,
                         description: _advertisement.description,
-                        requirementsAdvertisementTrucker:
-                            _advertisement.requirements,
+                        requirements: _advertisement.requirements,
                         title: _advertisement.title,
                         type: _advertisement.type,
                       );

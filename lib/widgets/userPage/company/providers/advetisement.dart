@@ -161,55 +161,82 @@ class CompanyAdvertisements with ChangeNotifier {
   }
 
   Future<void> addAdvertisement({
-    @required String uidCompany,
+    @required String companyUid,
     @required CompanyInfoAdvertisement companyInfo,
     @required String description,
     // endDate -- Obecnie bedzie ustawiony na stale, ze przy dodawaniu jest aktywne przez nastepnych 7 dni
-    @required requirementsAdvertisementTrucker,
+    @required requirements,
     @required String title,
     @required String type,
   }) async {
     try {
+      DocumentReference doc = _advertisementsCollection.document();
+      String endDate = DateTime.now().add(Duration(days: 7)).toIso8601String();
       if (type == 'Trucker') {
-        await _advertisementsCollection.document().setData({
-          'uidCompany': uidCompany,
+        await doc.setData({
+          'uidCompany': companyUid,
           'companyData': {
             'logoUrl': companyInfo.logoUrl,
             'name': companyInfo.name,
             'phone': companyInfo.phone,
           },
           'description': description,
-          'endDate': DateTime.now().add(Duration(days: 7)).toIso8601String(),
+          'endDate': endDate,
           'requirements': {
-            'kartakierowcy': requirementsAdvertisementTrucker.kartaKierowcy,
+            'kartakierowcy': requirements.kartaKierowcy,
             'zaswiadczenieoniekaralnosci':
-                requirementsAdvertisementTrucker.zaswiadczenieoniekaralnosci,
+                requirements.zaswiadczenieoniekaralnosci,
           },
           'status': true,
           'title': title,
           'type': type,
         });
+        _activeAdvertisement.putIfAbsent(
+            doc.documentID,
+            () => Advertisement(
+                  advertisementUid: doc.documentID,
+                  companyUid: companyUid,
+                  companyInfo: companyInfo,
+                  title: title,
+                  requirements: requirements,
+                  description: description,
+                  type: type,
+                  endDate: endDate,
+                ));
+        notifyListeners();
       } else if (type == 'Forwarder') {
-        await _advertisementsCollection.document().setData({
-          'uidCompany': uidCompany,
+        await doc.setData({
+          'uidCompany': companyUid,
           'companyData': {
             'logoUrl': companyInfo.logoUrl,
             'name': companyInfo.name,
             'phone': companyInfo.phone,
           },
           'description': description,
-          'endDate': DateTime.now().add(Duration(days: 7)).toIso8601String(),
+          'endDate': endDate,
           'requirements': {
-            'doswiadczenie': requirementsAdvertisementTrucker.doswiadczenie,
+            'doswiadczenie': requirements.doswiadczenie,
             'zaswiadczenieoniekaralnosci':
-                requirementsAdvertisementTrucker.zaswiadczenieoniekaralnosci,
-            'umiejetnoscianalityczne':
-                requirementsAdvertisementTrucker.umiejetnoscianalityczne,
+                requirements.zaswiadczenieoniekaralnosci,
+            'umiejetnoscianalityczne': requirements.umiejetnoscianalityczne,
           },
           'status': true,
           'title': title,
           'type': type,
         });
+        _activeAdvertisement.putIfAbsent(
+            doc.documentID,
+            () => Advertisement(
+                  advertisementUid: doc.documentID,
+                  companyUid: companyUid,
+                  companyInfo: companyInfo,
+                  title: title,
+                  requirements: requirements,
+                  description: description,
+                  type: type,
+                  endDate: endDate,
+                ));
+        notifyListeners();
       } else {
         print(
             'Problem from adding new Advertisement.  -- company/providers/adverisement.dart');
@@ -262,6 +289,37 @@ class CompanyAdvertisements with ChangeNotifier {
         _activeAdvertisement.putIfAbsent(
             advUid, () => _finishedAdvertisement[advUid]);
         _finishedAdvertisement.removeWhere((key, value) => key == advUid);
+      }
+      notifyListeners();
+    } catch (err) {
+      print(err);
+      throw err;
+    }
+  }
+
+  Future<void> deleteAdversitsement({
+    SelectedAdvertisement selectedAdvertisement,
+    String uidAdvertisement,
+  }) async {
+    try {
+      if (selectedAdvertisement == SelectedAdvertisement.Active) {
+        _advertisementsCollection
+            .document(uidAdvertisement)
+            .delete()
+            .whenComplete(() {
+          _activeAdvertisement
+              .removeWhere((key, value) => key == uidAdvertisement);
+          notifyListeners();
+        });
+      } else {
+        _advertisementsCollection
+            .document(uidAdvertisement)
+            .delete()
+            .whenComplete(() {
+          _finishedAdvertisement
+              .removeWhere((key, value) => key == uidAdvertisement);
+          notifyListeners();
+        });
       }
       notifyListeners();
     } catch (err) {

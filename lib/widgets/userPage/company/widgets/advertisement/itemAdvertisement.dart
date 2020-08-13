@@ -4,6 +4,7 @@ import 'package:truckmanagement_app/widgets/shared/screens/advertisementForwarde
 import 'package:truckmanagement_app/widgets/shared/screens/advertisementTrucker.dart';
 import 'package:truckmanagement_app/widgets/userPage/company/models/adventisement.dart';
 import '../../providers/advetisement.dart';
+import '../../providers/advetisement.dart';
 
 class ItemAdvertisement extends StatelessWidget {
   final Advertisement advertisement;
@@ -91,7 +92,7 @@ class ItemAdvertisement extends StatelessWidget {
                 showDialog<void>(
                   context: context,
                   barrierDismissible: false, // user must tap button!
-                  builder: (BuildContext context) {
+                  builder: (BuildContext ctx) {
                     return AlertDialog(
                       title: Center(
                         child: Text('Czy usunąć tytul?'),
@@ -100,13 +101,30 @@ class ItemAdvertisement extends StatelessWidget {
                         FlatButton(
                           child: Text('Tak'),
                           onPressed: () {
-                            Navigator.of(context).pop();
+                            Navigator.of(ctx).pop();
+                            Provider.of<CompanyAdvertisements>(context,
+                                    listen: false)
+                                .deleteAdversitsement(
+                                  selectedAdvertisement: selectedAdvertisement,
+                                  uidAdvertisement:
+                                      advertisement.advertisementUid,
+                                )
+                                .whenComplete(
+                                  () => Scaffold.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                          'Usunieto ogloszenie ${advertisement.title}'),
+                                      backgroundColor:
+                                          Theme.of(context).errorColor,
+                                    ),
+                                  ),
+                                );
                           },
                         ),
                         FlatButton(
                           child: Text('Nie'),
                           onPressed: () {
-                            Navigator.of(context).pop();
+                            Navigator.of(ctx).pop();
                           },
                         ),
                       ],
