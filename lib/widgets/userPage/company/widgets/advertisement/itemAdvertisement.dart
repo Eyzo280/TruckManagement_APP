@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:truckmanagement_app/widgets/shared/screens/advertisementForwarder.dart';
 import 'package:truckmanagement_app/widgets/shared/screens/advertisementTrucker.dart';
 import 'package:truckmanagement_app/widgets/userPage/company/models/adventisement.dart';
+import 'package:truckmanagement_app/widgets/userPage/company/widgets/advertisement/addNew/trucker.dart';
+import 'package:truckmanagement_app/widgets/userPage/company/widgets/advertisement/edit/trucker.dart';
 import '../../providers/advetisement.dart';
 import '../../providers/advetisement.dart';
 
@@ -88,6 +90,12 @@ class ItemAdvertisement extends StatelessWidget {
                   );
                 }
               } else if (selectedValue == 'Edytuj') {
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (context) {
+                  return EditAdvertisement(
+                    advertisement: advertisement,
+                  );
+                }));
               } else if (selectedValue == 'Usun') {
                 showDialog<void>(
                   context: context,

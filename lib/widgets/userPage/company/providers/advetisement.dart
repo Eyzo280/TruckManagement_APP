@@ -56,6 +56,7 @@ class CompanyAdvertisements with ChangeNotifier {
     // Sprawdzenie wybranego okna na stronie
     if (selectedAdvertisement == SelectedAdvertisement.Active) {
       if (_activeAdvertisement.isEmpty) {
+        // Pobiera dokumenty z bazy danych
         advertisements = await _advertisementsCollection
             .orderBy('endDate')
             .where('uidCompany', isEqualTo: uidCompany)
@@ -106,7 +107,7 @@ class CompanyAdvertisements with ChangeNotifier {
       }
     }
     try {
-      // Pobieranie i dodawanie danych do advertisements
+      // Pobrane wczesniej dokumenty do advertisements sa dodawane do providera zaleznie od tego jakie wybrane jest okno 'SelectedAdvertisement.Active/Finished'
       for (DocumentSnapshot doc in advertisements.documents) {
         if (selectedAdvertisement == SelectedAdvertisement.Active) {
           _activeAdvertisement.putIfAbsent(
@@ -172,6 +173,7 @@ class CompanyAdvertisements with ChangeNotifier {
     try {
       DocumentReference doc = _advertisementsCollection.document();
       String endDate = DateTime.now().add(Duration(days: 7)).toIso8601String();
+      // Sprawdza typ nowego ogloszenia i dodaje jego dane do bazy danych oraz do providera.
       if (type == 'Trucker') {
         await doc.setData({
           'uidCompany': companyUid,
@@ -252,6 +254,8 @@ class CompanyAdvertisements with ChangeNotifier {
     String uidCompany,
     SelectedAdvertisement selectedAdvertisement,
   }) async {
+    // Czysci ogloszenia i pobiera na nowo z bazy danych.
+
     clear(selectedAdvertisement).whenComplete(
       () => viewCompanyAdvertisement(
         uidCompany: uidCompany,
@@ -297,6 +301,62 @@ class CompanyAdvertisements with ChangeNotifier {
     }
   }
 
+  Future<void> editAdversitsement({
+    SelectedAdvertisement selectedAdvertisement,
+    @required String advUid,
+    @required CompanyInfoAdvertisement companyInfo,
+    @required String description,
+    // endDate -- Obecnie bedzie ustawiony na stale, ze przy dodawaniu jest aktywne przez nastepnych 7 dni
+    @required requirements,
+    @required String title,
+    @required String type,
+  }) async {
+    String endDate = DateTime.now().add(Duration(days: 7)).toIso8601String();
+    try {
+      _advertisementsCollection.document(advUid).updateData({
+        'companyData': {
+          'logoUrl': companyInfo.logoUrl,
+          'name': companyInfo.name,
+          'phone': companyInfo.phone,
+        },
+        'description': description,
+        'endDate': endDate,
+        'requirements': type == 'Trucker'
+            ? {
+                'kartakierowcy': requirements.kartaKierowcy,
+                'zaswiadczenieoniekaralnosci':
+                    requirements.zaswiadczenieoniekaralnosci,
+              }
+            : {
+                'doswiadczenie': requirements.doswiadczenie,
+                'zaswiadczenieoniekaralnosci':
+                    requirements.zaswiadczenieoniekaralnosci,
+                'umiejetnoscianalityczne': requirements.umiejetnoscianalityczne,
+              },
+        'status': true,
+        'title': title,
+        'type': type,
+      });
+      _activeAdvertisement.update(
+        advUid,
+        (value) => Advertisement(
+          advertisementUid: value.advertisementUid,
+          companyUid: value.companyUid,
+          companyInfo: companyInfo,
+          title: title,
+          requirements: requirements,
+          description: description,
+          type: type,
+          endDate: endDate,
+        ),
+      );
+      notifyListeners();
+    } catch (err) {
+      print(err);
+      throw err;
+    }
+  }
+
   Future<void> deleteAdversitsement({
     SelectedAdvertisement selectedAdvertisement,
     String uidAdvertisement,
@@ -321,13 +381,13 @@ class CompanyAdvertisements with ChangeNotifier {
           notifyListeners();
         });
       }
-      notifyListeners();
     } catch (err) {
       print(err);
       throw err;
     }
   }
 
+  // Czysci ogloszenia zalezne od selectedAdvertisement
   Future<void> clear(SelectedAdvertisement selectedAdvertisement) async {
     if (selectedAdvertisement == SelectedAdvertisement.Active) {
       _activeAdvertisement.clear();
@@ -338,32 +398,4 @@ class CompanyAdvertisements with ChangeNotifier {
     }
     notifyListeners();
   }
-/*
-  Future<void> viewTrucker() async {
-    var advTruckers =
-        await advertisements.where('type', isEqualTo: 'Trucker').getDocuments();
-    try {
-      for (var doc in advTruckers.documents) {
-        truckers.add(
-          Advertisement(
-            companyUid: doc.data['companyUid'],
-            companyInfo:
-                CompanyInfoAdvertisement.fromMap(doc.data['companyData']),
-            title: doc.data['title'],
-            description: doc.data['description'],
-            requirements: RequirementsAdvertisementTrucker.fromMap(
-                doc.data['requirements']),
-            status: doc.data['status'],
-            type: doc.data['type'],
-          ),
-        );
-      }
-
-      notifyListeners();
-    } catch (err) {
-      print(err);
-      throw err;
-    }
-  }
-  */
 }

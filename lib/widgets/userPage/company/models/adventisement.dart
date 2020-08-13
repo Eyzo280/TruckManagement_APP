@@ -76,7 +76,7 @@ class Advertisement {
 
   Advertisement({
     @required this.advertisementUid,
-    @required this.companyUid,
+    this.companyUid,
     @required this.companyInfo,
     @required this.title,
     @required this.requirements,
