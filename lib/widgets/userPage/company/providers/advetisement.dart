@@ -8,7 +8,7 @@ class CompanyAdvertisements with ChangeNotifier {
 
   // Advertisement Settings
 
-  int _perPage = 8;
+  int _perPage = 5;
 
   //
 
@@ -57,22 +57,25 @@ class CompanyAdvertisements with ChangeNotifier {
     if (selectedAdvertisement == SelectedAdvertisement.Active) {
       if (_activeAdvertisement.isEmpty) {
         advertisements = await _advertisementsCollection
+            .orderBy('endDate')
             .where('uidCompany', isEqualTo: uidCompany)
-            .where('status', isEqualTo: true)
             .limit(_perPage)
             .getDocuments();
-        _lastDocumentActiveAdver =
-            advertisements.documents[advertisements.documents.length - 1];
+        if (advertisements.documents.isNotEmpty) {
+          _lastDocumentActiveAdver =
+              advertisements.documents[advertisements.documents.length - 1];
+        }
       } else if (fetch) {
         advertisements = await _advertisementsCollection
             .orderBy('endDate')
             .startAfter([_lastDocumentActiveAdver.data['endDate']])
             .where('uidCompany', isEqualTo: uidCompany)
-            .where('endDate', isEqualTo: true)
             .limit(_perPage)
             .getDocuments();
-        _lastDocumentActiveAdver =
-            advertisements.documents[advertisements.documents.length - 1];
+        if (advertisements.documents.isNotEmpty) {
+          _lastDocumentActiveAdver =
+              advertisements.documents[advertisements.documents.length - 1];
+        }
       } else {
         return;
       }
@@ -83,18 +86,21 @@ class CompanyAdvertisements with ChangeNotifier {
             .where('endDate', isEqualTo: '')
             .limit(_perPage)
             .getDocuments();
-        _lastDocumentFinishedAdver =
-            advertisements.documents[advertisements.documents.length - 1];
+        if (advertisements.documents.isNotEmpty) {
+          _lastDocumentActiveAdver =
+              advertisements.documents[advertisements.documents.length - 1];
+        }
       } else if (fetch) {
         advertisements = await _advertisementsCollection
             .orderBy('endDate')
             .startAfter([_lastDocumentFinishedAdver.data['endDate']])
             .where('uidCompany', isEqualTo: uidCompany)
-            .where('endDate', isEqualTo: false)
             .limit(_perPage)
             .getDocuments();
-        _lastDocumentFinishedAdver =
-            advertisements.documents[advertisements.documents.length - 1];
+        if (advertisements.documents.isNotEmpty) {
+          _lastDocumentActiveAdver =
+              advertisements.documents[advertisements.documents.length - 1];
+        }
       } else {
         return;
       }

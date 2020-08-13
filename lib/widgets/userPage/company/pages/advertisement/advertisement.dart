@@ -22,6 +22,8 @@ class _AdvertisementState extends State<Advertisement> {
   String _uidCompany;
   model.SelectedAdvertisement _selectedAdvertisement =
       model.SelectedAdvertisement.Active;
+  bool _loadingData =
+      false; // gdy dane sa pobierane po przewinieciu w dol to _loadingData jest ustawiany na true
 
   void changeSelectedAdvertisement({
     model.SelectedAdvertisement selectedAdvertisement,
@@ -62,11 +64,17 @@ class _AdvertisementState extends State<Advertisement> {
       double delta = MediaQuery.of(context).size.height * 25;
 
       if (maxScroll - currentScroll <= delta) {
-        Provider.of<CompanyAdvertisements>(context, listen: false)
-            .viewCompanyAdvertisement(
-                uidCompany: _uidCompany,
-                fetch: true,
-                selectedAdvertisement: _selectedAdvertisement);
+        if (!_loadingData) {
+          _loadingData = true;
+          Provider.of<CompanyAdvertisements>(context, listen: false)
+              .viewCompanyAdvertisement(
+                  uidCompany: _uidCompany,
+                  fetch: true,
+                  selectedAdvertisement: _selectedAdvertisement)
+              .whenComplete(() => _loadingData = false);
+        } else {
+          print('Ladowanie danych.');
+        }
       }
     });
   }

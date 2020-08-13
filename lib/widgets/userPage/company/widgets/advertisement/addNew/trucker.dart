@@ -20,6 +20,7 @@ class _NewAdvertisementTruckerState extends State<NewAdvertisementTrucker> {
   void didChangeDependencies() {
     CompanyData companyData = Provider.of<CompanyData>(context, listen: false);
     _advertisement = Advertisement(
+      advertisementUid: '',
       companyInfo: CompanyInfoAdvertisement(
         logoUrl: companyData.logoUrl,
         name: companyData.nameCompany,
@@ -81,6 +82,7 @@ class _NewAdvertisementTruckerState extends State<NewAdvertisementTrucker> {
                     ),
                     onSaved: (val) {
                       _advertisement = Advertisement(
+                        advertisementUid: _advertisement.advertisementUid,
                         companyUid: _advertisement.companyUid,
                         companyInfo: _advertisement.companyInfo,
                         title: val,
@@ -104,6 +106,7 @@ class _NewAdvertisementTruckerState extends State<NewAdvertisementTrucker> {
                   title: Text('Karta Kierowcy'),
                   onSaved: (val) {
                     _advertisement = Advertisement(
+                      advertisementUid: _advertisement.advertisementUid,
                       companyUid: _advertisement.companyUid,
                       companyInfo: _advertisement.companyInfo,
                       title: _advertisement.title,
@@ -122,6 +125,7 @@ class _NewAdvertisementTruckerState extends State<NewAdvertisementTrucker> {
                   title: Text('Zaswiadczenie o niekaralnosci'),
                   onSaved: (val) {
                     _advertisement = Advertisement(
+                      advertisementUid: _advertisement.advertisementUid,
                       companyUid: _advertisement.companyUid,
                       companyInfo: _advertisement.companyInfo,
                       title: _advertisement.title,
@@ -159,6 +163,7 @@ class _NewAdvertisementTruckerState extends State<NewAdvertisementTrucker> {
                     ),
                     onSaved: (val) {
                       _advertisement = Advertisement(
+                        advertisementUid: _advertisement.advertisementUid,
                         companyUid: _advertisement.companyUid,
                         companyInfo: _advertisement.companyInfo,
                         title: _advertisement.title,
@@ -177,6 +182,7 @@ class _NewAdvertisementTruckerState extends State<NewAdvertisementTrucker> {
                       return;
                     }
                     _advertisement = Advertisement(
+                      advertisementUid: _advertisement.advertisementUid,
                       companyUid: _advertisement.companyUid,
                       companyInfo: _advertisement.companyInfo,
                       title: _advertisement.title,
