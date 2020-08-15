@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_icons/flutter_icons.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:truckmanagement_app/widgets/shared/screens/advertisementForwarder.dart';
 import 'package:truckmanagement_app/widgets/shared/screens/advertisementTrucker.dart';
@@ -55,7 +57,12 @@ class ItemAdvertisement extends StatelessWidget {
                   'Zakonczone',
                   style: TextStyle(color: Theme.of(context).errorColor),
                 )
-              : Text('Do: ${advertisement.endDate}'),
+              : Text(
+                  'Do: ' +
+                      DateFormat('dd-MM-yyy').format(
+                        DateTime.parse(advertisement.endDate),
+                      ),
+                ),
           trailing: DropdownButton(
             underline: Container(
               height: 0,
@@ -139,6 +146,19 @@ class ItemAdvertisement extends StatelessWidget {
                     );
                   },
                 );
+              } else if (selectedValue == 'Zakoncz') {
+                Provider.of<CompanyAdvertisements>(context, listen: false)
+                    .finishedAdversitsement(
+                        uidAdvertisement: advertisement.advertisementUid)
+                    .whenComplete(
+                      () => Scaffold.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                              'Zakonczono ${advertisement.title}'),
+                          backgroundColor: Theme.of(context).primaryColor,
+                        ),
+                      ),
+                    );
               }
             },
             iconEnabledColor: Theme.of(context).buttonColor,
@@ -146,16 +166,17 @@ class ItemAdvertisement extends StatelessWidget {
               'Przedluz',
               'Edytuj',
               'Usun',
+              'Zakoncz',
             ].map<DropdownMenuItem<String>>((String value) {
               return DropdownMenuItem<String>(
                 value: value,
-                child: value == 'Usun'
+                child: value == 'Przedluz'
                     ? Row(
                         children: <Widget>[
                           Container(
                             width: 50,
                             child: Icon(
-                              Icons.delete_outline,
+                              Icons.replay,
                               color: Colors.white,
                             ),
                           ),
@@ -175,18 +196,31 @@ class ItemAdvertisement extends StatelessWidget {
                               Text(value),
                             ],
                           )
-                        : Row(
-                            children: <Widget>[
-                              Container(
-                                width: 50,
-                                child: Icon(
-                                  Icons.replay,
-                                  color: Colors.white,
-                                ),
+                        : value == 'Usun'
+                            ? Row(
+                                children: <Widget>[
+                                  Container(
+                                    width: 50,
+                                    child: Icon(
+                                      Icons.delete_outline,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  Text(value),
+                                ],
+                              )
+                            : Row(
+                                children: <Widget>[
+                                  Container(
+                                    width: 50,
+                                    child: Icon(
+                                      MaterialCommunityIcons.clock,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  Text(value),
+                                ],
                               ),
-                              Text(value),
-                            ],
-                          ),
               );
             }).toList(),
           ),

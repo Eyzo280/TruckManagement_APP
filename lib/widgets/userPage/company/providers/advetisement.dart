@@ -60,6 +60,7 @@ class CompanyAdvertisements with ChangeNotifier {
         advertisements = await _advertisementsCollection
             .orderBy('endDate')
             .where('uidCompany', isEqualTo: uidCompany)
+            .where('endDate', isGreaterThan: '')
             .limit(_perPage)
             .getDocuments();
         if (advertisements.documents.isNotEmpty) {
@@ -71,6 +72,7 @@ class CompanyAdvertisements with ChangeNotifier {
             .orderBy('endDate')
             .startAfter([_lastDocumentActiveAdver.data['endDate']])
             .where('uidCompany', isEqualTo: uidCompany)
+            .where('endDate', isGreaterThan: '')
             .limit(_perPage)
             .getDocuments();
         if (advertisements.documents.isNotEmpty) {
@@ -96,6 +98,7 @@ class CompanyAdvertisements with ChangeNotifier {
             .orderBy('endDate')
             .startAfter([_lastDocumentFinishedAdver.data['endDate']])
             .where('uidCompany', isEqualTo: uidCompany)
+            .where('endDate', isEqualTo: '')
             .limit(_perPage)
             .getDocuments();
         if (advertisements.documents.isNotEmpty) {
@@ -274,7 +277,7 @@ class CompanyAdvertisements with ChangeNotifier {
       String time = DateTime.now().add(Duration(days: 7)).toIso8601String();
 
       if (selectedAdvertisement == SelectedAdvertisement.Active) {
-        _advertisementsCollection.document(advUid).updateData({
+        await _advertisementsCollection.document(advUid).updateData({
           'endDate': time,
         });
         _activeAdvertisement.update(advUid, (value) {
@@ -284,7 +287,7 @@ class CompanyAdvertisements with ChangeNotifier {
 
         //selectedAdv.endDate = time;
       } else {
-        _advertisementsCollection.document(advUid).updateData({
+        await _advertisementsCollection.document(advUid).updateData({
           'endDate': time,
         });
         _finishedAdvertisement[advUid].endDate = time;
@@ -357,13 +360,35 @@ class CompanyAdvertisements with ChangeNotifier {
     }
   }
 
+  Future<void> finishedAdversitsement({String uidAdvertisement}) async {
+    try {
+      //  Aktualizuje w bazie danych, oraz w providerze pole endDate na '' i usuwa z aktywnych do zakonczonych.
+      await _advertisementsCollection.document(uidAdvertisement).updateData({
+        'endDate': '',
+      }).whenComplete(() {
+        _activeAdvertisement[uidAdvertisement].endDate = '';
+        _finishedAdvertisement.putIfAbsent(
+          uidAdvertisement,
+          () => _activeAdvertisement[uidAdvertisement],
+        );
+        _activeAdvertisement.removeWhere(
+          (key, value) => key == uidAdvertisement,
+        );
+        notifyListeners();
+      });
+    } catch (err) {
+      print(err);
+      throw err;
+    }
+  }
+
   Future<void> deleteAdversitsement({
     SelectedAdvertisement selectedAdvertisement,
     String uidAdvertisement,
   }) async {
     try {
       if (selectedAdvertisement == SelectedAdvertisement.Active) {
-        _advertisementsCollection
+        await _advertisementsCollection
             .document(uidAdvertisement)
             .delete()
             .whenComplete(() {
@@ -372,7 +397,7 @@ class CompanyAdvertisements with ChangeNotifier {
           notifyListeners();
         });
       } else {
-        _advertisementsCollection
+        await _advertisementsCollection
             .document(uidAdvertisement)
             .delete()
             .whenComplete(() {
