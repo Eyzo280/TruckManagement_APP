@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:truckmanagement_app/widgets/shared/widgets/checkboxformfield.dart';
-import 'package:truckmanagement_app/widgets/userPage/company/models/adventisement.dart';
+import 'package:truckmanagement_app/models/adventisement.dart';
 import 'package:truckmanagement_app/widgets/userPage/company/models/company_Employees.dart';
 import 'package:truckmanagement_app/widgets/userPage/company/providers/advetisement.dart';
 

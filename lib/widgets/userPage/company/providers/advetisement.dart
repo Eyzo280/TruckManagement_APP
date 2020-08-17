@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:truckmanagement_app/widgets/userPage/company/models/adventisement.dart';
+import 'package:truckmanagement_app/models/adventisement.dart';
 
 class CompanyAdvertisements with ChangeNotifier {
   CollectionReference _advertisementsCollection =
