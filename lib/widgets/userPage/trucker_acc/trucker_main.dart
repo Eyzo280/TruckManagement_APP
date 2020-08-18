@@ -7,6 +7,7 @@ import 'package:truckmanagement_app/theme.dart';
 import 'package:truckmanagement_app/widgets/chat/chats.dart';
 import 'package:truckmanagement_app/widgets/userPage/trucker_acc/models/trucker.dart';
 import 'package:truckmanagement_app/widgets/userPage/trucker_acc/providers/advertisements.dart';
+import 'package:truckmanagement_app/widgets/userPage/trucker_acc/screens/application.dart';
 import 'package:truckmanagement_app/widgets/userPage/trucker_acc/services_Trucker/database_Trucker.dart';
 import 'package:truckmanagement_app/widgets/userPage/trucker_acc/trucker_page.dart';
 import 'package:truckmanagement_app/widgets/userPage/trucker_acc/trucker_search_company.dart';
@@ -28,6 +29,8 @@ class TruckerMain extends StatelessWidget {
       child: MaterialApp(
         theme: basicTheme(),
         routes: {
+          // Advertisement
+          '/TruckerNewApplication/': (ctx) => TruckerNewApplication(),
           // Drawer
           '/searchJobs/': (ctx) => SearchJobs(),
           //

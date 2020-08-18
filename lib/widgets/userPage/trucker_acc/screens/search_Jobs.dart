@@ -42,8 +42,7 @@ class _SearchJobsState extends State<SearchJobs> {
         if (!_loadingData) {
           _loadingData = true;
           Provider.of<TruckerAdvertisements>(context, listen: false)
-              .loadAdvertisements(
-                  fetchNew: true)
+              .loadAdvertisements(fetchNew: true)
               .whenComplete(() => _loadingData = false);
         } else {
           print('Ladowanie danych.');
@@ -93,10 +92,13 @@ class _SearchJobsState extends State<SearchJobs> {
                         );
                       },
                       contentPadding: EdgeInsets.all(15),
-                      leading: advertisements[index].companyInfo.logoUrl == ''
-                          ? Image.asset('images/default.jpg')
-                          : Image.network(
-                              advertisements[index].companyInfo.logoUrl),
+                      leading: Hero(
+                        tag: advertisements[index].advertisementUid + '-Image',
+                        child: advertisements[index].companyInfo.logoUrl == ''
+                            ? Image.asset('images/default.jpg')
+                            : Image.network(
+                                advertisements[index].companyInfo.logoUrl),
+                      ),
                       title: Container(
                         margin: EdgeInsets.only(bottom: 5),
                         child: Text(

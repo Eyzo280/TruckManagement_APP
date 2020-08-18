@@ -28,6 +28,7 @@ class TruckerAdvertisements with ChangeNotifier {
       if (_advertisements.isEmpty) {
         await _advertisementsCollection
             .orderBy('endDate')
+            .where('endDate', isGreaterThan: '')
             .where('type', isEqualTo: 'Trucker')
             .limit(_perPage)
             .getDocuments()
@@ -59,6 +60,7 @@ class TruckerAdvertisements with ChangeNotifier {
       } else if (_advertisements.isNotEmpty && fetchNew) {
         await _advertisementsCollection
             .orderBy('endDate')
+            .where('endDate', isGreaterThan: '')
             .startAfter([_lastDocument.data['endDate']])
             .where('type', isEqualTo: 'Trucker')
             .limit(_perPage)

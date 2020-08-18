@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:truckmanagement_app/models/user.dart';
 import 'package:truckmanagement_app/models/adventisement.dart';
+import 'package:truckmanagement_app/widgets/userPage/trucker_acc/screens/application.dart';
 
 class PreviewAdvertisementTrucker extends StatelessWidget {
   Advertisement advertisement;
@@ -56,9 +57,12 @@ class PreviewAdvertisementTrucker extends StatelessWidget {
                   children: <Widget>[
                     Flexible(
                       fit: FlexFit.tight,
-                      child: advertisement.companyInfo.logoUrl == ''
-                          ? Image.asset('images/default.jpg')
-                          : Image.network(advertisement.companyInfo.logoUrl),
+                      child: Hero(
+                        tag: advertisement.advertisementUid + '-Image',
+                        child: advertisement.companyInfo.logoUrl == ''
+                            ? Image.asset('images/default.jpg')
+                            : Image.network(advertisement.companyInfo.logoUrl),
+                      ),
                     ),
                     Flexible(
                       fit: FlexFit.tight,
@@ -200,9 +204,13 @@ class PreviewAdvertisementTrucker extends StatelessWidget {
           ? null
           : FloatingActionButton.extended(
               onPressed: () {
+                Navigator.of(context).pushNamed(
+                  TruckerNewApplication.routeName,
+                  arguments: advertisement,
+                );
                 // funkcja zgloszenia się na ogloszenie
               },
-              label: Text('Report back'),
+              label: Text('Aplikuj'),
             ),
     );
   }
