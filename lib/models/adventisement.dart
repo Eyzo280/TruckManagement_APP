@@ -24,6 +24,14 @@ class CompanyInfoAdvertisement {
       phone: data['phone'],
     );
   }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'name': name,
+      'logoUrl': logoUrl,
+      'phone': phone,
+    };
+  }
 }
 
 class RequirementsAdvertisementForwarder {
@@ -62,6 +70,13 @@ class RequirementsAdvertisementTrucker {
       zaswiadczenieoniekaralnosci: data['zaswiadczenieoniekaralnosci'] ?? false,
     );
   }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'kartaKierowcy': kartaKierowcy,
+      'zaswiadczenieoniekaralnosci': zaswiadczenieoniekaralnosci,
+    };
+  }
 }
 
 class Advertisement {
@@ -84,4 +99,19 @@ class Advertisement {
     @required this.type,
     @required this.endDate,
   });
+
+  Map<String, dynamic> toMap() {
+    return {
+      'advertisementUid': advertisementUid,
+      'companyUid': companyUid,
+      'companyInfo': companyInfo.toMap(),
+      'title': title,
+      'requirements': type == 'Trucker'
+          ? RequirementsAdvertisementTrucker().toMap()
+          : RequirementsAdvertisementForwarder(),
+      'description': description,
+      'type': type,
+      'endDate': endDate,
+    };
+  }
 }

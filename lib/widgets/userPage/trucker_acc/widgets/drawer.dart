@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../screens/search_Jobs.dart';
+import '../screens/advertisements.dart';
 
 class DrawerTrucker extends StatelessWidget {
   final String uid;
@@ -69,7 +69,7 @@ class DrawerTrucker extends StatelessWidget {
             leading: Icon(Icons.search),
             title: Text('Szukaj Pracy'),
             onTap: () {
-              Navigator.popAndPushNamed(context, SearchJobs.routeName);
+              Navigator.popAndPushNamed(context, Advertisements.routeName);
             },
           ),
           ListTile(

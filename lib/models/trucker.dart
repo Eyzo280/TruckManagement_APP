@@ -10,4 +10,13 @@ class Trucker {
     this.createDate,
     this.type,
   });
+
+  Map<String, dynamic> toMap() {
+    return {
+      'uid': uid,
+      'nickName': nickName,
+      'createDate': createDate,
+      'type': type,
+    };
+  }
 }

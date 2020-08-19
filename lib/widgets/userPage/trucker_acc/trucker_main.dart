@@ -7,11 +7,12 @@ import 'package:truckmanagement_app/theme.dart';
 import 'package:truckmanagement_app/widgets/chat/chats.dart';
 import 'package:truckmanagement_app/widgets/userPage/trucker_acc/models/trucker.dart';
 import 'package:truckmanagement_app/widgets/userPage/trucker_acc/providers/advertisements.dart';
+import 'package:truckmanagement_app/widgets/userPage/trucker_acc/providers/applications.dart';
 import 'package:truckmanagement_app/widgets/userPage/trucker_acc/screens/application.dart';
 import 'package:truckmanagement_app/widgets/userPage/trucker_acc/services_Trucker/database_Trucker.dart';
 import 'package:truckmanagement_app/widgets/userPage/trucker_acc/trucker_page.dart';
 import 'package:truckmanagement_app/widgets/userPage/trucker_acc/trucker_search_company.dart';
-import './screens/search_Jobs.dart';
+import 'screens/advertisements.dart';
 
 class TruckerMain extends StatelessWidget {
   final userData;
@@ -24,6 +25,9 @@ class TruckerMain extends StatelessWidget {
       providers: [
         ChangeNotifierProvider.value(
           value: TruckerAdvertisements(),
+        ),
+        ChangeNotifierProvider.value(
+          value: Applications(),
         )
       ],
       child: MaterialApp(
@@ -32,7 +36,7 @@ class TruckerMain extends StatelessWidget {
           // Advertisement
           '/TruckerNewApplication/': (ctx) => TruckerNewApplication(),
           // Drawer
-          '/searchJobs/': (ctx) => SearchJobs(),
+          '/Advertisements/': (ctx) => Advertisements(),
           //
           '/searchCompany': (ctx) =>
               StreamProvider<List<BaseSearchCompany>>.value(

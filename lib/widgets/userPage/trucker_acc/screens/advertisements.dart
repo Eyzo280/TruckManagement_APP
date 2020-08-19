@@ -5,14 +5,14 @@ import 'package:truckmanagement_app/models/adventisement.dart';
 import 'package:truckmanagement_app/widgets/shared/screens/advertisementTrucker.dart';
 import 'package:truckmanagement_app/widgets/userPage/trucker_acc/providers/advertisements.dart';
 
-class SearchJobs extends StatefulWidget {
-  static const routeName = '/searchJobs/';
+class Advertisements extends StatefulWidget {
+  static const routeName = '/Advertisements/';
 
   @override
-  _SearchJobsState createState() => _SearchJobsState();
+  _AdvertisementsState createState() => _AdvertisementsState();
 }
 
-class _SearchJobsState extends State<SearchJobs> {
+class _AdvertisementsState extends State<Advertisements> {
   bool _isData = false;
   bool _loadingData = false;
   ScrollController _scrollController = ScrollController();
