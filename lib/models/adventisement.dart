@@ -71,10 +71,10 @@ class RequirementsAdvertisementTrucker {
     );
   }
 
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toMap({RequirementsAdvertisementTrucker requirements}) {
     return {
-      'kartaKierowcy': kartaKierowcy,
-      'zaswiadczenieoniekaralnosci': zaswiadczenieoniekaralnosci,
+      'kartaKierowcy': requirements.kartaKierowcy,
+      'zaswiadczenieoniekaralnosci': requirements.zaswiadczenieoniekaralnosci,
     };
   }
 }
@@ -107,7 +107,7 @@ class Advertisement {
       'companyInfo': companyInfo.toMap(),
       'title': title,
       'requirements': type == 'Trucker'
-          ? RequirementsAdvertisementTrucker().toMap()
+          ? RequirementsAdvertisementTrucker().toMap(requirements: requirements)
           : RequirementsAdvertisementForwarder(),
       'description': description,
       'type': type,

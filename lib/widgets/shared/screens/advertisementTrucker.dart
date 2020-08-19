@@ -6,6 +6,7 @@ import 'package:truckmanagement_app/widgets/userPage/trucker_acc/screens/applica
 
 class PreviewAdvertisementTrucker extends StatelessWidget {
   Advertisement advertisement;
+  bool application;
   /*
   final String uid; // uid uzytkownika
   final String companyName;
@@ -21,6 +22,7 @@ class PreviewAdvertisementTrucker extends StatelessWidget {
 
   PreviewAdvertisementTrucker({
     this.advertisement,
+    this.application = true,
     /*
     this.uid,
     this.companyName,
@@ -40,7 +42,7 @@ class PreviewAdvertisementTrucker extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Szukam kierowcy Polska/Wlochy'),
+        title: const Text('Szukam kierowcy Polska/Wlochy'),
         centerTitle: true,
         elevation: 0,
       ),
@@ -92,7 +94,9 @@ class PreviewAdvertisementTrucker extends StatelessWidget {
             flex: 5,
             fit: FlexFit.tight,
             child: ClipRRect(
-              borderRadius: BorderRadius.vertical(top: Radius.circular(35)),
+              borderRadius: const BorderRadius.vertical(
+                top: const Radius.circular(35),
+              ),
               child: Container(
                 height: double.infinity,
                 width: double.infinity,
@@ -106,7 +110,7 @@ class PreviewAdvertisementTrucker extends StatelessWidget {
                       children: <Widget>[
                         Column(
                           children: <Widget>[
-                            SizedBox(
+                            const SizedBox(
                               height: 15,
                             ),
                             Center(
@@ -120,32 +124,33 @@ class PreviewAdvertisementTrucker extends StatelessWidget {
                                         fontSize: 25),
                               ),
                             ),
-                            SizedBox(height: 15),
+                            const SizedBox(height: 15),
                             Container(
                               width: double.infinity,
-                              margin: EdgeInsets.symmetric(horizontal: 10),
+                              margin:
+                                  const EdgeInsets.symmetric(horizontal: 10),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
                                   advertisement.requirements.kartaKierowcy ==
                                           true
-                                      ? Text(
+                                      ? const Text(
                                           '\u2022 Karta Kierowcy',
                                           style: TextStyle(fontSize: 20),
                                         )
-                                      : SizedBox(),
+                                      : const SizedBox(),
                                   advertisement.requirements
                                               .zaswiadczenieoniekaralnosci ==
                                           true
-                                      ? Text(
+                                      ? const Text(
                                           '\u2022 Zaswiadczenie o niekaralnosci',
                                           style: TextStyle(fontSize: 20),
                                         )
-                                      : SizedBox(),
+                                      : const SizedBox(),
                                 ],
                               ),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 15,
                             ),
                           ],
@@ -176,12 +181,12 @@ class PreviewAdvertisementTrucker extends StatelessWidget {
                                         ),
                                       ),
                                     ),
-                                    SizedBox(
+                                    const SizedBox(
                                       height: 15,
                                     ),
                                     advertisement.description == ''
-                                        ? Center(
-                                            child: Text('Brak'),
+                                        ? const Center(
+                                            child: const Text('Brak'),
                                           )
                                         : Text(advertisement.description),
                                   ],
@@ -200,18 +205,19 @@ class PreviewAdvertisementTrucker extends StatelessWidget {
         ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: userData.data.type != 'Trucker'
-          ? null
-          : FloatingActionButton.extended(
-              onPressed: () {
-                Navigator.of(context).pushNamed(
-                  TruckerNewApplication.routeName,
-                  arguments: advertisement,
-                );
-                // funkcja zgloszenia się na ogloszenie
-              },
-              label: Text('Aplikuj'),
-            ),
+      floatingActionButton:
+          userData.data.type != 'Trucker' || application == false
+              ? null
+              : FloatingActionButton.extended(
+                  onPressed: () {
+                    Navigator.of(context).pushNamed(
+                      TruckerNewApplication.routeName,
+                      arguments: advertisement,
+                    );
+                    // funkcja zgloszenia się na ogloszenie
+                  },
+                  label: const Text('Aplikuj'),
+                ),
     );
   }
 }

@@ -23,6 +23,7 @@ class Applications with ChangeNotifier {
         'uidApplicator': application.uidApplicator,
         'uidCompany': application.uidCompany,
         'additionalInfo': application.additionalInfo,
+        'dateSendApplication': application.dateSendApplication,
       }).whenComplete(() {
         _applications.putIfAbsent(
           doc.documentID,
@@ -34,6 +35,7 @@ class Applications with ChangeNotifier {
             uidApplicator: application.uidApplicator,
             uidCompany: application.uidCompany,
             additionalInfo: application.additionalInfo,
+            dateSendApplication: application.dateSendApplication,
           ),
         );
         notifyListeners();

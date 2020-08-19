@@ -10,6 +10,7 @@ class Application {
   final String uidAdvertisement;
   final String uidApplicator;
   final String uidCompany;
+  final String dateSendApplication;
 
   Application({
     this.infoAdvertisement,
@@ -19,5 +20,6 @@ class Application {
     this.uidAdvertisement,
     this.uidApplicator,
     this.uidCompany,
+    this.dateSendApplication,
   });
 }

@@ -38,7 +38,7 @@ class TruckerAdvertisements with ChangeNotifier {
               doc.documentID,
               () => Advertisement(
                 advertisementUid: doc.documentID,
-                companyUid: doc.data['companyUid'],
+                companyUid: doc.data['uidCompany'],
                 companyInfo:
                     CompanyInfoAdvertisement.fromMap(doc.data['companyData']) ??
                         null,

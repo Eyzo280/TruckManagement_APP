@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:truckmanagement_app/models/adventisement.dart';
 import 'package:truckmanagement_app/models/trucker.dart';
 import 'package:truckmanagement_app/models/user.dart';
+import 'package:truckmanagement_app/widgets/shared/screens/advertisementTrucker.dart';
 import 'package:truckmanagement_app/widgets/userPage/trucker_acc/models/application.dart';
 import 'package:truckmanagement_app/widgets/userPage/trucker_acc/providers/applications.dart';
 
@@ -28,10 +29,11 @@ class _TruckerNewApplicationState extends State<TruckerNewApplication> {
       uidApplicator: userInfo.uid,
       uidCompany: advertisement.companyUid,
       additionalInfo: '',
+      dateSendApplication: DateTime.now().toIso8601String(),
     );
 
     final appBar = AppBar(
-      title: Text('Aplikacja'),
+      title: const Text('Aplikacja'),
       centerTitle: true,
     );
 
@@ -81,7 +83,7 @@ class _TruckerNewApplicationState extends State<TruckerNewApplication> {
                                             .bodyText1
                                             .copyWith(fontSize: 15),
                                       ),
-                                      SizedBox(
+                                      const SizedBox(
                                         height: 5,
                                       ),
                                       Text(
@@ -91,7 +93,7 @@ class _TruckerNewApplicationState extends State<TruckerNewApplication> {
                                             .bodyText1
                                             .copyWith(fontSize: 15),
                                       ),
-                                      SizedBox(
+                                      const SizedBox(
                                         height: 5,
                                       ),
                                       Row(
@@ -104,18 +106,30 @@ class _TruckerNewApplicationState extends State<TruckerNewApplication> {
                                                 .copyWith(fontSize: 15),
                                           ),
                                           InkWell(
-                                            onTap: () {},
-                                            child: Card(
+                                            onTap: () {
+                                              Navigator.of(context).push(
+                                                MaterialPageRoute(
+                                                  builder: (context) {
+                                                    return PreviewAdvertisementTrucker(
+                                                      advertisement:
+                                                          advertisement,
+                                                      application: false,
+                                                    );
+                                                  },
+                                                ),
+                                              );
+                                            },
+                                            child: const Card(
                                                 color: Colors.white,
-                                                child: Padding(
+                                                child: const Padding(
                                                   padding:
                                                       const EdgeInsets.all(8.0),
-                                                  child: Text('Podglad'),
+                                                  child: const Text('Podglad'),
                                                 )),
                                           ),
                                         ],
                                       ),
-                                      SizedBox(
+                                      const SizedBox(
                                         height: 5,
                                       ),
                                     ],
@@ -200,6 +214,16 @@ class _TruckerNewApplicationState extends State<TruckerNewApplication> {
                                         .copyWith(fontSize: 15),
                                   ),
                                 ),
+                                Padding(
+                                  padding: const EdgeInsets.only(bottom: 8.0),
+                                  child: Text(
+                                    'Telefon: ${userInfo.nickName}',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1
+                                        .copyWith(fontSize: 15),
+                                  ),
+                                ),
                               ],
                             ),
                           ),
@@ -235,19 +259,19 @@ class _TruckerNewApplicationState extends State<TruckerNewApplication> {
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.bodyText1,
             ),
-            SizedBox(height: 15),
+            const SizedBox(height: 15),
             companyInfo(),
-            Divider(),
+            const Divider(),
             Text(
               'Moje dane',
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.bodyText1,
             ),
-            SizedBox(
+            const SizedBox(
               height: 15,
             ),
             myInfo(),
-            SizedBox(
+            const SizedBox(
               height: 15,
             ),
             Column(
@@ -256,17 +280,46 @@ class _TruckerNewApplicationState extends State<TruckerNewApplication> {
                   'Dodatkowe informacje:',
                   style: Theme.of(context).textTheme.bodyText1,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 15,
                 ),
                 Container(
                   color: Colors.white,
-                  child: TextField(),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextField(
+                      maxLines: null,
+                      onChanged: (val) {
+                        _application = Application(
+                          userInfo: _application.userInfo,
+                          infoAdvertisement: _application.infoAdvertisement,
+                          uidAdvertisement: _application.uidAdvertisement,
+                          uidApplicator: _application.uidApplicator,
+                          uidCompany: _application.uidCompany,
+                          additionalInfo: val,
+                          dateSendApplication: _application.dateSendApplication,
+                        );
+                      },
+                      decoration: const InputDecoration(
+                        enabledBorder: const UnderlineInputBorder(
+                          borderSide: const BorderSide(color: Colors.white),
+                        ),
+                        focusedBorder: const UnderlineInputBorder(
+                          borderSide: const BorderSide(color: Colors.white),
+                        ),
+                        border: const UnderlineInputBorder(
+                          borderSide: const BorderSide(color: Colors.white),
+                        ),
+                      ),
+                      textInputAction: TextInputAction.done,
+                    ),
+                  ),
                 ),
                 FlatButton(
                   onPressed: () {
-                    Provider.of<Applications>(context, listen: false).sendApplication(
-                        application: _application, trucker: userInfo);
+                    Provider.of<Applications>(context, listen: false)
+                        .sendApplication(
+                            application: _application, trucker: userInfo);
                   },
                   color: Theme.of(context).canvasColor,
                   child: Text(
