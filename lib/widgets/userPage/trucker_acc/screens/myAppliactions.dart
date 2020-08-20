@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:truckmanagement_app/models/trucker.dart';
+import 'package:truckmanagement_app/models/user.dart';
 import 'package:truckmanagement_app/widgets/userPage/trucker_acc/models/application.dart';
 import 'package:truckmanagement_app/widgets/userPage/trucker_acc/providers/applications.dart';
 
@@ -12,13 +14,21 @@ class MyApplications extends StatefulWidget {
 }
 
 class _MyApplicationsState extends State<MyApplications> {
+  String _userUid = '';
   bool _isData = false;
   bool _loadingData = false;
   ScrollController _scrollController = ScrollController();
 
   void didChangeDependencies() {
     if (!_isData) {
-      Provider.of<Applications>(context, listen: false).loadApplications().catchError((onError){print(onError);});
+      if (_userUid == '') {
+        _userUid = Provider.of<UserData>(context).data.uid;
+      }
+      Provider.of<Applications>(context, listen: false)
+          .loadApplications(userUid: _userUid)
+          .catchError((onError) {
+        print(onError);
+      });
       setState(() {
         _isData = true;
       });
@@ -41,7 +51,7 @@ class _MyApplicationsState extends State<MyApplications> {
           _loadingData = true;
 
           Provider.of<Applications>(context, listen: false)
-              .loadApplications()
+              .loadApplications(userUid: _userUid)
               .whenComplete(() => _loadingData = false);
         } else {
           print('Ladowanie danych.');

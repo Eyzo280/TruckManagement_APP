@@ -24,12 +24,13 @@ class Applications with ChangeNotifier {
     return _listApplications;
   }
 
-  Future<void> loadApplications() async {
+  Future<void> loadApplications({String userUid}) async {
     try {
       // pobiera moje aplikacje na ogloszenia
       if (_applications.isEmpty) {
         await _applicationCollection
             .orderBy('dateSendApplication')
+            .where('uidApplicator', isEqualTo: userUid)
             .limit(_perPage)
             .getDocuments()
             .then((value) {
