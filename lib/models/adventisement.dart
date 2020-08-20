@@ -100,6 +100,23 @@ class Advertisement {
     @required this.endDate,
   });
 
+  factory Advertisement.fromMap(Map<String, dynamic> data) {
+    return Advertisement(
+      advertisementUid: data['advertisementUid'] ?? null,
+      companyUid: data['companyUid'] ?? null,
+      companyInfo:
+          CompanyInfoAdvertisement.fromMap(data['companyInfo']) ?? null,
+      title: data['title'] ?? null,
+      requirements: data['type'] == 'Trucker'
+          ? RequirementsAdvertisementTrucker.fromMap(data['requirements']) ??
+              null
+          : RequirementsAdvertisementForwarder() ?? null,
+      description: data['description'] ?? null,
+      type: data['type'] ?? null,
+      endDate: data['endDate'] ?? null,
+    );
+  }
+
   Map<String, dynamic> toMap() {
     return {
       'advertisementUid': advertisementUid,
@@ -107,8 +124,10 @@ class Advertisement {
       'companyInfo': companyInfo.toMap(),
       'title': title,
       'requirements': type == 'Trucker'
-          ? RequirementsAdvertisementTrucker().toMap(requirements: requirements)
-          : RequirementsAdvertisementForwarder(),
+          ? RequirementsAdvertisementTrucker()
+                  .toMap(requirements: requirements) ??
+              null
+          : RequirementsAdvertisementForwarder() ?? null,
       'description': description,
       'type': type,
       'endDate': endDate,

@@ -9,6 +9,7 @@ import 'package:truckmanagement_app/widgets/userPage/trucker_acc/models/trucker.
 import 'package:truckmanagement_app/widgets/userPage/trucker_acc/providers/advertisements.dart';
 import 'package:truckmanagement_app/widgets/userPage/trucker_acc/providers/applications.dart';
 import 'package:truckmanagement_app/widgets/userPage/trucker_acc/screens/application.dart';
+import 'package:truckmanagement_app/widgets/userPage/trucker_acc/screens/myAppliactions.dart';
 import 'package:truckmanagement_app/widgets/userPage/trucker_acc/services_Trucker/database_Trucker.dart';
 import 'package:truckmanagement_app/widgets/userPage/trucker_acc/trucker_page.dart';
 import 'package:truckmanagement_app/widgets/userPage/trucker_acc/trucker_search_company.dart';
@@ -37,6 +38,7 @@ class TruckerMain extends StatelessWidget {
           '/TruckerNewApplication/': (ctx) => TruckerNewApplication(),
           // Drawer
           '/Advertisements/': (ctx) => Advertisements(),
+          '/MyApplications/': (ctx) => MyApplications(),
           //
           '/searchCompany': (ctx) =>
               StreamProvider<List<BaseSearchCompany>>.value(

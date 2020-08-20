@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:truckmanagement_app/widgets/userPage/trucker_acc/screens/myAppliactions.dart';
 import '../screens/advertisements.dart';
 
 class DrawerTrucker extends StatelessWidget {
@@ -70,6 +71,13 @@ class DrawerTrucker extends StatelessWidget {
             title: Text('Szukaj Pracy'),
             onTap: () {
               Navigator.popAndPushNamed(context, Advertisements.routeName);
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.chat),
+            title: Text('Moje Aplikacje'),
+            onTap: () {
+              Navigator.of(context).pushNamed(MyApplications.routeName);
             },
           ),
           ListTile(
