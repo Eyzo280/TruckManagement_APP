@@ -74,7 +74,7 @@ class DrawerTrucker extends StatelessWidget {
             },
           ),
           ListTile(
-            leading: Icon(Icons.chat),
+            leading: Icon(Icons.calendar_today),
             title: Text('Moje Aplikacje'),
             onTap: () {
               Navigator.of(context).pushNamed(MyApplications.routeName);

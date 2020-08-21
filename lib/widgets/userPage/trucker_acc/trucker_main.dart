@@ -5,10 +5,11 @@ import 'package:truckmanagement_app/models/user.dart';
 import 'package:truckmanagement_app/services/database.dart';
 import 'package:truckmanagement_app/theme.dart';
 import 'package:truckmanagement_app/widgets/chat/chats.dart';
+import 'package:truckmanagement_app/widgets/shared/screens/application.dart';
 import 'package:truckmanagement_app/widgets/userPage/trucker_acc/models/trucker.dart';
 import 'package:truckmanagement_app/widgets/userPage/trucker_acc/providers/advertisements.dart';
 import 'package:truckmanagement_app/widgets/userPage/trucker_acc/providers/applications.dart';
-import 'package:truckmanagement_app/widgets/userPage/trucker_acc/screens/application.dart';
+import 'package:truckmanagement_app/widgets/userPage/trucker_acc/screens/newApplication.dart';
 import 'package:truckmanagement_app/widgets/userPage/trucker_acc/screens/myAppliactions.dart';
 import 'package:truckmanagement_app/widgets/userPage/trucker_acc/services_Trucker/database_Trucker.dart';
 import 'package:truckmanagement_app/widgets/userPage/trucker_acc/trucker_page.dart';
@@ -39,6 +40,7 @@ class TruckerMain extends StatelessWidget {
           // Drawer
           '/Advertisements/': (ctx) => Advertisements(),
           '/MyApplications/': (ctx) => MyApplications(),
+          '/Application/': (ctx) => Application(),
           //
           '/searchCompany': (ctx) =>
               StreamProvider<List<BaseSearchCompany>>.value(

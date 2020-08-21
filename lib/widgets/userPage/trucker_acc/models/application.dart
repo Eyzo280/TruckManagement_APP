@@ -11,6 +11,7 @@ class Application {
   final String uidApplicator;
   final String uidCompany;
   final String dateSendApplication;
+  final bool status; // Jezeli true to jest Rozpatrywana aplikacja w przeciwnym razie jest zakonczona.
 
   Application({
     this.infoAdvertisement,
@@ -21,5 +22,6 @@ class Application {
     this.uidApplicator,
     this.uidCompany,
     this.dateSendApplication,
+    this.status,
   });
 }

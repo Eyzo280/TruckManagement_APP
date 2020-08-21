@@ -47,6 +47,7 @@ class Applications with ChangeNotifier {
                 uidCompany: doc.data['uidCompany'] ?? null,
                 additionalInfo: doc.data['additionalInfo'] ?? null,
                 dateSendApplication: doc.data['dateSendApplication'] ?? null,
+                status: doc.data['status'] ?? null,
               ),
             );
           }
@@ -78,6 +79,7 @@ class Applications with ChangeNotifier {
         'uidCompany': application.uidCompany,
         'additionalInfo': application.additionalInfo,
         'dateSendApplication': application.dateSendApplication,
+        'status': application.status,
       }).whenComplete(() {
         _applications.putIfAbsent(
           doc.documentID,
@@ -90,10 +92,30 @@ class Applications with ChangeNotifier {
             uidCompany: application.uidCompany,
             additionalInfo: application.additionalInfo,
             dateSendApplication: application.dateSendApplication,
+            status: application.status,
           ),
         );
         notifyListeners();
       });
+    } catch (err) {
+      print(err);
+      throw err;
+    }
+  }
+
+  Future<void> refreshApplications({@required String userUid}) async {
+    try {
+      clear().whenComplete(() => loadApplications(userUid: userUid));
+    } catch (err) {
+      print(err);
+      throw err;
+    }
+  }
+
+  Future<void> clear() async {
+    try {
+      _applications.clear();
+      _lastDocument = null;
     } catch (err) {
       print(err);
       throw err;

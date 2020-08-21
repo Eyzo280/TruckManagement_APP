@@ -1,36 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:truckmanagement_app/models/adventisement.dart';
-import 'package:truckmanagement_app/models/trucker.dart';
-import 'package:truckmanagement_app/models/user.dart';
+import 'package:truckmanagement_app/widgets/shared/screens/advertisementForwarder.dart';
 import 'package:truckmanagement_app/widgets/shared/screens/advertisementTrucker.dart';
-import 'package:truckmanagement_app/widgets/userPage/trucker_acc/models/application.dart';
-import 'package:truckmanagement_app/widgets/userPage/trucker_acc/providers/applications.dart';
+import 'package:truckmanagement_app/widgets/userPage/trucker_acc/models/application.dart'
+    as model;
 
-class TruckerNewApplication extends StatefulWidget {
-  static const routeName = '/TruckerNewApplication/';
+class Application extends StatelessWidget {
+  static const routeName = '/Application/';
 
-  @override
-  _TruckerNewApplicationState createState() => _TruckerNewApplicationState();
-}
-
-class _TruckerNewApplicationState extends State<TruckerNewApplication> {
   @override
   Widget build(BuildContext context) {
-    final Trucker userInfo = Provider.of<UserData>(context).data;
-
-    final Advertisement advertisement =
+    final model.Application application =
         ModalRoute.of(context).settings.arguments;
-
-    Application _application = Application(
-      userInfo: userInfo,
-      infoAdvertisement: advertisement,
-      uidAdvertisement: advertisement.advertisementUid,
-      uidApplicator: userInfo.uid,
-      uidCompany: advertisement.companyUid,
-      additionalInfo: '',
-      dateSendApplication: DateTime.now().toIso8601String(),
-    );
 
     final appBar = AppBar(
       title: const Text('Aplikacja'),
@@ -54,9 +34,15 @@ class _TruckerNewApplicationState extends State<TruckerNewApplication> {
                     fit: FlexFit.tight,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(15),
-                      child: advertisement.companyInfo.logoUrl == ''
-                          ? Image.asset('images/default.jpg')
-                          : Image.network(advertisement.companyInfo.logoUrl),
+                      child: Hero(
+                        tag: application.uidAdvertisement + '-Image',
+                        child:
+                            application.infoAdvertisement.companyInfo.logoUrl ==
+                                    ''
+                                ? Image.asset('images/default.jpg')
+                                : Image.network(application
+                                    .infoAdvertisement.companyInfo.logoUrl),
+                      ),
                     ),
                   ),
                   Flexible(
@@ -77,7 +63,7 @@ class _TruckerNewApplicationState extends State<TruckerNewApplication> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        'Nazwa: ${advertisement.companyInfo.name}',
+                                        'Nazwa: ${application.infoAdvertisement.companyInfo.name}',
                                         style: Theme.of(context)
                                             .textTheme
                                             .bodyText1
@@ -87,7 +73,7 @@ class _TruckerNewApplicationState extends State<TruckerNewApplication> {
                                         height: 5,
                                       ),
                                       Text(
-                                        'Telefon: ${advertisement.companyInfo.phone}',
+                                        'Telefon: ${application.infoAdvertisement.companyInfo.phone}',
                                         style: Theme.of(context)
                                             .textTheme
                                             .bodyText1
@@ -110,22 +96,29 @@ class _TruckerNewApplicationState extends State<TruckerNewApplication> {
                                               Navigator.of(context).push(
                                                 MaterialPageRoute(
                                                   builder: (context) {
-                                                    return PreviewAdvertisementTrucker(
-                                                      advertisement:
-                                                          advertisement,
-                                                      application: false,
-                                                    );
+                                                    return application
+                                                                .infoAdvertisement
+                                                                .type ==
+                                                            'Trucker'
+                                                        ? PreviewAdvertisementTrucker(
+                                                            advertisement:
+                                                                application
+                                                                    .infoAdvertisement,
+                                                            application: false,
+                                                          )
+                                                        : PreviewAdvertisementForwarder();
                                                   },
                                                 ),
                                               );
                                             },
                                             child: const Card(
-                                                color: Colors.white,
-                                                child: const Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: const Text('Podglad'),
-                                                )),
+                                              color: Colors.white,
+                                              child: const Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: const Text('Podglad'),
+                                              ),
+                                            ),
                                           ),
                                         ],
                                       ),
@@ -177,7 +170,7 @@ class _TruckerNewApplicationState extends State<TruckerNewApplication> {
                                 Padding(
                                   padding: const EdgeInsets.only(bottom: 8.0),
                                   child: Text(
-                                    'Imie: ${userInfo.nickName}',
+                                    'Imie: ${application.userInfo.nickName}',
                                     style: Theme.of(context)
                                         .textTheme
                                         .bodyText1
@@ -187,7 +180,7 @@ class _TruckerNewApplicationState extends State<TruckerNewApplication> {
                                 Padding(
                                   padding: const EdgeInsets.only(bottom: 8.0),
                                   child: Text(
-                                    'Nazwisko: ${userInfo.nickName}',
+                                    'Nazwisko: ${application.userInfo.nickName}',
                                     style: Theme.of(context)
                                         .textTheme
                                         .bodyText1
@@ -197,7 +190,7 @@ class _TruckerNewApplicationState extends State<TruckerNewApplication> {
                                 Padding(
                                   padding: const EdgeInsets.only(bottom: 8.0),
                                   child: Text(
-                                    'Doswiadczenie: ${userInfo.nickName}',
+                                    'Doswiadczenie: ${application.userInfo.nickName}',
                                     style: Theme.of(context)
                                         .textTheme
                                         .bodyText1
@@ -207,7 +200,7 @@ class _TruckerNewApplicationState extends State<TruckerNewApplication> {
                                 Padding(
                                   padding: const EdgeInsets.only(bottom: 8.0),
                                   child: Text(
-                                    'Imie: ${userInfo.nickName}',
+                                    'Imie: ${application.userInfo.nickName}',
                                     style: Theme.of(context)
                                         .textTheme
                                         .bodyText1
@@ -217,7 +210,7 @@ class _TruckerNewApplicationState extends State<TruckerNewApplication> {
                                 Padding(
                                   padding: const EdgeInsets.only(bottom: 8.0),
                                   child: Text(
-                                    'Telefon: ${userInfo.nickName}',
+                                    'Telefon: ${application.userInfo.nickName}',
                                     style: Theme.of(context)
                                         .textTheme
                                         .bodyText1
@@ -238,9 +231,10 @@ class _TruckerNewApplicationState extends State<TruckerNewApplication> {
               fit: FlexFit.tight,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(15),
-                child: advertisement.companyInfo.logoUrl == ''
+                child: application.infoAdvertisement.companyInfo.logoUrl == ''
                     ? Image.asset('images/default.jpg')
-                    : Image.network(advertisement.companyInfo.logoUrl),
+                    : Image.network(
+                        application.infoAdvertisement.companyInfo.logoUrl),
               ),
             ),
           ],
@@ -274,60 +268,11 @@ class _TruckerNewApplicationState extends State<TruckerNewApplication> {
             const SizedBox(
               height: 15,
             ),
-            Column(
-              children: [
-                Text(
-                  'Dodatkowe informacje:',
-                  style: Theme.of(context).textTheme.bodyText1,
-                ),
-                const SizedBox(
-                  height: 15,
-                ),
-                Container(
-                  color: Colors.white,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: TextField(
-                      maxLines: null,
-                      onChanged: (val) {
-                        _application = Application(
-                          userInfo: _application.userInfo,
-                          infoAdvertisement: _application.infoAdvertisement,
-                          uidAdvertisement: _application.uidAdvertisement,
-                          uidApplicator: _application.uidApplicator,
-                          uidCompany: _application.uidCompany,
-                          additionalInfo: val,
-                          dateSendApplication: _application.dateSendApplication,
-                        );
-                      },
-                      decoration: const InputDecoration(
-                        enabledBorder: const UnderlineInputBorder(
-                          borderSide: const BorderSide(color: Colors.white),
-                        ),
-                        focusedBorder: const UnderlineInputBorder(
-                          borderSide: const BorderSide(color: Colors.white),
-                        ),
-                        border: const UnderlineInputBorder(
-                          borderSide: const BorderSide(color: Colors.white),
-                        ),
-                      ),
-                      textInputAction: TextInputAction.done,
-                    ),
-                  ),
-                ),
-                FlatButton(
-                  onPressed: () {
-                    Provider.of<Applications>(context, listen: false)
-                        .sendApplication(
-                            application: _application, trucker: userInfo);
-                  },
-                  color: Theme.of(context).canvasColor,
-                  child: Text(
-                    'Aplikuj',
-                    style: Theme.of(context).textTheme.bodyText1,
-                  ),
-                )
-              ],
+            Container(
+              color: Colors.white,
+              child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(application.additionalInfo)),
             ),
           ],
         ),

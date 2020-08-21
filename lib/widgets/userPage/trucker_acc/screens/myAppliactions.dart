@@ -81,9 +81,10 @@ class _MyApplicationsState extends State<MyApplications> {
           color: Colors.white,
           child: RefreshIndicator(
             color: Colors.white,
-            onRefresh: () => null,
-            //Provider.of<Applications>(context, listen: false).refreshApplications(),
+            onRefresh: () => Provider.of<Applications>(context, listen: false)
+                .refreshApplications(userUid: _userUid),
             child: ListView.builder(
+              physics: AlwaysScrollableScrollPhysics(),
               controller: _scrollController,
               itemCount: applications.length,
               itemBuilder: (context, index) {
@@ -91,15 +92,10 @@ class _MyApplicationsState extends State<MyApplications> {
                   children: <Widget>[
                     ListTile(
                       onTap: () {
-                        /*
-                            Navigator.of(context).push(
-                              MaterialPageRoute(builder: (ctx) {
-                                return PreviewAdvertisementTrucker(
-                                  advertisement: applications[index],
-                                );
-                              }),
-                            );
-                            */
+                        Navigator.of(context).pushNamed(
+                          '/Application/',
+                          arguments: applications[index],
+                        );
                       },
                       contentPadding: EdgeInsets.all(15),
                       leading: Hero(
@@ -124,22 +120,23 @@ class _MyApplicationsState extends State<MyApplications> {
                               ),
                         ),
                       ),
-                      subtitle:
-                          applications[index].infoAdvertisement.endDate == ''
-                              ? Text(
-                                  'Zakonczone',
-                                  style: TextStyle(
-                                      color: Theme.of(context).errorColor),
-                                )
-                              : Text(
-                                  'Do: ' +
-                                      DateFormat('dd-MM-yyy').format(
-                                        DateTime.parse(applications[index]
-                                            .infoAdvertisement
-                                            .endDate),
-                                      ),
-                                ),
-                      trailing: Text(''),
+                      subtitle: Text(
+                        'Wyslane: ' +
+                            DateFormat('dd-MM-yyy').format(
+                              DateTime.parse(
+                                  applications[index].dateSendApplication),
+                            ),
+                      ),
+                      trailing: Text(
+                        applications[index].status
+                            ? 'Rozpatrywana'
+                            : 'Zakończona',
+                        style: Theme.of(context).textTheme.bodyText1.copyWith(
+                            fontSize: 15,
+                            color: applications[index].status
+                                ? Colors.green
+                                : Theme.of(context).errorColor),
+                      ),
                     ),
                     Divider()
                   ],

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:truckmanagement_app/models/user.dart';
 import 'package:truckmanagement_app/models/adventisement.dart';
-import 'package:truckmanagement_app/widgets/userPage/trucker_acc/screens/application.dart';
+import 'package:truckmanagement_app/widgets/userPage/trucker_acc/screens/newApplication.dart';
 
 class PreviewAdvertisementTrucker extends StatelessWidget {
   Advertisement advertisement;
