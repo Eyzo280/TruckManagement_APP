@@ -158,6 +158,14 @@ class DrawerCompanyMain extends StatelessWidget {
             },
           ),
           ListTile(
+            leading: Icon(Icons.perm_contact_calendar),
+            title: Text('Zgloszenia'),
+            onTap: () {
+              Navigator.of(context).pushNamed('/Applications/');
+              print('Zgloszenia');
+            },
+          ),
+          ListTile(
             leading: Icon(Icons.settings),
             title: Text('Settings'),
             onTap: () {
