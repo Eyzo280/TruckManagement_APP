@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:truckmanagement_app/models/user.dart';
-import 'package:truckmanagement_app/widgets/userPage/company/models/application.dart';
+import 'package:truckmanagement_app/models/application.dart';
 import '../../providers/applications.dart' as providers;
 
 class Applications extends StatefulWidget {
@@ -93,6 +93,10 @@ class _ApplicationsState extends State<Applications> {
                     ListTile(
                       onTap: () {
                         // push do strony zwykłej aplikacji z przyciskami Zapros, Anuluj.
+                        Navigator.of(context).pushNamed(
+                          '/Application/',
+                          arguments: applications[index],
+                        );
                       },
                       contentPadding: EdgeInsets.all(15),
                       leading: Hero(

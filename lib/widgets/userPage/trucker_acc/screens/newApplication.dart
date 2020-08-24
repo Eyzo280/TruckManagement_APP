@@ -4,7 +4,7 @@ import 'package:truckmanagement_app/models/adventisement.dart';
 import 'package:truckmanagement_app/models/trucker.dart';
 import 'package:truckmanagement_app/models/user.dart';
 import 'package:truckmanagement_app/widgets/shared/screens/advertisementTrucker.dart';
-import 'package:truckmanagement_app/widgets/userPage/trucker_acc/models/application.dart';
+import 'package:truckmanagement_app/models/application.dart';
 import 'package:truckmanagement_app/widgets/userPage/trucker_acc/providers/applications.dart';
 
 class TruckerNewApplication extends StatefulWidget {
@@ -30,7 +30,7 @@ class _TruckerNewApplicationState extends State<TruckerNewApplication> {
       uidCompany: advertisement.companyUid,
       additionalInfo: '',
       dateSendApplication: DateTime.now().toIso8601String(),
-      status: true,
+      status: 'Rozpatrywana',
     );
 
     final appBar = AppBar(

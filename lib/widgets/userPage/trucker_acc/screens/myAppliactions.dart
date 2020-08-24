@@ -3,7 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:truckmanagement_app/models/trucker.dart';
 import 'package:truckmanagement_app/models/user.dart';
-import 'package:truckmanagement_app/widgets/userPage/trucker_acc/models/application.dart';
+import 'package:truckmanagement_app/models/application.dart';
 import 'package:truckmanagement_app/widgets/userPage/trucker_acc/providers/applications.dart';
 
 class MyApplications extends StatefulWidget {
@@ -128,14 +128,16 @@ class _MyApplicationsState extends State<MyApplications> {
                             ),
                       ),
                       trailing: Text(
-                        applications[index].status
-                            ? 'Rozpatrywana'
-                            : 'Zakończona',
+                        applications[index].status,
                         style: Theme.of(context).textTheme.bodyText1.copyWith(
-                            fontSize: 15,
-                            color: applications[index].status
-                                ? Colors.green
-                                : Theme.of(context).errorColor),
+                              fontSize: 15,
+                              color: applications[index].status ==
+                                      'Rozpatrywana'
+                                  ? Colors.green
+                                  : applications[index].status == 'Zaproszenie'
+                                      ? Theme.of(context).canvasColor
+                                      : Theme.of(context).errorColor,
+                            ),
                       ),
                     ),
                     Divider()

@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:truckmanagement_app/models/adventisement.dart';
 import 'package:truckmanagement_app/models/trucker.dart';
-import 'package:truckmanagement_app/widgets/userPage/trucker_acc/models/application.dart';
+import 'package:truckmanagement_app/models/application.dart';
 
 class Applications with ChangeNotifier {
   CollectionReference _applicationCollection =

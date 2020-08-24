@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:truckmanagement_app/widgets/shared/screens/advertisementForwarder.dart';
 import 'package:truckmanagement_app/widgets/shared/screens/advertisementTrucker.dart';
-import 'package:truckmanagement_app/widgets/userPage/trucker_acc/models/application.dart'
-    as model;
+import 'package:truckmanagement_app/models/application.dart' as model;
+import 'package:truckmanagement_app/widgets/shared/widgets/Application/applicatiorInfo.dart';
+import 'package:truckmanagement_app/widgets/shared/widgets/Application/companyInfo.dart';
 
 class Application extends StatelessWidget {
   static const routeName = '/Application/';
+
+  final String userUid;
+
+  Application({this.userUid});
 
   @override
   Widget build(BuildContext context) {
@@ -20,228 +25,6 @@ class Application extends StatelessWidget {
     final heightDevice =
         (MediaQuery.of(context).size.height - appBar.preferredSize.height);
 
-    Widget companyInfo() {
-      return Container(
-        height: heightDevice * 0.25,
-        width: double.infinity,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Expanded(
-              child: Row(
-                children: [
-                  Flexible(
-                    fit: FlexFit.tight,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(15),
-                      child: Hero(
-                        tag: application.uidAdvertisement + '-Image',
-                        child:
-                            application.infoAdvertisement.companyInfo.logoUrl ==
-                                    ''
-                                ? Image.asset('images/default.jpg')
-                                : Image.network(application
-                                    .infoAdvertisement.companyInfo.logoUrl),
-                      ),
-                    ),
-                  ),
-                  Flexible(
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 8.0),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(15),
-                        child: CustomScrollView(
-                          slivers: [
-                            SliverFillRemaining(
-                              hasScrollBody: false,
-                              child: Container(
-                                color: Theme.of(context).canvasColor,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'Nazwa: ${application.infoAdvertisement.companyInfo.name}',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyText1
-                                            .copyWith(fontSize: 15),
-                                      ),
-                                      const SizedBox(
-                                        height: 5,
-                                      ),
-                                      Text(
-                                        'Telefon: ${application.infoAdvertisement.companyInfo.phone}',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyText1
-                                            .copyWith(fontSize: 15),
-                                      ),
-                                      const SizedBox(
-                                        height: 5,
-                                      ),
-                                      Row(
-                                        children: [
-                                          Text(
-                                            'Ogloszenie: ',
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodyText1
-                                                .copyWith(fontSize: 15),
-                                          ),
-                                          InkWell(
-                                            onTap: () {
-                                              Navigator.of(context).push(
-                                                MaterialPageRoute(
-                                                  builder: (context) {
-                                                    return application
-                                                                .infoAdvertisement
-                                                                .type ==
-                                                            'Trucker'
-                                                        ? PreviewAdvertisementTrucker(
-                                                            advertisement:
-                                                                application
-                                                                    .infoAdvertisement,
-                                                            application: false,
-                                                          )
-                                                        : PreviewAdvertisementForwarder();
-                                                  },
-                                                ),
-                                              );
-                                            },
-                                            child: const Card(
-                                              color: Colors.white,
-                                              child: const Padding(
-                                                padding:
-                                                    const EdgeInsets.all(8.0),
-                                                child: const Text('Podglad'),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      const SizedBox(
-                                        height: 5,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ],
-        ),
-      );
-    }
-
-    Widget myInfo() {
-      return Container(
-        height: heightDevice * 0.25,
-        child: Row(
-          // Dane uzytkownika
-          children: [
-            Flexible(
-              fit: FlexFit.tight,
-              child: Padding(
-                padding: const EdgeInsets.only(right: 8.0),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(15),
-                  child: CustomScrollView(
-                    slivers: [
-                      SliverFillRemaining(
-                        hasScrollBody: false,
-                        child: Container(
-                          height: double.infinity,
-                          color: Theme.of(context).canvasColor,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(bottom: 8.0),
-                                  child: Text(
-                                    'Imie: ${application.userInfo.nickName}',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyText1
-                                        .copyWith(fontSize: 15),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(bottom: 8.0),
-                                  child: Text(
-                                    'Nazwisko: ${application.userInfo.nickName}',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyText1
-                                        .copyWith(fontSize: 15),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(bottom: 8.0),
-                                  child: Text(
-                                    'Doswiadczenie: ${application.userInfo.nickName}',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyText1
-                                        .copyWith(fontSize: 15),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(bottom: 8.0),
-                                  child: Text(
-                                    'Imie: ${application.userInfo.nickName}',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyText1
-                                        .copyWith(fontSize: 15),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(bottom: 8.0),
-                                  child: Text(
-                                    'Telefon: ${application.userInfo.nickName}',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyText1
-                                        .copyWith(fontSize: 15),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            Flexible(
-              fit: FlexFit.tight,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(15),
-                child: application.infoAdvertisement.companyInfo.logoUrl == ''
-                    ? Image.asset('images/default.jpg')
-                    : Image.network(
-                        application.infoAdvertisement.companyInfo.logoUrl),
-              ),
-            ),
-          ],
-        ),
-      );
-    }
-
     return Scaffold(
       appBar: appBar,
       body: Padding(
@@ -254,17 +37,31 @@ class Application extends StatelessWidget {
               style: Theme.of(context).textTheme.bodyText1,
             ),
             const SizedBox(height: 15),
-            companyInfo(),
+            CompanyInfo(
+              application: application,
+              heightDevice: heightDevice,
+            ),
             const Divider(),
             Text(
-              'Moje dane',
+              application.uidCompany != userUid ? 'Moje dane' : 'Dane Kierowcy',
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.bodyText1,
             ),
             const SizedBox(
               height: 15,
             ),
-            myInfo(),
+            ApplicatorInfo(
+              application: application,
+              heightDevice: heightDevice,
+            ),
+            const SizedBox(
+              height: 15,
+            ),
+            Text(
+              'Dodatkowe informacje:',
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.bodyText1,
+            ),
             const SizedBox(
               height: 15,
             ),
@@ -274,6 +71,30 @@ class Application extends StatelessWidget {
                   padding: const EdgeInsets.all(8.0),
                   child: Text(application.additionalInfo)),
             ),
+            application.uidCompany != userUid
+                ? SizedBox()
+                : Column(
+                    children: [
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          FlatButton(
+                            onPressed: () {},
+                            color: Theme.of(context).canvasColor,
+                            child: Text('Zapros'),
+                          ),
+                          FlatButton(
+                            onPressed: () {},
+                            color: Theme.of(context).canvasColor,
+                            child: Text('Odrzuc'),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
           ],
         ),
       ),
