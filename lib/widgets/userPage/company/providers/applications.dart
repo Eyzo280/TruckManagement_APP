@@ -38,6 +38,7 @@ class Applications with ChangeNotifier {
             _applications.putIfAbsent(
               doc.documentID,
               () => Application(
+                applicationID: doc.documentID,
                 infoAdvertisement:
                     Advertisement.fromMap(doc.data['infoAdvertisement']) ??
                         null,
@@ -58,6 +59,41 @@ class Applications with ChangeNotifier {
           () => notifyListeners(),
         );
       }
+    } catch (err) {
+      print(err);
+      throw err;
+    }
+  }
+
+  Future<void> changeStatus({
+    String applicationID,
+    String status,
+    bool endApplication = false,
+  }) async {
+    try {
+      String newStatus = status == 'Zaproszenie'
+          ? 'Rozpatrywana'
+          : endApplication ? 'Zakonczona' : 'Zaproszenie';
+
+      await _applicationCollection.document(applicationID).updateData({
+        'status': newStatus,
+      }).whenComplete(() {
+        _applications.update(
+          applicationID,
+          (value) => Application(
+            applicationID: value.applicationID,
+            infoAdvertisement: value.infoAdvertisement,
+            userInfo: value.userInfo,
+            uidAdvertisement: value.uidAdvertisement,
+            uidApplicator: value.uidApplicator,
+            uidCompany: value.uidCompany,
+            additionalInfo: value.additionalInfo,
+            dateSendApplication: value.dateSendApplication,
+            status: newStatus,
+          ),
+        );
+        notifyListeners();
+      });
     } catch (err) {
       print(err);
       throw err;

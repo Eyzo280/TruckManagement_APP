@@ -5,7 +5,7 @@ import 'package:truckmanagement_app/models/user.dart';
 import 'package:truckmanagement_app/theme.dart';
 import 'package:truckmanagement_app/widgets/chat/chats.dart';
 import 'package:truckmanagement_app/widgets/shared/loading.dart';
-import 'package:truckmanagement_app/widgets/shared/screens/application.dart';
+import 'package:truckmanagement_app/widgets/userPage/company/pages/applications/application.dart';
 import 'package:truckmanagement_app/widgets/userPage/company/main_Company/Company_page.dart';
 import 'package:truckmanagement_app/widgets/userPage/company/models/company_Employees.dart';
 import 'package:truckmanagement_app/widgets/userPage/company/pages/advertisement/addNew.dart';

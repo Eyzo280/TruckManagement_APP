@@ -38,6 +38,7 @@ class Applications with ChangeNotifier {
             _applications.putIfAbsent(
               doc.documentID,
               () => Application(
+                applicationID: doc.documentID,
                 infoAdvertisement:
                     Advertisement.fromMap(doc.data['infoAdvertisement']) ??
                         null,

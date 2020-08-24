@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:truckmanagement_app/models/chat.dart';
+import 'package:truckmanagement_app/models/trucker.dart' as model;
 import 'package:truckmanagement_app/models/user.dart';
 import 'package:truckmanagement_app/services/database.dart';
 import 'package:truckmanagement_app/theme.dart';
 import 'package:truckmanagement_app/widgets/chat/chats.dart';
-import 'package:truckmanagement_app/widgets/shared/screens/application.dart';
+import 'package:truckmanagement_app/widgets/userPage/trucker_acc/screens/application.dart';
 import 'package:truckmanagement_app/widgets/userPage/trucker_acc/models/trucker.dart';
 import 'package:truckmanagement_app/widgets/userPage/trucker_acc/providers/advertisements.dart';
 import 'package:truckmanagement_app/widgets/userPage/trucker_acc/providers/applications.dart';
@@ -17,7 +18,7 @@ import 'package:truckmanagement_app/widgets/userPage/trucker_acc/trucker_search_
 import 'screens/advertisements.dart';
 
 class TruckerMain extends StatelessWidget {
-  final userData;
+  final model.Trucker userData;
 
   TruckerMain({this.userData});
 
@@ -40,7 +41,7 @@ class TruckerMain extends StatelessWidget {
           // Drawer
           '/Advertisements/': (ctx) => Advertisements(),
           '/MyApplications/': (ctx) => MyApplications(),
-          '/Application/': (ctx) => Application(),
+          '/Application/': (ctx) => Application(userUid: userData.uid),
           //
           '/searchCompany': (ctx) =>
               StreamProvider<List<BaseSearchCompany>>.value(
