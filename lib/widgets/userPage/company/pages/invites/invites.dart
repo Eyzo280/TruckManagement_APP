@@ -19,7 +19,7 @@ class Invitations extends StatefulWidget {
 
 class _InvitationsState extends State<Invitations> {
 
-  Firestore _firestore = Firestore.instance;
+  FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   List<InvData> _invites = [];
 
@@ -38,36 +38,36 @@ class _InvitationsState extends State<Invitations> {
   _getEmployees() async {
     Query q = _firestore
         .collection('Companys')
-        .document(widget.companyUid)
+        .doc(widget.companyUid)
         .collection('Invitations')
         .limit(_per_page);
 
     setState(() {
       _loadingInvites = true;
     });
-    QuerySnapshot querySnapshot = await q.getDocuments();
-    _invites = querySnapshot.documents.map((doc) {
+    QuerySnapshot querySnapshot = await q.get();
+    _invites = querySnapshot.docs.map((doc) {
       return InvData(
-        invUid: doc.documentID,
+        invUid: doc.id,
         dateSentInv: DateTime.fromMillisecondsSinceEpoch(
-                doc.data['dateSentInv'].seconds * 1000) ??
+                doc.data()['dateSentInv'].seconds * 1000) ??
             null,
         dateOfEmplotment: DateTime.fromMillisecondsSinceEpoch(
-                doc.data['dateOfEmplotment'].seconds * 1000) ??
+                doc.data()['dateOfEmplotment'].seconds * 1000) ??
             null,
-        drivingLicense: doc.data['drivingLicense'] ?? null,
+        drivingLicense: doc.data()['drivingLicense'] ?? null,
         drivingLicenseFrom: DateTime.fromMillisecondsSinceEpoch(
-                doc.data['drivingLicenseFrom'].seconds * 1000) ??
+                doc.data()['drivingLicenseFrom'].seconds * 1000) ??
             null,
-        firstName: doc.data['firstName'] ?? null,
-        knownLanguages: doc.data['knownLanguages'] ?? null,
-        lastName: doc.data['lastName'] ?? null,
-        numberPhone: doc.data['numberPhone'] ?? null,
-        totalDistanceTraveled: doc.data['totalDistanceTraveled'] ?? null,
-        type: doc.data['type'] ?? null,
+        firstName: doc.data()['firstName'] ?? null,
+        knownLanguages: doc.data()['knownLanguages'] ?? null,
+        lastName: doc.data()['lastName'] ?? null,
+        numberPhone: doc.data()['numberPhone'] ?? null,
+        totalDistanceTraveled: doc.data()['totalDistanceTraveled'] ?? null,
+        type: doc.data()['type'] ?? null,
       );
     }).toList();
-    _lastDocument = querySnapshot.documents[querySnapshot.documents.length - 1];
+    _lastDocument = querySnapshot.docs[querySnapshot.docs.length - 1];
 
     setState(() {
       _loadingInvites = false;
@@ -90,38 +90,38 @@ class _InvitationsState extends State<Invitations> {
 
     Query q = _firestore
         .collection('Companys')
-        .document(widget.companyUid)
+        .doc(widget.companyUid)
         .collection('Invitations')
-        .startAfter([_lastDocument.data['totalDistanceTraveled']]).limit(
+        .startAfter([_lastDocument.data()['totalDistanceTraveled']]).limit(
             _per_page);
 
-    QuerySnapshot querySnapshot = await q.getDocuments();
+    QuerySnapshot querySnapshot = await q.get();
 
-    if (querySnapshot.documents.length < _per_page) {
+    if (querySnapshot.docs.length < _per_page) {
       _moreInvitesAbailable = false;
     }
 
-    _lastDocument = querySnapshot.documents[querySnapshot.documents.length - 1];
+    _lastDocument = querySnapshot.docs[querySnapshot.docs.length - 1];
 
-    _invites.addAll(querySnapshot.documents.map((doc) {
+    _invites.addAll(querySnapshot.docs.map((doc) {
       return InvData(
-        invUid: doc.documentID,
+        invUid: doc.id,
         dateSentInv: DateTime.fromMillisecondsSinceEpoch(
-                doc.data['dateSentInv'].seconds * 1000) ??
+                doc.data()['dateSentInv'].seconds * 1000) ??
             null,
         dateOfEmplotment: DateTime.fromMillisecondsSinceEpoch(
-                doc.data['dateOfEmplotment'].seconds * 1000) ??
+                doc.data()['dateOfEmplotment'].seconds * 1000) ??
             null,
-        drivingLicense: doc.data['drivingLicense'] ?? null,
+        drivingLicense: doc.data()['drivingLicense'] ?? null,
         drivingLicenseFrom: DateTime.fromMillisecondsSinceEpoch(
-                doc.data['drivingLicenseFrom'].seconds * 1000) ??
+                doc.data()['drivingLicenseFrom'].seconds * 1000) ??
             null,
-        firstName: doc.data['firstName'] ?? null,
-        knownLanguages: doc.data['knownLanguages'] ?? null,
-        lastName: doc.data['lastName'] ?? null,
-        numberPhone: doc.data['numberPhone'] ?? null,
-        totalDistanceTraveled: doc.data['totalDistanceTraveled'] ?? null,
-        type: doc.data['type'] ?? null,
+        firstName: doc.data()['firstName'] ?? null,
+        knownLanguages: doc.data()['knownLanguages'] ?? null,
+        lastName: doc.data()['lastName'] ?? null,
+        numberPhone: doc.data()['numberPhone'] ?? null,
+        totalDistanceTraveled: doc.data()['totalDistanceTraveled'] ?? null,
+        type: doc.data()['type'] ?? null,
       );
     }).toList());
 

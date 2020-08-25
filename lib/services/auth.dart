@@ -7,12 +7,12 @@ import 'package:flutter/material.dart';
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  LoginUser _userFromFirebaseUser(FirebaseUser user) {
+  LoginUser _userFromFirebaseUser(User user) {
     return user != null ? LoginUser(uid: user.uid) : LoginUser(uid: null);
   }
 
   Stream<LoginUser> get user {
-    return _auth.onAuthStateChanged
+    return _auth.authStateChanges()
         //.map((FirebaseUser user) => _userFromFirebaseUser(user)); // mozna tez tak zapisac
         .map(_userFromFirebaseUser);
   }
@@ -21,9 +21,9 @@ class AuthService {
 
   Future signInWithEmailAndPassword({String email, String password}) async {
     try {
-      AuthResult result = await _auth.signInWithEmailAndPassword(
+      UserCredential result = await _auth.signInWithEmailAndPassword(
           email: email, password: password);
-      FirebaseUser user = result.user;
+      User user = result.user;
       return user;
     } catch (e) {
       print(e);
@@ -41,11 +41,11 @@ class AuthService {
   }) async {
     try {
       String createdDate = DateTime.now().toIso8601String();
-      AuthResult result = await _auth.createUserWithEmailAndPassword(
+      UserCredential result = await _auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
-      FirebaseUser user = result.user;
+      User user = result.user;
       await DatabaseService(uid: user.uid).registerChiefDatabase(
         nameCompany: nameCompany,
         nickName: nickName,
@@ -65,11 +65,11 @@ class AuthService {
   }) async {
     try {
       String createdDate = DateTime.now().toIso8601String();
-      AuthResult result = await _auth.createUserWithEmailAndPassword(
+      UserCredential result = await _auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
-      FirebaseUser user = result.user;
+      User user = result.user;
       await DatabaseService(uid: user.uid).registerForwarderDatabase(
         nickName: nickName,
         createdDate: createdDate,
@@ -88,11 +88,11 @@ class AuthService {
   }) async {
     try {
       String createdDate = DateTime.now().toIso8601String();
-      AuthResult result = await _auth.createUserWithEmailAndPassword(
+      UserCredential result = await _auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
-      FirebaseUser user = result.user;
+      User user = result.user;
       await DatabaseService(uid: user.uid).registerTruckerDatabase(
         nickName: nickName,
         createdDate: createdDate,

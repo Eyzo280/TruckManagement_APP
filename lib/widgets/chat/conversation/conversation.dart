@@ -30,15 +30,15 @@ class Conversation extends StatelessWidget {
 
   Widget _viewer_messages(
       {BuildContext context, int index, DocumentSnapshot document}) {
-    if (document['idFrom'] == mainUid) {
+    if (document.data()['idFrom'] == mainUid) {
       // Right (my message)
       return Row(
         children: <Widget>[
-          document['typeMessage'] == 0
+          document.data()['typeMessage'] == 0
               // Text
               ? Container(
                   child: Text(
-                    document['content'],
+                    document.data()['content'],
                     style: TextStyle(
                         color: Theme.of(context).textTheme.display3.color),
                   ),
@@ -82,7 +82,7 @@ class Conversation extends StatelessWidget {
                           ),
                           clipBehavior: Clip.hardEdge,
                         ),
-                        imageUrl: document[
+                        imageUrl: document.data()[
                             'content'], // Trzeba zrobic stream z obiektem i dac tam getUrl
                         width: 200.0,
                         height: 200.0,
@@ -113,11 +113,11 @@ class Conversation extends StatelessWidget {
           children: <Widget>[
             Row(
               children: <Widget>[
-                document['typeMessage'] == 0
+                document.data()['typeMessage'] == 0
                     // Text
                     ? Container(
                         child: Text(
-                          document['content'],
+                          document.data()['content'],
                           style: TextStyle(
                               color:
                                   Theme.of(context).textTheme.display3.color),
@@ -168,7 +168,7 @@ class Conversation extends StatelessWidget {
                                 ),
                                 clipBehavior: Clip.hardEdge,
                               ),
-                              imageUrl: document['content'],
+                              imageUrl: document.data()['content'],
                               width: 200.0,
                               height: 200.0,
                               fit: BoxFit.cover,
@@ -198,7 +198,7 @@ class Conversation extends StatelessWidget {
                     child: Text(
                       DateFormat('dd MMM kk:mm').format(
                           DateTime.fromMillisecondsSinceEpoch(
-                              int.parse(document['timestamp']))),
+                              int.parse(document.data()['timestamp']))),
                       style: TextStyle(
                           color: Theme.of(context).textTheme.display3.color,
                           fontSize: 12.0,
@@ -257,9 +257,9 @@ class Conversation extends StatelessWidget {
             Flexible(
               fit: FlexFit.tight,
               child: StreamBuilder(
-                stream: Firestore.instance
+                stream: FirebaseFirestore.instance
                     .collection('Messages')
-                    .document(groupChatId)
+                    .doc(groupChatId)
                     .collection(groupChatId)
                     .orderBy('timestamp', descending: true)
                     .limit(10)

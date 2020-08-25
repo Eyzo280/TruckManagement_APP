@@ -47,28 +47,28 @@ class _TracksFinishedState extends State<TracksFinished> {
       });
       print(checkData);
       if (checkData.isEmpty) {
-        await Firestore.instance
+        await FirebaseFirestore.instance
             .collection('Companys')
-            .document(widget.companyData.uidCompany)
+            .doc(widget.companyData.uidCompany)
             .collection(
                 'Tracks') // V // W bazie danych zawsze musza byc 2 godz do przodu bo jest UTC+2, dlatego czasami nie pojawia sie dana z dnia, gdy np. jest przed 2 w nocy.
             .where('Termin',
                 isGreaterThanOrEqualTo: viewDate,
                 isLessThanOrEqualTo:
                     Timestamp(viewDate.seconds + (23 * 59 * 59), 0))
-            .getDocuments()
+            .get()
             .then((val) async {
-          for (var doc in val.documents) {
-            if (doc.data['Status'] == false) { // jest to malo wydajne, ale nie wiem jak zrobic przy pobieraniu danych dwoch warunkow
+          for (var doc in val.docs) {
+            if (doc.data()['Status'] == false) { // jest to malo wydajne, ale nie wiem jak zrobic przy pobieraniu danych dwoch warunkow
               trackData.add(Track(
-                dodatkoweInfo: doc.data['DodatkoweInfo'] ?? null,
-                fracht: doc.data['Fracht'] ?? null,
-                from: doc.data['From'] ?? null,
-                status: doc.data['Status'] ?? null,
+                dodatkoweInfo: doc.data()['DodatkoweInfo'] ?? null,
+                fracht: doc.data()['Fracht'] ?? null,
+                from: doc.data()['From'] ?? null,
+                status: doc.data()['Status'] ?? null,
                 termin: DateTime.fromMillisecondsSinceEpoch(
-                    doc.data['Termin'].seconds * 1000),
-                to: doc.data['To'] ?? null,
-                wspolrzedneDostawy: doc.data['WspolrzedneDostawy'] ?? null,
+                    doc.data()['Termin'].seconds * 1000),
+                to: doc.data()['To'] ?? null,
+                wspolrzedneDostawy: doc.data()['WspolrzedneDostawy'] ?? null,
               ));
             }
           }

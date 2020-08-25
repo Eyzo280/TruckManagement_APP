@@ -4,7 +4,7 @@ import 'package:truckmanagement_app/models/adventisement.dart';
 
 class CompanyAdvertisements with ChangeNotifier {
   CollectionReference _advertisementsCollection =
-      Firestore.instance.collection('Advetisement');
+      FirebaseFirestore.instance.collection('Advetisement');
 
   // Advertisement Settings
 
@@ -62,7 +62,7 @@ class CompanyAdvertisements with ChangeNotifier {
             .where('uidCompany', isEqualTo: uidCompany)
             .where('endDate', isGreaterThan: '')
             .limit(_perPage)
-            .getDocuments();
+            .get();
         if (advertisements.documents.isNotEmpty) {
           _lastDocumentActiveAdver =
               advertisements.documents[advertisements.documents.length - 1];
@@ -70,11 +70,11 @@ class CompanyAdvertisements with ChangeNotifier {
       } else if (fetch) {
         advertisements = await _advertisementsCollection
             .orderBy('endDate')
-            .startAfter([_lastDocumentActiveAdver.data['endDate']])
+            .startAfter([_lastDocumentActiveAdver.data()['endDate']])
             .where('uidCompany', isEqualTo: uidCompany)
             .where('endDate', isGreaterThan: '')
             .limit(_perPage)
-            .getDocuments();
+            .get();
         if (advertisements.documents.isNotEmpty) {
           _lastDocumentActiveAdver =
               advertisements.documents[advertisements.documents.length - 1];
@@ -88,7 +88,7 @@ class CompanyAdvertisements with ChangeNotifier {
             .where('uidCompany', isEqualTo: uidCompany)
             .where('endDate', isEqualTo: '')
             .limit(_perPage)
-            .getDocuments();
+            .get();
         if (advertisements.documents.isNotEmpty) {
           _lastDocumentActiveAdver =
               advertisements.documents[advertisements.documents.length - 1];
@@ -96,11 +96,11 @@ class CompanyAdvertisements with ChangeNotifier {
       } else if (fetch) {
         advertisements = await _advertisementsCollection
             .orderBy('endDate')
-            .startAfter([_lastDocumentFinishedAdver.data['endDate']])
+            .startAfter([_lastDocumentFinishedAdver.data()['endDate']])
             .where('uidCompany', isEqualTo: uidCompany)
             .where('endDate', isEqualTo: '')
             .limit(_perPage)
-            .getDocuments();
+            .get();
         if (advertisements.documents.isNotEmpty) {
           _lastDocumentActiveAdver =
               advertisements.documents[advertisements.documents.length - 1];
@@ -114,44 +114,44 @@ class CompanyAdvertisements with ChangeNotifier {
       for (DocumentSnapshot doc in advertisements.documents) {
         if (selectedAdvertisement == SelectedAdvertisement.Active) {
           _activeAdvertisement.putIfAbsent(
-            doc.documentID,
+            doc.id,
             () => Advertisement(
-              advertisementUid: doc.documentID,
-              companyUid: doc.data['companyUid'],
+              advertisementUid: doc.id,
+              companyUid: doc.data()['companyUid'],
               companyInfo:
-                  CompanyInfoAdvertisement.fromMap(doc.data['companyData']) ??
+                  CompanyInfoAdvertisement.fromMap(doc.data()['companyData']) ??
                       null,
-              title: doc.data['title'] ?? null,
-              description: doc.data['description'] ?? null,
-              requirements: doc.data['type'] == 'Trucker'
+              title: doc.data()['title'] ?? null,
+              description: doc.data()['description'] ?? null,
+              requirements: doc.data()['type'] == 'Trucker'
                   ? RequirementsAdvertisementTrucker.fromMap(
-                      doc.data['requirements'])
+                      doc.data()['requirements'])
                   : RequirementsAdvertisementForwarder.fromMap(
-                          doc.data['requirements']) ??
+                          doc.data()['requirements']) ??
                       null,
-              endDate: doc.data['endDate'] ?? null,
-              type: doc.data['type'] ?? null,
+              endDate: doc.data()['endDate'] ?? null,
+              type: doc.data()['type'] ?? null,
             ),
           );
         } else {
           _finishedAdvertisement.putIfAbsent(
-            doc.documentID,
+            doc.id,
             () => Advertisement(
-              advertisementUid: doc.documentID,
-              companyUid: doc.data['companyUid'],
+              advertisementUid: doc.id,
+              companyUid: doc.data()['companyUid'],
               companyInfo:
-                  CompanyInfoAdvertisement.fromMap(doc.data['companyData']) ??
+                  CompanyInfoAdvertisement.fromMap(doc.data()['companyData']) ??
                       null,
-              title: doc.data['title'] ?? null,
-              description: doc.data['description'] ?? null,
-              requirements: doc.data['type'] == 'Trucker'
+              title: doc.data()['title'] ?? null,
+              description: doc.data()['description'] ?? null,
+              requirements: doc.data()['type'] == 'Trucker'
                   ? RequirementsAdvertisementTrucker.fromMap(
-                      doc.data['requirements'])
+                      doc.data()['requirements'])
                   : RequirementsAdvertisementForwarder.fromMap(
-                          doc.data['requirements']) ??
+                          doc.data()['requirements']) ??
                       null,
-              endDate: doc.data['endDate'] ?? null,
-              type: doc.data['type'] ?? null,
+              endDate: doc.data()['endDate'] ?? null,
+              type: doc.data()['type'] ?? null,
             ),
           );
         }
@@ -174,11 +174,11 @@ class CompanyAdvertisements with ChangeNotifier {
     @required String type,
   }) async {
     try {
-      DocumentReference doc = _advertisementsCollection.document();
+      DocumentReference doc = _advertisementsCollection.doc();
       String endDate = DateTime.now().add(Duration(days: 7)).toIso8601String();
       // Sprawdza typ nowego ogloszenia i dodaje jego dane do bazy danych oraz do providera.
       if (type == 'Trucker') {
-        await doc.setData({
+        await doc.set({
           'uidCompany': companyUid,
           'companyData': {
             'logoUrl': companyInfo.logoUrl,
@@ -197,9 +197,9 @@ class CompanyAdvertisements with ChangeNotifier {
           'type': type,
         });
         _activeAdvertisement.putIfAbsent(
-            doc.documentID,
+            doc.id,
             () => Advertisement(
-                  advertisementUid: doc.documentID,
+                  advertisementUid: doc.id,
                   companyUid: companyUid,
                   companyInfo: companyInfo,
                   title: title,
@@ -210,7 +210,7 @@ class CompanyAdvertisements with ChangeNotifier {
                 ));
         notifyListeners();
       } else if (type == 'Forwarder') {
-        await doc.setData({
+        await doc.set({
           'uidCompany': companyUid,
           'companyData': {
             'logoUrl': companyInfo.logoUrl,
@@ -230,9 +230,9 @@ class CompanyAdvertisements with ChangeNotifier {
           'type': type,
         });
         _activeAdvertisement.putIfAbsent(
-            doc.documentID,
+            doc.id,
             () => Advertisement(
-                  advertisementUid: doc.documentID,
+                  advertisementUid: doc.id,
                   companyUid: companyUid,
                   companyInfo: companyInfo,
                   title: title,

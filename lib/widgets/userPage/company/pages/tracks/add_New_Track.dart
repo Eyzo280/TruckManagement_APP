@@ -308,25 +308,25 @@ class _AddNewTrackState extends State<AddNewTrack> {
     // TODO: implement initState
     super.initState();
 
-    Firestore.instance
+    FirebaseFirestore.instance
         .collection('Companys')
-        .document(widget.companyData.uidCompany)
+        .doc(widget.companyData.uidCompany)
         .collection('DriverTrucks')
         .where('statusDriver', isEqualTo: true)
-        .getDocuments()
+        .get()
         .then((val) {
-      for (var doc in val.documents) {
+      for (var doc in val.docs) {
         dropDownValues.add(
           DropdownMenuItem(
             child: Text(
-              doc.data['firstName'],
+              doc.data()['firstName'],
               style: TextStyle(color: Color(0xff11b719)),
             ),
-            value: doc.data['firstName'],
+            value: doc.data()['firstName'],
           ),
         );
       }
-      _dropdownDriver = val.documents[0].data['firstName'];
+      _dropdownDriver = val.docs[0].data()['firstName'];
     });
   }
 

@@ -139,34 +139,6 @@ class Application extends StatelessWidget {
       );
     }
 
-    Widget userControlWidget() {
-      return application.status == 'Rozpatrywana' ||
-              application.status == 'Zakonczona'
-          ? SizedBox()
-          : Column(
-              children: [
-                const SizedBox(
-                  height: 15,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    FlatButton(
-                      onPressed: () {},
-                      color: Theme.of(context).canvasColor,
-                      child: Text('Akceptuj'),
-                    ),
-                    FlatButton(
-                      onPressed: () {},
-                      color: Theme.of(context).canvasColor,
-                      child: Text('Odrzuc'),
-                    ),
-                  ],
-                ),
-              ],
-            );
-    }
-
     return Scaffold(
       appBar: appBar,
       body: Padding(
@@ -213,11 +185,7 @@ class Application extends StatelessWidget {
                   padding: const EdgeInsets.all(8.0),
                   child: Text(application.additionalInfo)),
             ),
-            application.uidCompany == userUid
-                ? companyControlWidget()
-                : application.uidApplicator == userUid
-                    ? userControlWidget()
-                    : SizedBox(),
+            companyControlWidget(),
           ],
         ),
       ),

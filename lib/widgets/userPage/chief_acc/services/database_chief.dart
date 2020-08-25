@@ -10,11 +10,11 @@ class DataBase_Chief {
   DataBase_Chief({this.uid});
 
   Future changeActiveCompany({String chiefUid, bool active}) async {
-    final company = Firestore.instance
+    final company = FirebaseFirestore.instance
         .collection('Chiefs')
-        .document(chiefUid)
+        .doc(chiefUid)
         .collection('Companys');
-    return await company.document(uid).updateData({
+    return await company.doc(uid).update({
       'active': !active,
     });
   }
@@ -22,39 +22,39 @@ class DataBase_Chief {
   FutureOr<List<BaseCompanyData>> _getdata(QuerySnapshot companysStream) async {
     var companys = List<BaseCompanyData>();
 
-    for (var companyDoc in companysStream.documents) {
+    for (var companyDoc in companysStream.docs) {
       var company;
-      if (companyDoc.documentID != null) {
-        var companyName = await Firestore.instance
+      if (companyDoc.id != null) {
+        var companyName = await FirebaseFirestore.instance
             .collection('Companys')
-            .document(companyDoc.documentID)
+            .doc(companyDoc.id)
             .get();
-        var companyAmountEmployees = await Firestore.instance
+        var companyAmountEmployees = await FirebaseFirestore.instance
             .collection('Companys')
-            .document(companyDoc.documentID)
+            .doc(companyDoc.id)
             .collection('DriverTrucks')
-            .getDocuments()
+            .get()
             .then((snapshot) {
-          return snapshot.documents.length;
+          return snapshot.docs.length;
         });
-        var companyEmployees = await Firestore.instance
+        var companyEmployees = await FirebaseFirestore.instance
             .collection('Companys')
-            .document(companyDoc.documentID)
+            .doc(companyDoc.id)
             .collection('DriverTrucks')
             .orderBy('distanceTraveled', descending: true)
             .limit(1)
-            .getDocuments();
+            .get();
         var companyTopEmployees;
-        for (var companyDoc in companyEmployees.documents) {
-          companyTopEmployees = companyDoc.data['firstName'] +
+        for (var companyDoc in companyEmployees.docs) {
+          companyTopEmployees = companyDoc.data()['firstName'] +
               ' ' +
-              companyDoc.data['lastName'].toString().substring(0, 1);
+              companyDoc.data()['lastName'].toString().substring(0, 1);
         }
 
         company = BaseCompanyData(
-          idCompany: companyName.documentID,
-          nameCompany: companyName.data['nameCompany'] ?? null,
-          status: companyDoc.data['active'] ?? null,
+          idCompany: companyName.id,
+          nameCompany: companyName.data()['nameCompany'] ?? null,
+          status: companyDoc.data()['active'] ?? null,
           employees: companyAmountEmployees ?? null,
           topEmployees: companyTopEmployees ?? null,
         );
@@ -65,9 +65,9 @@ class DataBase_Chief {
   }
 
   Stream<List<BaseCompanyData>> get getBaseCompanyData {
-    return Firestore.instance
+    return FirebaseFirestore.instance
         .collection('Chiefs')
-        .document(uid)
+        .doc(uid)
         .collection('Companys')
         .snapshots()
         .asyncMap((QuerySnapshot companysStream) => _getdata(companysStream));
@@ -83,25 +83,25 @@ class DataBase_Chief {
       @required String pakiet,
       @required DateTime yearEstablishmentCompany}) async {
     try {
-      final user = Firestore.instance.collection('Chiefs');
-      final company = Firestore.instance.collection('Companys');
+      final user = FirebaseFirestore.instance.collection('Chiefs');
+      final company = FirebaseFirestore.instance.collection('Companys');
       int companyCount = await user
-          .document(uid)
+          .doc(uid)
           .collection('Companys')
-          .getDocuments()
+          .get()
           .then((val) {
-        return val.documents.length + 1;
+        return val.docs.length + 1;
       });
       String companyUid = uid + '_' + companyCount.toString();
 
       await user
-          .document(uid)
+          .doc(uid)
           .collection('Companys')
-          .document(companyUid)
-          .setData({
+          .doc(companyUid)
+          .set({
         'active': active,
       }).whenComplete(() {
-        company.document(companyUid).setData({
+        company.doc(companyUid).set({
           'advertisement': advertisement,
           'pakiet': pakiet,
           'nameCompany': nameCompany,

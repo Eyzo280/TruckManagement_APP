@@ -16,7 +16,7 @@ class Chat {
   });
 
   final CollectionReference messages =
-      Firestore.instance.collection('Messages');
+      FirebaseFirestore.instance.collection('Messages');
 
   Future searchChat({
     @required context,
@@ -71,13 +71,13 @@ class Chat {
 
       await messages.document(groupChatId).get().then((val) {
         if (val.exists &&
-            val.data[mainUid] == true &&
-            val.data[peopleUid] == true) {
+            val.data()[mainUid] == true &&
+            val.data()[peopleUid] == true) {
           // jezeli istnieje i dwoch uzytkownikow wylalo po jednej wiadomosci to znaczy ze mozna dalej kontynuowac konwersacje.
           open(conversation: true, firstMessage: false);
         } else if (val.exists == false) {
           open(conversation: false, firstMessage: true);
-        } else if (val.data[peopleUid] == false) {
+        } else if (val.data()[peopleUid] == false) {
           open(conversation: false, firstMessage: false);
         }
       });
@@ -223,45 +223,45 @@ class Chat {
   */
 
   Stream<List<PeerChat>> getUserChats() async* {
-    var chatsStream = Firestore.instance
+    var chatsStream = FirebaseFirestore.instance
         .collection('Messages')
         .where(mainUid, whereIn: [true, false]).snapshots();
     var chats = List<PeerChat>();
     await for (var chatsSnapshot in chatsStream) {
-      for (var chatDoc in chatsSnapshot.documents) {
+      for (var chatDoc in chatsSnapshot.docs) {
         var chat;
-        var chatUid = chatDoc.documentID.split('-');
+        var chatUid = chatDoc.id.split('-');
         for (var splitedUid in chatUid) {
           if (mainUid != splitedUid) {
             var complete;
-            await Firestore
+            await FirebaseFirestore
                 .instance // Sprawdzanie, gdzie znajduja sie uzytkownicy i tworzenie objektow
                 .collection('Chiefs')
-                .document(splitedUid)
+                .doc(splitedUid)
                 .get()
                 .then((val) async {
               if (val.exists) {
                 complete = val;
               } else {
-                await Firestore.instance
+                await FirebaseFirestore.instance
                     .collection('Companys')
-                    .document(splitedUid)
+                    .doc(splitedUid)
                     .get()
                     .then((val) async {
                   if (val.exists) {
                     complete = val;
                   } else {
-                    await Firestore.instance
+                    await FirebaseFirestore.instance
                         .collection('Drivers')
-                        .document(splitedUid)
+                        .doc(splitedUid)
                         .get()
                         .then((val) async {
                       if (val.exists) {
                         complete = val;
                       } else {
-                        await Firestore.instance
+                        await FirebaseFirestore.instance
                             .collection('Forwarders')
-                            .document(splitedUid)
+                            .doc(splitedUid)
                             .get()
                             .then((val) async {
                           if (val.exists) {
@@ -280,7 +280,7 @@ class Chat {
               if (complete.data['type'] == 'Chief') {
                 chat = PeerChat(
                   uid: splitedUid ?? null,
-                  conversation: chatDoc.data[splitedUid] ?? null,
+                  conversation: chatDoc.data()[splitedUid] ?? null,
                   firstName: complete.data['firstName'] ??
                       null, // Pasowalo by przerobic baze danych, zeby zamiast firstName bylo firstName itp
                   lastName: complete.data['lastName'] ?? null,
@@ -289,7 +289,7 @@ class Chat {
               } else if (complete.data['type'] == 'Company') {
                 chat = PeerChat(
                   uid: splitedUid ?? null,
-                  conversation: chatDoc.data[splitedUid] ?? null,
+                  conversation: chatDoc.data()[splitedUid] ?? null,
                   firstName: complete.data['nameCompany'] ??
                       null, // Pasowalo by przerobic baze danych, zeby zamiast firstName bylo firstName itp
                   lastName: null,
@@ -298,7 +298,7 @@ class Chat {
               } else if (complete.data['type'] == 'DriverTruck') {
                 chat = PeerChat(
                   uid: splitedUid ?? null,
-                  conversation: chatDoc.data[splitedUid] ?? null,
+                  conversation: chatDoc.data()[splitedUid] ?? null,
                   firstName: complete.data['firstName'] ??
                       null, // Pasowalo by przerobic baze danych, zeby zamiast firstName bylo firstName itp
                   lastName: complete.data['lastName'] ?? null,
@@ -307,7 +307,7 @@ class Chat {
               } else if (complete.data['type'] == 'Forwarder') {
                 chat = PeerChat(
                   uid: splitedUid ?? null,
-                  conversation: chatDoc.data[splitedUid] ?? null,
+                  conversation: chatDoc.data()[splitedUid] ?? null,
                   firstName: complete.data['firstName'] ??
                       null, // Pasowalo by przerobic baze danych, zeby zamiast firstName bylo firstName itp
                   lastName: complete.data['lastName'] ?? null,

@@ -20,13 +20,13 @@ class TracksActive extends StatefulWidget {
 
 class _TracksActiveState extends State<TracksActive> {
   Future getActiveTracks() async {
-    final tracks = await Firestore.instance
+    final tracks = await FirebaseFirestore.instance
         .collection('Companys')
-        .document(widget.companyUid)
+        .doc(widget.companyUid)
         .collection('Tracks')
         .where('Status', isEqualTo: true)
-        .getDocuments();
-    print(tracks.documents);
+        .get();
+    print(tracks.docs);
   }
 
   // Sprawdzanie oraz uzywanie Search //

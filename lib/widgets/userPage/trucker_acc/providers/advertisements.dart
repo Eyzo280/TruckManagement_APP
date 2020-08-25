@@ -4,7 +4,7 @@ import 'package:truckmanagement_app/models/adventisement.dart';
 
 class TruckerAdvertisements with ChangeNotifier {
   CollectionReference _advertisementsCollection =
-      Firestore.instance.collection('Advetisement');
+      FirebaseFirestore.instance.collection('Advetisement');
 
   int _perPage = 6; // limit pobieranych jednoczesnie ogloszen
 
@@ -31,28 +31,28 @@ class TruckerAdvertisements with ChangeNotifier {
             .where('endDate', isGreaterThan: '')
             .where('type', isEqualTo: 'Trucker')
             .limit(_perPage)
-            .getDocuments()
+            .get()
             .then((value) {
-          for (DocumentSnapshot doc in value.documents) {
+          for (DocumentSnapshot doc in value.docs) {
             _advertisements.putIfAbsent(
-              doc.documentID,
+              doc.id,
               () => Advertisement(
-                advertisementUid: doc.documentID,
-                companyUid: doc.data['uidCompany'],
+                advertisementUid: doc.id,
+                companyUid: doc.data()['uidCompany'],
                 companyInfo:
-                    CompanyInfoAdvertisement.fromMap(doc.data['companyData']) ??
+                    CompanyInfoAdvertisement.fromMap(doc.data()['companydata()']) ??
                         null,
-                title: doc.data['title'] ?? null,
-                description: doc.data['description'] ?? null,
+                title: doc.data()['title'] ?? null,
+                description: doc.data()['description'] ?? null,
                 requirements: RequirementsAdvertisementTrucker.fromMap(
-                    doc.data['requirements']),
-                endDate: doc.data['endDate'] ?? null,
-                type: doc.data['type'] ?? null,
+                    doc.data()['requirements']),
+                endDate: doc.data()['endDate'] ?? null,
+                type: doc.data()['type'] ?? null,
               ),
             );
           }
-          if (value.documents.isNotEmpty) {
-            _lastDocument = value.documents[value.documents.length - 1];
+          if (value.docs.isNotEmpty) {
+            _lastDocument = value.docs[value.docs.length - 1];
           }
         }).whenComplete(
           () => notifyListeners(),
@@ -61,31 +61,31 @@ class TruckerAdvertisements with ChangeNotifier {
         await _advertisementsCollection
             .orderBy('endDate')
             .where('endDate', isGreaterThan: '')
-            .startAfter([_lastDocument.data['endDate']])
+            .startAfter([_lastDocument.data()['endDate']])
             .where('type', isEqualTo: 'Trucker')
             .limit(_perPage)
-            .getDocuments()
+            .get()
             .then((value) {
-              for (DocumentSnapshot doc in value.documents) {
+              for (DocumentSnapshot doc in value.docs) {
                 _advertisements.putIfAbsent(
-                  doc.documentID,
+                  doc.id,
                   () => Advertisement(
-                    advertisementUid: doc.documentID,
-                    companyUid: doc.data['companyUid'],
+                    advertisementUid: doc.id,
+                    companyUid: doc.data()['companyUid'],
                     companyInfo: CompanyInfoAdvertisement.fromMap(
-                            doc.data['companyData']) ??
+                            doc.data()['companyData']) ??
                         null,
-                    title: doc.data['title'] ?? null,
-                    description: doc.data['description'] ?? null,
+                    title: doc.data()['title'] ?? null,
+                    description: doc.data()['description'] ?? null,
                     requirements: RequirementsAdvertisementTrucker.fromMap(
-                        doc.data['requirements']),
-                    endDate: doc.data['endDate'] ?? null,
-                    type: doc.data['type'] ?? null,
+                        doc.data()['requirements']),
+                    endDate: doc.data()['endDate'] ?? null,
+                    type: doc.data()['type'] ?? null,
                   ),
                 );
               }
-              if (value.documents.isNotEmpty) {
-                _lastDocument = value.documents[value.documents.length - 1];
+              if (value.docs.isNotEmpty) {
+                _lastDocument = value.docs[value.docs.length - 1];
               }
             })
             .whenComplete(

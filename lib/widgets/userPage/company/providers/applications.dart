@@ -6,7 +6,7 @@ import 'package:truckmanagement_app/models/application.dart';
 
 class Applications with ChangeNotifier {
   CollectionReference _applicationCollection =
-      Firestore.instance.collection('Applications');
+      FirebaseFirestore.instance.collection('Applications');
 
   int _perPage = 8; // limit pobieranych jednoczesnie aplikacji
 
@@ -32,28 +32,28 @@ class Applications with ChangeNotifier {
             .orderBy('dateSendApplication')
             .where('uidCompany', isEqualTo: uidCompany)
             .limit(_perPage)
-            .getDocuments()
+            .get()
             .then((value) {
-          for (DocumentSnapshot doc in value.documents) {
+          for (DocumentSnapshot doc in value.docs) {
             _applications.putIfAbsent(
-              doc.documentID,
+              doc.id,
               () => Application(
-                applicationID: doc.documentID,
+                applicationID: doc.id,
                 infoAdvertisement:
-                    Advertisement.fromMap(doc.data['infoAdvertisement']) ??
+                    Advertisement.fromMap(doc.data()['infoAdvertisement']) ??
                         null,
-                userInfo: Trucker.fromMap(doc.data['userInfo']) ?? null,
-                uidAdvertisement: doc.data['uidAdvertisement'] ?? null,
-                uidApplicator: doc.data['uidApplicator'] ?? null,
-                uidCompany: doc.data['uidCompany'] ?? null,
-                additionalInfo: doc.data['additionalInfo'] ?? null,
-                dateSendApplication: doc.data['dateSendApplication'] ?? null,
-                status: doc.data['status'] ?? null,
+                userInfo: Trucker.fromMap(doc.data()['userInfo']) ?? null,
+                uidAdvertisement: doc.data()['uidAdvertisement'] ?? null,
+                uidApplicator: doc.data()['uidApplicator'] ?? null,
+                uidCompany: doc.data()['uidCompany'] ?? null,
+                additionalInfo: doc.data()['additionalInfo'] ?? null,
+                dateSendApplication: doc.data()['dateSendApplication'] ?? null,
+                status: doc.data()['status'] ?? null,
               ),
             );
           }
-          if (value.documents.isNotEmpty) {
-            _lastDocument = value.documents[value.documents.length - 1];
+          if (value.docs.isNotEmpty) {
+            _lastDocument = value.docs[value.docs.length - 1];
           }
         }).whenComplete(
           () => notifyListeners(),

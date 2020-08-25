@@ -11,7 +11,7 @@ class SearchingList extends StatefulWidget {
 }
 
 class _SearchingListState extends State<SearchingList> {
-  Firestore _firestore = Firestore.instance;
+  FirebaseFirestore _firestore = FirebaseFirestore.instance;
   List<SearchDriverData> _employees = [];
   bool _loadingEmployees = true;
   int _per_page = 8;
@@ -31,26 +31,26 @@ class _SearchingListState extends State<SearchingList> {
     setState(() {
       _loadingEmployees = true;
     });
-    QuerySnapshot querySnapshot = await q.getDocuments();
-    _employees = querySnapshot.documents.map((doc) {
+    QuerySnapshot querySnapshot = await q.get();
+    _employees = querySnapshot.docs.map((doc) {
       return SearchDriverData(
-        driverUid: doc.documentID ?? null,
+        driverUid: doc.id ?? null,
         dateOfEmplotment: DateTime.fromMillisecondsSinceEpoch(
-                doc.data['dateOfEmplotment'].seconds * 1000) ??
+                doc.data()['dateOfEmplotment'].seconds * 1000) ??
             null,
-        drivingLicense: doc.data['drivingLicense'] ?? null,
+        drivingLicense: doc.data()['drivingLicense'] ?? null,
         drivingLicenseFrom: DateTime.fromMillisecondsSinceEpoch(
-                doc.data['drivingLicenseFrom'].seconds * 1000) ??
+                doc.data()['drivingLicenseFrom'].seconds * 1000) ??
             null,
-        firstName: doc.data['firstName'] ?? null,
-        knownLanguages: doc.data['knownLanguages'] ?? null,
-        lastName: doc.data['lastName'] ?? null,
-        numberPhone: doc.data['numberPhone'] ?? null,
-        totalDistanceTraveled: doc.data['totalDistanceTraveled'] ?? null,
-        type: doc.data['type'] ?? null,
+        firstName: doc.data()['firstName'] ?? null,
+        knownLanguages: doc.data()['knownLanguages'] ?? null,
+        lastName: doc.data()['lastName'] ?? null,
+        numberPhone: doc.data()['numberPhone'] ?? null,
+        totalDistanceTraveled: doc.data()['totalDistanceTraveled'] ?? null,
+        type: doc.data()['type'] ?? null,
       );
     }).toList();
-    _lastDocument = querySnapshot.documents[querySnapshot.documents.length - 1];
+    _lastDocument = querySnapshot.docs[querySnapshot.docs.length - 1];
 
     setState(() {
       _loadingEmployees = false;
@@ -74,33 +74,33 @@ class _SearchingListState extends State<SearchingList> {
     Query q = _firestore
         .collection('Drivers')
         .orderBy('totalDistanceTraveled')
-        .startAfter([_lastDocument.data['totalDistanceTraveled']]).limit(
+        .startAfter([_lastDocument.data()['totalDistanceTraveled']]).limit(
             _per_page);
 
-    QuerySnapshot querySnapshot = await q.getDocuments();
+    QuerySnapshot querySnapshot = await q.get();
 
-    if (querySnapshot.documents.length < _per_page) {
+    if (querySnapshot.docs.length < _per_page) {
       _moreEmployeesAbailable = false;
     }
 
-    _lastDocument = querySnapshot.documents[querySnapshot.documents.length - 1];
+    _lastDocument = querySnapshot.docs[querySnapshot.docs.length - 1];
 
-    _employees.addAll(querySnapshot.documents.map((doc) {
+    _employees.addAll(querySnapshot.docs.map((doc) {
       return SearchDriverData(
-        driverUid: doc.documentID ?? null,
+        driverUid: doc.id ?? null,
         dateOfEmplotment: DateTime.fromMillisecondsSinceEpoch(
-                doc.data['dateOfEmplotment'].seconds * 1000) ??
+                doc.data()['dateOfEmplotment'].seconds * 1000) ??
             null,
-        drivingLicense: doc.data['drivingLicense'] ?? null,
+        drivingLicense: doc.data()['drivingLicense'] ?? null,
         drivingLicenseFrom: DateTime.fromMillisecondsSinceEpoch(
-                doc.data['drivingLicenseFrom'].seconds * 1000) ??
+                doc.data()['drivingLicenseFrom'].seconds * 1000) ??
             null,
-        firstName: doc.data['firstName'] ?? null,
-        knownLanguages: doc.data['knownLanguages'] ?? null,
-        lastName: doc.data['lastName'] ?? null,
-        numberPhone: doc.data['numberPhone'] ?? null,
-        totalDistanceTraveled: doc.data['totalDistanceTraveled'] ?? null,
-        type: doc.data['type'] ?? null,
+        firstName: doc.data()['firstName'] ?? null,
+        knownLanguages: doc.data()['knownLanguages'] ?? null,
+        lastName: doc.data()['lastName'] ?? null,
+        numberPhone: doc.data()['numberPhone'] ?? null,
+        totalDistanceTraveled: doc.data()['totalDistanceTraveled'] ?? null,
+        type: doc.data()['type'] ?? null,
       );
     }).toList());
 
@@ -176,29 +176,29 @@ class _SearchingListState extends State<SearchingList> {
               print('Pokaz Szczegoly');
               // Zbiera informacje do kogo nie ma mozliwosci wyslania Zaproszenia
               if (sentInvitations.isEmpty) {
-                await Firestore.instance
+                await FirebaseFirestore.instance
                     .collection('Companys')
-                    .document(companyData.uid)
+                    .doc(companyData.uid)
                     .collection('DriverTrucks')
                     .where('dateOfEmplotment',
                         isLessThan:
                             null) // Sprawdzanie, czy uztkownik jest pracownikiem firmy, czy nie
-                    .getDocuments()
+                    .get()
                     .then((QuerySnapshot snapshot) {
-                  for (var val in snapshot.documents) {
-                    sentInvitations.add(val.documentID);
+                  for (var val in snapshot.docs) {
+                    sentInvitations.add(val.id);
                   }
                   print(sentInvitations.length);
                 });
-                await Firestore.instance
+                await FirebaseFirestore.instance
                     .collection('Companys')
-                    .document(companyData.uid)
+                    .doc(companyData.uid)
                     .collection('SentInvitations')
-                    .getDocuments()
+                    .get()
                     .then((QuerySnapshot snapshot) {
-                  for (var val in snapshot.documents) {
-                    if (!sentInvitations.contains(val.documentID)) {
-                      sentInvitations.add(val.documentID);
+                  for (var val in snapshot.docs) {
+                    if (!sentInvitations.contains(val.id)) {
+                      sentInvitations.add(val.id);
                     }
                   }
                   print(sentInvitations.length);

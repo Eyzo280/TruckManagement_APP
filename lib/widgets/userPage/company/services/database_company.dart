@@ -16,34 +16,34 @@ class Database_Company {
     this.searchSettings,
   });
 
-  final CollectionReference company = Firestore.instance.collection('Companys');
+  final CollectionReference company = FirebaseFirestore.instance.collection('Companys');
 
   // Dane ChiefEmployees
   FullTruckDriverData _getFullDataChiefEmoloyees(DocumentSnapshot doc) {
     return FullTruckDriverData(
-      firstName: doc.data['firstName'] ?? null,
-      lastName: doc.data['lastName'] ?? null,
-      salary: doc.data['salary'] ?? null,
-      earned: doc.data['earned'] ?? null,
-      paid: doc.data['paid'] ?? null,
+      firstName: doc.data()['firstName'] ?? null,
+      lastName: doc.data()['lastName'] ?? null,
+      salary: doc.data()['salary'] ?? null,
+      earned: doc.data()['earned'] ?? null,
+      paid: doc.data()['paid'] ?? null,
       distanceTraveled:
-          double.parse(doc.data['distanceTraveled'].toString()) ?? null,
-      statusDriver: doc.data['statusDriver'] ?? null,
-      costDriver: double.parse(doc.data['costDriver'].toString()) ?? null,
-      numberPhone: doc.data['numberPhone'] ?? null,
+          double.parse(doc.data()['distanceTraveled'].toString()) ?? null,
+      statusDriver: doc.data()['statusDriver'] ?? null,
+      costDriver: double.parse(doc.data()['costDriver'].toString()) ?? null,
+      numberPhone: doc.data()['numberPhone'] ?? null,
       dateOfEmplotment: DateTime.fromMillisecondsSinceEpoch(
-          doc.data['dateOfEmplotment'].seconds * 1000),
+          doc.data()['dateOfEmplotment'].seconds * 1000),
       payday: DateTime.fromMillisecondsSinceEpoch(
-              doc.data['payday'].seconds * 1000) ??
+              doc.data()['payday'].seconds * 1000) ??
           null,
     );
   }
 
   Stream<FullTruckDriverData> get getFullDataEmployees {
     return company
-        .document(companyUid)
+        .doc(companyUid)
         .collection('DriverTrucks')
-        .document(uid)
+        .doc(uid)
         .snapshots()
         .map(_getFullDataChiefEmoloyees);
   }
@@ -51,24 +51,24 @@ class Database_Company {
   // Dane ChiefEmployees
   List<BaseTruckDriverData> _getBaseDataCompanyEmoloyees(
       QuerySnapshot snapshot) {
-    return snapshot.documents.map((doc) {
+    return snapshot.docs.map((doc) {
       return BaseTruckDriverData(
-        uidDriver: doc.documentID,
-        firstName: doc.data['firstName'] ?? null,
-        lastName: doc.data['lastName'] ?? null,
-        salary: doc.data['salary'] ?? null,
-        earned: doc.data['earned'] ?? null,
-        paid: doc.data['paid'] ?? null,
+        uidDriver: doc.id,
+        firstName: doc.data()['firstName'] ?? null,
+        lastName: doc.data()['lastName'] ?? null,
+        salary: doc.data()['salary'] ?? null,
+        earned: doc.data()['earned'] ?? null,
+        paid: doc.data()['paid'] ?? null,
         distanceTraveled:
-            double.parse(doc.data['distanceTraveled'].toString()) ?? null,
-        statusDriver: doc.data['statusDriver'] ?? null,
+            double.parse(doc.data()['distanceTraveled'].toString()) ?? null,
+        statusDriver: doc.data()['statusDriver'] ?? null,
       );
     }).toList();
   }
 
   Stream<List<BaseTruckDriverData>> get getBaseDataEmployees {
     return company
-        .document(uid)
+        .doc(uid)
         .collection('DriverTrucks')
         .snapshots()
         .map(_getBaseDataCompanyEmoloyees);
@@ -77,20 +77,20 @@ class Database_Company {
   // Pobieranie danych o firmie
 
   CompanyData _getCompanyData(DocumentSnapshot doc) {
-    print(doc.data['status']);
+    print(doc.data()['status']);
     return CompanyData(
-      uid: doc.documentID,
-      logoUrl: doc.data['logoUrl'] ?? null,
-      forwardersFromCompany: doc.data['forwardersFromCompany'] ?? [],
-      truckersFromCompany: doc.data['truckersFromCompany'] ?? [],
-      nameCompany: doc.data['nameCompany'] ?? [],
-      createDate: doc.data['createDate'] ?? '',
-      status: doc.data['status'] ?? false,
+      uid: doc.id,
+      logoUrl: doc.data()['logoUrl'] ?? null,
+      forwardersFromCompany: doc.data()['forwardersFromCompany'] ?? [],
+      truckersFromCompany: doc.data()['truckersFromCompany'] ?? [],
+      nameCompany: doc.data()['nameCompany'] ?? [],
+      createDate: doc.data()['createDate'] ?? '',
+      status: doc.data()['status'] ?? false,
     );
   }
 
   Stream<CompanyData> get getCompanyData {
-    return company.document(uid).snapshots().map(_getCompanyData);
+    return company.doc(uid).snapshots().map(_getCompanyData);
   }
 
   // Podstawowe informacje zaproszen
@@ -128,10 +128,10 @@ class Database_Company {
     String numberPhone,
   }) async {
     company
-        .document(companyUid)
+        .doc(companyUid)
         .collection('DriverTrucks')
-        .document(driverUid)
-        .setData({
+        .doc(driverUid)
+        .set({
       'costDriver': 0,
       'dateOfEmplotment': DateTime.now(),
       'distanceTraveled': 0,
@@ -145,15 +145,15 @@ class Database_Company {
       'salary': 7500, // trzeba dodawc ustawienie wyplaty kierowcow
       'statusDriver': false, // trzeba dodawc ustawienie zmiany statusu kierowcy
     }).whenComplete(() {
-      Firestore.instance.collection('Drivers').document(driverUid).updateData({
+      FirebaseFirestore.instance.collection('Drivers').doc(driverUid).update({
         'nameCompany':
             companyUid, // trzeba bedzie chyba przerobic zeby byla odzielna kolekcja z firma, a w danych uzytkownika bedzie tylko, ze jest zatrudniony
       });
     }).whenComplete(() {
       company
-          .document(companyUid)
+          .doc(companyUid)
           .collection('Invitations')
-          .document(driverUid)
+          .doc(driverUid)
           .delete();
     });
   }
@@ -164,26 +164,26 @@ class Database_Company {
     companyData,
     driverData,
   }) async {
-    final CollectionReference driver = Firestore.instance.collection('Drivers');
+    final CollectionReference driver = FirebaseFirestore.instance.collection('Drivers');
 
     driver
-        .document(driverData.driverUid)
+        .doc(driverData.driverUid)
         .collection('Invitations')
-        .document(companyData.uidCompany)
-        .setData({
+        .doc(companyData.uidCompany)
+        .set({
       'nameCompany': companyData.nameCompany,
       'yearEstablishmentCompany': companyData.yearEstablishmentCompany,
       'dateSentInv': DateTime.now(),
     });
 
     final CollectionReference company =
-        Firestore.instance.collection('Companys');
+        FirebaseFirestore.instance.collection('Companys');
 
     company
-        .document(companyData.uidCompany)
+        .doc(companyData.uidCompany)
         .collection('SentInvitations')
-        .document(driverData.driverUid)
-        .setData({
+        .doc(driverData.driverUid)
+        .set({
       'firstName': driverData.firstName,
       'lastName': driverData.lastName,
       'drivingLicenseFrom': driverData.drivingLicenseFrom,
@@ -206,7 +206,7 @@ class Database_Company {
       GeoPoint wspolrzedneDostawy,
       String driver}) async {
     try {
-      company.document(companyUid).collection('Tracks').document().setData({
+      company.doc(companyUid).collection('Tracks').doc().set({
         'DodatkoweInfo': dodatkoweInfo,
         'Fracht': fracht,
         'From': from,
@@ -225,17 +225,17 @@ class Database_Company {
 
   List<Track> getActiveTracks(QuerySnapshot snap) {
     try {
-      return snap.documents.map((doc) {
+      return snap.docs.map((doc) {
         return Track(
-          dodatkoweInfo: doc.data['DodatkoweInfo'] ?? null,
-          fracht: doc.data['Fracht'] ?? null,
-          from: doc.data['From'] ?? null,
-          status: doc.data['Status'] ?? null,
+          dodatkoweInfo: doc.data()['DodatkoweInfo'] ?? null,
+          fracht: doc.data()['Fracht'] ?? null,
+          from: doc.data()['From'] ?? null,
+          status: doc.data()['Status'] ?? null,
           termin: DateTime.fromMillisecondsSinceEpoch(
-                  doc.data['Termin'].seconds * 1000) ??
+                  doc.data()['Termin'].seconds * 1000) ??
               null,
-          to: doc.data['To'] ?? null,
-          wspolrzedneDostawy: doc.data['WspolrzedneDostawy'] ?? null,
+          to: doc.data()['To'] ?? null,
+          wspolrzedneDostawy: doc.data()['WspolrzedneDostawy'] ?? null,
         );
       }).toList();
     } catch (err) {
@@ -244,9 +244,9 @@ class Database_Company {
   }
 
   Stream<List<Track>> get streamActiveTracks {
-    return Firestore.instance
+    return FirebaseFirestore.instance
         .collection('Companys')
-        .document(companyUid)
+        .doc(companyUid)
         .collection('Tracks')
         .where('Status', isEqualTo: true)
         .snapshots()

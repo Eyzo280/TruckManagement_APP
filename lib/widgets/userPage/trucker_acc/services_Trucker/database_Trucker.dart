@@ -7,19 +7,19 @@ class DataBase_Trucker {
   DataBase_Trucker({this.uid});
 
   List<BaseSearchCompany> _getBaseSearchCompany(QuerySnapshot snapshot) {
-    return snapshot.documents.map((doc) {
+    return snapshot.docs.map((doc) {
       return BaseSearchCompany(
-        idCompany: doc.documentID,
-        nameCompany: doc.data['nameCompany'].toString() ?? 'Brak danych',
-        salary: doc.data['salary'] ?? null,
-        kursy: doc.data['kursy'] ?? 'Brak danych',
+        idCompany: doc.id,
+        nameCompany: doc.data()['nameCompany'].toString() ?? 'Brak danych',
+        salary: doc.data()['salary'] ?? null,
+        kursy: doc.data()['kursy'] ?? 'Brak danych',
       );
     }).toList();
   }
 
   Stream<List<BaseSearchCompany>> get getBaseSearchCompany {
     final CollectionReference companys =
-        Firestore.instance.collection('Companys');
+        FirebaseFirestore.instance.collection('Companys');
     return companys
         .where("advertisement", isEqualTo: true)
         .snapshots()
@@ -40,15 +40,15 @@ class DataBase_Trucker {
     int totalDistanceTraveled,
     String type,
   }) async {
-    final CollectionReference driver = Firestore.instance.collection('Drivers');
+    final CollectionReference driver = FirebaseFirestore.instance.collection('Drivers');
     final CollectionReference company =
-        Firestore.instance.collection('Companys');
+        FirebaseFirestore.instance.collection('Companys');
 
     company
-        .document(companyUid)
+        .doc(companyUid)
         .collection('Invitations')
-        .document(uid)
-        .setData({
+        .doc(uid)
+        .set({
       'dateOfEmplotment': dateOfEmplotment,
       'drivingLicense': drivingLicense,
       'drivingLicenseFrom': drivingLicenseFrom,
@@ -60,7 +60,7 @@ class DataBase_Trucker {
       'type': type,
       'dateSentInv': DateTime.now(),
     }).whenComplete((){
-      driver.document(uid).collection('SentInvitations').document(companyUid).setData({
+      driver.doc(uid).collection('SentInvitations').doc(companyUid).set({
         // Trzeba dodac dane firmy
       });
     });

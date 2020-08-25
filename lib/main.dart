@@ -8,8 +8,13 @@ import 'package:truckmanagement_app/widgets/Authenticate/authenticate.dart';
 import 'package:truckmanagement_app/widgets/shared/loading.dart';
 import 'package:truckmanagement_app/widgets/userPage/company/providers/advetisement.dart';
 import 'package:truckmanagement_app/widgets/userPage/select_user.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-void main() => runApp(MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.

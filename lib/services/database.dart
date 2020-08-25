@@ -21,11 +21,11 @@ class DatabaseService {
   }) async {
     try {
       final companyUid =
-          Firestore.instance.collection('Companys').document().documentID;
+          FirebaseFirestore.instance.collection('Companys').doc().id;
       final List<Map<String, Object>> companyMap = [
         {companyUid: nameCompany}
       ];
-      await Firestore.instance.collection('Users').document(uid).setData(
+      await FirebaseFirestore.instance.collection('Users').doc(uid).set(
         {
           'nickName': nickName,
           'createDate': createdDate,
@@ -33,10 +33,10 @@ class DatabaseService {
           'companys': companyMap,
         },
       ).whenComplete(
-        () => Firestore.instance
+        () => FirebaseFirestore.instance
             .collection('Companys')
-            .document(companyUid)
-            .setData(
+            .doc(companyUid)
+            .set(
           {
             'chief': uid,
             'forwardersFromCompany': [],
@@ -58,7 +58,7 @@ class DatabaseService {
     String createdDate,
   }) async {
     try {
-      await Firestore.instance.collection('Users').document(uid).setData(
+      await FirebaseFirestore.instance.collection('Users').doc(uid).set(
         {
           'nickName': nickName,
           'createDate': createdDate,
@@ -76,7 +76,7 @@ class DatabaseService {
     String createdDate,
   }) async {
     try {
-      await Firestore.instance.collection('Users').document(uid).setData(
+      await FirebaseFirestore.instance.collection('Users').doc(uid).set(
         {
           'nickName': nickName,
           'createDate': createdDate,
@@ -94,16 +94,16 @@ class DatabaseService {
   Chief _chiefDataFromsnapshot(DocumentSnapshot snapshot) {
     List<Map<String, Object>> companys = [];
 
-    for (var data in snapshot.data['companys']) {
+    for (var data in snapshot.data()['companys']) {
       companys.add(data);
     }
 
     return Chief(
       uid: uid,
-      nickName: snapshot.data['nickName'] ?? null,
-      createDate: snapshot.data['createDate'] ?? null,
+      nickName: snapshot.data()['nickName'] ?? null,
+      createDate: snapshot.data()['createDate'] ?? null,
       companys: companys ?? null,
-      type: snapshot.data['type'] ?? null,
+      type: snapshot.data()['type'] ?? null,
     );
   }
 
@@ -111,34 +111,34 @@ class DatabaseService {
     // pobieranie firm trzeba dodac
     return Forwarder(
       uid: uid,
-      nickName: snapshot.data['nickName'] ?? null,
-      createDate: snapshot.data['createDate'] ?? null,
-      type: snapshot.data['type'] ?? null,
+      nickName: snapshot.data()['nickName'] ?? null,
+      createDate: snapshot.data()['createDate'] ?? null,
+      type: snapshot.data()['type'] ?? null,
     );
   }
 
   Trucker _truckerDataFromsnapshot(DocumentSnapshot snapshot) {
     return Trucker(
       uid: uid,
-      nickName: snapshot.data['nickName'] ?? null,
-      createDate: snapshot.data['createDate'] ?? null,
-      type: snapshot.data['type'] ?? null,
+      nickName: snapshot.data()['nickName'] ?? null,
+      createDate: snapshot.data()['createDate'] ?? null,
+      type: snapshot.data()['type'] ?? null,
     );
   }
 
   Stream<UserData> get userData {
-    return Firestore.instance.collection('Users').document(uid).snapshots().map(
+    return FirebaseFirestore.instance.collection('Users').doc(uid).snapshots().map(
       (snap) {
-        if (snap.data['type'] == 'Chief') {
+        if (snap.data()['type'] == 'Chief') {
           return UserData(
             // Potrzebne bylo poniewaz nie moglem uzyc StreamProvider<dynamic>
             data: _chiefDataFromsnapshot(snap),
           );
-        } else if (snap.data['type'] == 'Forwarder') {
+        } else if (snap.data()['type'] == 'Forwarder') {
           return UserData(
             data: _forwarderDataFromsnapshot(snap),
           );
-        } else if (snap.data['type'] == 'Trucker') {
+        } else if (snap.data()['type'] == 'Trucker') {
           return UserData(
             data: _truckerDataFromsnapshot(snap),
           );
@@ -153,25 +153,25 @@ class DatabaseService {
   // Pobieranie uid Companys
 
   Stream<List<ChiefUidCompanys>> get getUidCompanys async* {
-    var companysStream = Firestore.instance
+    var companysStream = FirebaseFirestore.instance
         .collection('Chiefs')
-        .document(uid)
+        .doc(uid)
         .collection('Companys')
         // .where('active', isEqualTo: true)
         .snapshots();
     var companys = List<ChiefUidCompanys>();
     await for (var companysSnapshot in companysStream) {
-      for (var companyDoc in companysSnapshot.documents) {
+      for (var companyDoc in companysSnapshot.docs) {
         var company;
-        if (companyDoc.documentID != null) {
-          var companyName = await Firestore.instance
+        if (companyDoc.id != null) {
+          var companyName = await FirebaseFirestore.instance
               .collection('Companys')
-              .document(companyDoc.documentID)
+              .doc(companyDoc.id)
               .get();
           company = ChiefUidCompanys(
-            uidCompanys: companyDoc.documentID ?? null,
-            nameCompany: companyName.data['nameCompany'] ?? null,
-            active: companyDoc.data['active'] ?? null,
+            uidCompanys: companyDoc.id ?? null,
+            nameCompany: companyName.data()['nameCompany'] ?? null,
+            active: companyDoc.data()['active'] ?? null,
           );
         }
         companys.add(company);
