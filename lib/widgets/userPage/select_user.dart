@@ -19,7 +19,7 @@ class SelectUser extends StatefulWidget {
 class _SelectUserState extends State<SelectUser> {
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<UserData>(context) ?? null;
+    final user = Provider.of<UserData>(context, listen: false) ?? null;
 
     print('Problem');
     if (user == null) {
@@ -31,9 +31,7 @@ class _SelectUserState extends State<SelectUser> {
     } else if (user.data.type == 'Forwarder') {
       return ForwarderMain();
     } else if (user.data.type == 'Trucker') {
-      return TruckerMain(
-        userData: user.data,
-      );
+      return TruckerMain();
     } else {
       return ErrorPage();
     }

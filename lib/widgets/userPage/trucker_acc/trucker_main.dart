@@ -18,10 +18,6 @@ import 'package:truckmanagement_app/widgets/userPage/trucker_acc/trucker_search_
 import 'screens/advertisements.dart';
 
 class TruckerMain extends StatelessWidget {
-  final model.Trucker userData;
-
-  TruckerMain({this.userData});
-
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -33,28 +29,33 @@ class TruckerMain extends StatelessWidget {
           value: Applications(),
         )
       ],
-      child: MaterialApp(
-        theme: basicTheme(),
-        routes: {
-          // Advertisement
-          '/TruckerNewApplication/': (ctx) => TruckerNewApplication(),
-          // Drawer
-          '/Advertisements/': (ctx) => Advertisements(),
-          '/MyApplications/': (ctx) => MyApplications(),
-          '/Application/': (ctx) => Application(userUid: userData.uid),
-          //
-          '/searchCompany': (ctx) =>
-              StreamProvider<List<BaseSearchCompany>>.value(
-                value: DataBase_Trucker().getBaseSearchCompany,
-                child: TruckerSearchCompany(),
-              ),
-          '/Chats': (ctx) => StreamProvider<List<PeerChat>>.value(
-                value:
-                    Chat(mainUid: userData.uid, peopleUid: null).getUserChats(),
-                child: Chats(),
-              ),
+      child: Consumer<UserData>(
+        builder: (_, userData, __) {
+          model.Trucker user = userData.data;
+          return MaterialApp(
+            theme: basicTheme(),
+            routes: {
+              // Advertisement
+              '/TruckerNewApplication/': (ctx) => TruckerNewApplication(),
+              // Drawer
+              '/Advertisements/': (ctx) => Advertisements(),
+              '/MyApplications/': (ctx) => MyApplications(),
+              '/Application/': (ctx) => Application(userUid: user.uid),
+              //
+              '/searchCompany': (ctx) =>
+                  StreamProvider<List<BaseSearchCompany>>.value(
+                    value: DataBase_Trucker().getBaseSearchCompany,
+                    child: TruckerSearchCompany(),
+                  ),
+              '/Chats': (ctx) => StreamProvider<List<PeerChat>>.value(
+                    value:
+                        Chat(mainUid: user.uid, peopleUid: null).getUserChats(),
+                    child: Chats(),
+                  ),
+            },
+            home: TruckerPage(),
+          );
         },
-        home: TruckerPage(),
       ),
     );
   }

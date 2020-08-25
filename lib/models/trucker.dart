@@ -3,12 +3,14 @@ class Trucker {
   String nickName;
   String createDate;
   String type;
+  String uidCompany;
 
   Trucker({
     this.uid,
     this.nickName,
     this.createDate,
     this.type,
+    this.uidCompany,
   });
 
   factory Trucker.fromMap(Map<String, dynamic> data) {
@@ -17,6 +19,7 @@ class Trucker {
       nickName: data['nickName'] ?? null,
       createDate: data['createDate'] ?? null,
       type: data['type'] ?? null,
+      uidCompany: data['uidCompany'] ?? null,
     );
   }
 
@@ -26,6 +29,7 @@ class Trucker {
       'nickName': nickName ?? null,
       'createDate': createDate ?? null,
       'type': type ?? null,
+      'uidCompany': uidCompany ?? null,
     };
   }
 }

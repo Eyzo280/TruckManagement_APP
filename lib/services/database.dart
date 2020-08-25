@@ -123,6 +123,7 @@ class DatabaseService {
       nickName: snapshot.data()['nickName'] ?? null,
       createDate: snapshot.data()['createDate'] ?? null,
       type: snapshot.data()['type'] ?? null,
+      uidCompany: snapshot.data()['uidCompany'] ?? null,
     );
   }
 

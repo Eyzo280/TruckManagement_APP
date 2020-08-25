@@ -1,7 +1,3 @@
-class Trucker {
-
-}
-
 // wyslane oraz otrzymane zaproszenia zaproszenia
 
 class SentInvations {
