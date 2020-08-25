@@ -28,8 +28,9 @@ class Application extends StatelessWidget {
             children: [
               Consumer<Applications>(
                 builder: (_, applications, __) {
-                  var check = applications
-                      .fetchApplications.firstWhere((element) => element.applicationID == application.applicationID);
+                  var check = applications.fetchApplications.firstWhere(
+                      (element) =>
+                          element.applicationID == application.applicationID);
                   return Text(
                     check.status,
                     style: Theme.of(context).textTheme.bodyText1.copyWith(
@@ -53,31 +54,48 @@ class Application extends StatelessWidget {
         (MediaQuery.of(context).size.height - appBar.preferredSize.height);
 
     Widget userControlWidget() {
-      return application.status == 'Rozpatrywana' ||
-              application.status == 'Zakonczona'
-          ? SizedBox()
-          : Column(
-              children: [
-                const SizedBox(
-                  height: 15,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+      return Consumer<Applications>(
+        builder: (_, applications, __) {
+          var check = applications.fetchApplications.firstWhere(
+              (element) => element.applicationID == application.applicationID);
+          return check.status == 'Rozpatrywana' || check.status == 'Zakonczona'
+              ? SizedBox()
+              : Column(
                   children: [
-                    FlatButton(
-                      onPressed: () {},
-                      color: Theme.of(context).canvasColor,
-                      child: Text('Akceptuj'),
+                    const SizedBox(
+                      height: 15,
                     ),
-                    FlatButton(
-                      onPressed: () {},
-                      color: Theme.of(context).canvasColor,
-                      child: Text('Odrzuc'),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        FlatButton(
+                          onPressed: () {
+                            Provider.of<Applications>(context, listen: false)
+                                .acceptInvite(
+                              userUid: userUid,
+                              applicationId: application.applicationID,
+                              uidCompany:
+                                  application.infoAdvertisement.companyUid,
+                            );
+                          },
+                          color: Theme.of(context).canvasColor,
+                          child: const Text('Akceptuj'),
+                        ),
+                        FlatButton(
+                          onPressed: () {
+                            Provider.of<Applications>(context, listen: false)
+                                .cancelInvite(
+                                    applicationId: application.applicationID);
+                          },
+                          color: Theme.of(context).canvasColor,
+                          child: const Text('Odrzuc'),
+                        ),
+                      ],
                     ),
                   ],
-                ),
-              ],
-            );
+                );
+        },
+      );
     }
 
     return Scaffold(
@@ -123,12 +141,11 @@ class Application extends StatelessWidget {
             Container(
               color: Colors.white,
               child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(application.additionalInfo)),
+                padding: const EdgeInsets.all(8.0),
+                child: Text(application.additionalInfo),
+              ),
             ),
-            application.uidApplicator == userUid
-                ? userControlWidget()
-                : SizedBox(),
+            userControlWidget(),
           ],
         ),
       ),

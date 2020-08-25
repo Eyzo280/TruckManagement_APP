@@ -71,7 +71,7 @@ class Applications with ChangeNotifier {
   }) async {
     try {
       DocumentReference doc = _applicationCollection.doc();
-      await doc.setData({
+      await doc.set({
         //'infoCompany': application.companyData,
         'infoAdvertisement': application.infoAdvertisement.toMap(),
         'userInfo': application.userInfo.toMap(),
@@ -98,6 +98,47 @@ class Applications with ChangeNotifier {
         );
         notifyListeners();
       });
+    } catch (err) {
+      print(err);
+      throw err;
+    }
+  }
+
+  Future<void> acceptInvite({
+    @required String userUid,
+    @required String applicationId,
+    @required String uidCompany,
+  }) async {
+    // Najpierw dodaje uidCompany do Danych uzytkownika a pozniej ustawia aplikacje na zakonczona.
+    await FirebaseFirestore.instance.collection('Users').doc(userUid).update(
+      {
+        'uidCompany': uidCompany,
+        'applicationId': applicationId,
+      },
+    );
+    try {
+      await _applicationCollection.doc(applicationId).update(
+        {
+          'status': 'Zakonczona',
+        },
+      );
+      _applications[applicationId].status = 'Zakonczona';
+      notifyListeners();
+    } catch (err) {
+      print(err);
+      throw err;
+    }
+  }
+
+  Future<void> cancelInvite({@required String applicationId}) async {
+    await _applicationCollection.doc(applicationId).update(
+      {
+        'status': 'Zakonczona',
+      },
+    );
+    try {
+      _applications[applicationId].status = 'Zakonczona';
+      notifyListeners();
     } catch (err) {
       print(err);
       throw err;
