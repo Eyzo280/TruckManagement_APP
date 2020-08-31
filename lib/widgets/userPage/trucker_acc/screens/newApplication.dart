@@ -15,6 +15,10 @@ class TruckerNewApplication extends StatefulWidget {
 }
 
 class _TruckerNewApplicationState extends State<TruckerNewApplication> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
+  bool _loading = false;
+
   @override
   Widget build(BuildContext context) {
     final Trucker userInfo = Provider.of<UserData>(context).data;
@@ -250,6 +254,7 @@ class _TruckerNewApplicationState extends State<TruckerNewApplication> {
     }
 
     return Scaffold(
+      key: _scaffoldKey,
       appBar: appBar,
       body: Padding(
         padding: const EdgeInsets.all(5),
@@ -316,18 +321,57 @@ class _TruckerNewApplicationState extends State<TruckerNewApplication> {
                     ),
                   ),
                 ),
-                FlatButton(
-                  onPressed: () {
-                    Provider.of<Applications>(context, listen: false)
-                        .sendApplication(
-                            application: _application, trucker: userInfo);
-                  },
-                  color: Theme.of(context).canvasColor,
-                  child: Text(
-                    'Aplikuj',
-                    style: Theme.of(context).textTheme.bodyText1,
-                  ),
-                )
+                _loading
+                    ? Center(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: CircularProgressIndicator(),
+                        ),
+                      )
+                    : FlatButton(
+                        onPressed: () async {
+                          setState(() {
+                            _loading = true;
+                          });
+
+                          await Provider.of<Applications>(context,
+                                  listen: false)
+                              .sendApplication(
+                                  application: _application, trucker: userInfo);
+
+                          try {
+                            _scaffoldKey.currentState
+                              ..removeCurrentSnackBar()
+                              ..showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                      'Aplikowano na ${advertisement.title}'),
+                                  backgroundColor: Colors.green,
+                                ),
+                              );
+                            setState(() {
+                              _loading = false;
+                            });
+                          } catch (err) {
+                            _scaffoldKey.currentState
+                              ..removeCurrentSnackBar()
+                              ..showSnackBar(
+                                SnackBar(
+                                  content: Text('Problem.'),
+                                  backgroundColor: Theme.of(context).errorColor,
+                                ),
+                              );
+                            setState(() {
+                              _loading = false;
+                            });
+                          }
+                        },
+                        color: Theme.of(context).canvasColor,
+                        child: Text(
+                          'Aplikuj',
+                          style: Theme.of(context).textTheme.bodyText1,
+                        ),
+                      )
               ],
             ),
           ],

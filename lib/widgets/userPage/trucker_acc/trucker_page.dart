@@ -30,15 +30,16 @@ class TruckerPage extends StatelessWidget {
     final Trucker user = Provider.of<UserData>(context).data ?? null;
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          'Kierowca - ${user.nickName}',
-          style: TextStyle(color: Theme.of(context).primaryColor),
+        title: const Text(
+          'Panel Główny',
+          style: const TextStyle(color: Colors.white),
         ),
+        centerTitle: true,
         actions: <Widget>[
           Container(
-            margin: EdgeInsets.only(right: 30),
+            margin: const EdgeInsets.only(right: 30),
             child: IconButton(
-              icon: Icon(Icons.lock_outline),
+              icon: const Icon(Icons.lock_outline),
               onPressed: () async {
                 return await _auth.signOut(context);
               },
@@ -50,138 +51,44 @@ class TruckerPage extends StatelessWidget {
         uid: user.uid,
         nickName: user.nickName,
       ),
+      // backgroundColor: Colors.white,
       body: Column(
         children: <Widget>[
-          Card(
-            elevation: 5,
-            child: Row(
-              children: <Widget>[
-                Flexible(
-                  fit: FlexFit.tight,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      user != null
-                          ? Text('Nickname: ${user.nickName}')
-                          : CircularProgressIndicator(),
-                      user != null
-                          ? Text('Prawo jazdy: -')
-                          : CircularProgressIndicator(),
-                      user != null
-                          ? Text('Przejechane km: 0')
-                          : CircularProgressIndicator(),
-                    ],
-                  ),
-                ),
-                Flexible(
-                  fit: FlexFit.tight,
-                  child: Center(child: Text('Img')),
-                ),
-                /*Image(
-                    
-                  ),
-                  */
-                Flexible(
-                  fit: FlexFit.tight,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text('Obecna Firma:'),
-                      Text('Imie Szefa:'),
-                      Text('Przejechane km:'),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Container(
-            padding: EdgeInsets.all(5),
-            child: Column(
-              children: <Widget>[
-                Container(
-                  child: Row(
-                    children: <Widget>[
-                      Flexible(
-                        fit: FlexFit.tight,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(5),
-                              topRight: Radius.circular(20)),
-                          child: Container(
-                            color: Colors.blue,
-                            width: double.infinity,
-                            child: Center(
-                                child: Text(
-                              'Obecny Kurs',
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            )),
-                          ),
-                        ),
-                      ),
-                      Flexible(
-                        fit: FlexFit.tight,
-                        child: Opacity(opacity: 0.0),
-                      ),
-                    ],
-                  ),
-                ),
-                Card(
+          Flexible(
+            fit: FlexFit.tight,
+            child: Center(
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(7),
+                child: Card(
+                  elevation: 15,
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(0),
-                    topRight: Radius.circular(5),
-                    bottomLeft: Radius.circular(5),
-                    bottomRight: Radius.circular(5),
-                  )),
-                  margin: EdgeInsets.only(top: 0),
-                  elevation: 5,
-                  child: Row(
-                    children: <Widget>[
-                      Flexible(
-                        fit: FlexFit.tight,
-                        child: Container(
-                          alignment: Alignment.centerLeft,
-                          child: Column(
-                            children: <Widget>[
-                              Text('Obecny Kurs:'),
-                              Text('Data Dostawy:'),
-                              Text('Ciezarowka:'),
-                              Text('Data Dostawy:'),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Flexible(
-                        fit: FlexFit.tight,
-                        child: Column(
-                          children: <Widget>[
-                            RaisedButton(
-                              child: Text('Kontakt ze spedytorem'),
-                              onPressed: () {},
-                            ),
-                            RaisedButton(
-                              child: Text('Zaznacz punkt dostawy'),
-                              onPressed: () {},
-                            ),
-                            RaisedButton(
-                              child: Text('Kontakt z Szefem'),
-                              onPressed: () {},
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(16),
+                    ),
+                  ),
+                  margin: EdgeInsets.all(16),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(16),
+                    child: Container(
+                      padding: EdgeInsets.all(20),
+                      height: double.infinity,
+                      width: double.infinity,
+                      color: Colors.white,
+                      child: Text('1'),
+                    ),
                   ),
                 ),
-              ],
+              ),
             ),
           ),
-          Card(
-            elevation: 5,
+          Flexible(
+            fit: FlexFit.tight,
             child: Container(
-              height: 200,
-              color: Colors.grey,
+              margin: EdgeInsets.only(top: 8),
+              child: FittedBox(
+                fit: BoxFit.fill,
+                child: Image.asset('images/maps.JPG'),
+              ),
             ),
           ),
         ],
