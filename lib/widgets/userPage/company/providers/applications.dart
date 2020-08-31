@@ -70,32 +70,30 @@ class Applications with ChangeNotifier {
     String status,
     bool endApplication = false,
   }) async {
+    String newStatus = status == 'Zaproszenie'
+        ? 'Rozpatrywana'
+        : endApplication ? 'Zakonczona' : 'Zaproszenie';
+    await _applicationCollection.doc(applicationID).update({
+      'status': newStatus,
+    });
     try {
-      String newStatus = status == 'Zaproszenie'
-          ? 'Rozpatrywana'
-          : endApplication ? 'Zakonczona' : 'Zaproszenie';
-
-      await _applicationCollection.document(applicationID).updateData({
-        'status': newStatus,
-      }).whenComplete(() {
-        _applications.update(
-          applicationID,
-          (value) => Application(
-            applicationID: value.applicationID,
-            infoAdvertisement: value.infoAdvertisement,
-            userInfo: value.userInfo,
-            uidAdvertisement: value.uidAdvertisement,
-            uidApplicator: value.uidApplicator,
-            uidCompany: value.uidCompany,
-            additionalInfo: value.additionalInfo,
-            dateSendApplication: value.dateSendApplication,
-            status: newStatus,
-          ),
-        );
-        notifyListeners();
-      });
+      _applications.update(
+        applicationID,
+        (value) => Application(
+          applicationID: value.applicationID,
+          infoAdvertisement: value.infoAdvertisement,
+          userInfo: value.userInfo,
+          uidAdvertisement: value.uidAdvertisement,
+          uidApplicator: value.uidApplicator,
+          uidCompany: value.uidCompany,
+          additionalInfo: value.additionalInfo,
+          dateSendApplication: value.dateSendApplication,
+          status: newStatus,
+        ),
+      );
+      notifyListeners();
     } catch (err) {
-      print(err);
+      print('err');
       throw err;
     }
   }

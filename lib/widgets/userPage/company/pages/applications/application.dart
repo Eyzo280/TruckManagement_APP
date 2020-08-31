@@ -5,6 +5,7 @@ import 'package:truckmanagement_app/widgets/shared/widgets/Application/applicati
 import 'package:truckmanagement_app/widgets/shared/widgets/Application/companyInfo.dart';
 import 'package:truckmanagement_app/widgets/userPage/company/providers/applications.dart'
     as company;
+import 'package:truckmanagement_app/widgets/userPage/company/widgets/application/operationButtons.dart';
 
 class Application extends StatelessWidget {
   static const routeName = '/Application/';
@@ -12,6 +13,8 @@ class Application extends StatelessWidget {
   final String userUid;
 
   Application({this.userUid});
+
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
@@ -54,92 +57,8 @@ class Application extends StatelessWidget {
     final heightDevice =
         (MediaQuery.of(context).size.height - appBar.preferredSize.height);
 
-    Widget companyControlWidget() {
-      return Consumer<company.Applications>(
-        builder: (_, applications, __) {
-          var check = applications.fetchApplications.firstWhere(
-              (element) => element.applicationID == application.applicationID);
-          return check.status == 'Zakonczona'
-              ? SizedBox()
-              : check.status == 'Zaproszenie'
-                  ? Column(
-                      children: [
-                        const SizedBox(
-                          height: 15,
-                        ),
-                        Center(
-                          child: FlatButton(
-                            onPressed: () async {
-                              await Provider.of<company.Applications>(context,
-                                      listen: false)
-                                  .changeStatus(
-                                applicationID: application.applicationID,
-                                status: check.status,
-                              )
-                                  .catchError(
-                                (onError) {
-                                  print(onError);
-                                },
-                              );
-                            },
-                            color: Theme.of(context).canvasColor,
-                            child: Text('Anuluj zaproszenie'),
-                          ),
-                        ),
-                      ],
-                    )
-                  : Column(
-                      children: [
-                        const SizedBox(
-                          height: 15,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            FlatButton(
-                              onPressed: () async {
-                                await Provider.of<company.Applications>(context,
-                                        listen: false)
-                                    .changeStatus(
-                                        applicationID:
-                                            application.applicationID,
-                                        status: check.status)
-                                    .catchError(
-                                  (onError) {
-                                    print(onError);
-                                  },
-                                );
-                              },
-                              color: Theme.of(context).canvasColor,
-                              child: Text('Zapros'),
-                            ),
-                            FlatButton(
-                              onPressed: () async {
-                                await Provider.of<company.Applications>(context,
-                                        listen: false)
-                                    .changeStatus(
-                                        applicationID:
-                                            application.applicationID,
-                                        status: check.status,
-                                        endApplication: true)
-                                    .catchError(
-                                  (onError) {
-                                    print(onError);
-                                  },
-                                );
-                              },
-                              color: Theme.of(context).canvasColor,
-                              child: Text('Odrzuc'),
-                            ),
-                          ],
-                        ),
-                      ],
-                    );
-        },
-      );
-    }
-
     return Scaffold(
+      key: _scaffoldKey,
       appBar: appBar,
       body: Padding(
         padding: const EdgeInsets.all(5),
@@ -185,7 +104,12 @@ class Application extends StatelessWidget {
                   padding: const EdgeInsets.all(8.0),
                   child: Text(application.additionalInfo)),
             ),
-            companyControlWidget(),
+            const SizedBox(
+              height: 15,
+            ),
+            OperationButtons(
+              application: application,
+            ),
           ],
         ),
       ),
