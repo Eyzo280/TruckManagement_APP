@@ -133,6 +133,7 @@ class Applications with ChangeNotifier {
   Future<void> cancelInvite({@required String applicationId}) async {
     await _applicationCollection.doc(applicationId).update(
       {
+        'cancelApplication': false,
         'status': 'Zakonczona',
       },
     );

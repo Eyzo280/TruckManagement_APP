@@ -4,6 +4,7 @@ import 'package:truckmanagement_app/models/application.dart' as model;
 import 'package:truckmanagement_app/widgets/shared/widgets/Application/applicatiorInfo.dart';
 import 'package:truckmanagement_app/widgets/shared/widgets/Application/companyInfo.dart';
 import 'package:truckmanagement_app/widgets/userPage/trucker_acc/providers/applications.dart';
+import 'package:truckmanagement_app/widgets/userPage/trucker_acc/widgets/application/operationButtons.dart';
 
 class Application extends StatelessWidget {
   static const routeName = '/Application/';
@@ -53,51 +54,6 @@ class Application extends StatelessWidget {
     final heightDevice =
         (MediaQuery.of(context).size.height - appBar.preferredSize.height);
 
-    Widget userControlWidget() {
-      return Consumer<Applications>(
-        builder: (_, applications, __) {
-          var check = applications.fetchApplications.firstWhere(
-              (element) => element.applicationID == application.applicationID);
-          return check.status == 'Rozpatrywana' || check.status == 'Zakonczona'
-              ? SizedBox()
-              : Column(
-                  children: [
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        FlatButton(
-                          onPressed: () {
-                            Provider.of<Applications>(context, listen: false)
-                                .acceptInvite(
-                              userUid: userUid,
-                              applicationId: application.applicationID,
-                              uidCompany:
-                                  application.infoAdvertisement.companyUid,
-                            );
-                          },
-                          color: Theme.of(context).canvasColor,
-                          child: const Text('Akceptuj'),
-                        ),
-                        FlatButton(
-                          onPressed: () {
-                            Provider.of<Applications>(context, listen: false)
-                                .cancelInvite(
-                                    applicationId: application.applicationID);
-                          },
-                          color: Theme.of(context).canvasColor,
-                          child: const Text('Odrzuc'),
-                        ),
-                      ],
-                    ),
-                  ],
-                );
-        },
-      );
-    }
-
     return Scaffold(
       appBar: appBar,
       body: Padding(
@@ -145,7 +101,10 @@ class Application extends StatelessWidget {
                 child: Text(application.additionalInfo),
               ),
             ),
-            userControlWidget(),
+            OperationButtons(
+              userUid: userUid,
+              application: application,
+            )
           ],
         ),
       ),
