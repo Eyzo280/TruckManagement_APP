@@ -18,32 +18,35 @@ class _OperationButtonsState extends State<OperationButtons> {
   @override
   Widget build(BuildContext context) {
     void snackBarError(String value) {
-      Scaffold.of(context).removeCurrentSnackBar();
-      Scaffold.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            value,
-            textAlign: TextAlign.center,
+      Scaffold.of(context)
+        ..removeCurrentSnackBar()
+        ..showSnackBar(
+          SnackBar(
+            content: Text(
+              value,
+              textAlign: TextAlign.center,
+            ),
+            backgroundColor: Theme.of(context).errorColor,
           ),
-          backgroundColor: Theme.of(context).errorColor,
-        ),
-      );
+        );
     }
 
     void snackBarSuccess(String value) {
-      Scaffold.of(context).removeCurrentSnackBar();
-      Scaffold.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            value,
-            textAlign: TextAlign.center,
+      Scaffold.of(context)
+        ..removeCurrentSnackBar()
+        ..showSnackBar(
+          SnackBar(
+            content: Text(
+              value,
+              textAlign: TextAlign.center,
+            ),
+            backgroundColor: Colors.green,
           ),
-          backgroundColor: Colors.green,
-        ),
-      );
+        );
     }
 
     void changeStatus({
+      String text,
       Application check,
       bool endApplication = false,
     }) async {
@@ -58,7 +61,7 @@ class _OperationButtonsState extends State<OperationButtons> {
                 endApplication: endApplication)
             .whenComplete(
           () {
-            snackBarSuccess('Wysłano zaproszenie');
+            snackBarSuccess(text);
             setState(() {
               loading = false;
             });
@@ -69,7 +72,7 @@ class _OperationButtonsState extends State<OperationButtons> {
           loading = false;
         });
         return snackBarError(
-          'Wystąpił problem. Sprobuj później.',
+          text,
         );
       }
     }
@@ -89,10 +92,14 @@ class _OperationButtonsState extends State<OperationButtons> {
                     ? Center(
                         child: FlatButton(
                           onPressed: () async => changeStatus(
+                            text: 'Anulowano zaproszenie.',
                             check: check,
                           ),
                           color: Theme.of(context).canvasColor,
-                          child: Text('Anuluj zaproszenie'),
+                          child: Text(
+                            'Anuluj zaproszenie',
+                            style: TextStyle(color: Colors.white),
+                          ),
                         ),
                       )
                     : Row(
@@ -100,18 +107,26 @@ class _OperationButtonsState extends State<OperationButtons> {
                         children: [
                           FlatButton(
                             onPressed: () async => changeStatus(
+                              text: 'Wysłano zaproszenie',
                               check: check,
                             ),
                             color: Theme.of(context).canvasColor,
-                            child: Text('Zapros'),
+                            child: Text(
+                              'Zapros',
+                              style: TextStyle(color: Colors.white),
+                            ),
                           ),
                           FlatButton(
                             onPressed: () async => changeStatus(
+                              text: 'Wystąpił problem. Sprobuj później.',
                               check: check,
                               endApplication: true,
                             ),
                             color: Theme.of(context).canvasColor,
-                            child: Text('Odrzuc'),
+                            child: Text(
+                              'Odrzuc',
+                              style: TextStyle(color: Colors.white),
+                            ),
                           ),
                         ],
                       );

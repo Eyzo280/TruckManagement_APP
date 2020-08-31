@@ -58,7 +58,7 @@ class CompanyAdvertisements with ChangeNotifier {
       if (_activeAdvertisement.isEmpty) {
         // Pobiera dokumenty z bazy danych
         advertisements = await _advertisementsCollection
-            .orderBy('endDate')
+            .orderBy('endDate', descending: true)
             .where('uidCompany', isEqualTo: uidCompany)
             .where('endDate', isGreaterThan: '')
             .limit(_perPage)
@@ -69,7 +69,7 @@ class CompanyAdvertisements with ChangeNotifier {
         }
       } else if (fetch) {
         advertisements = await _advertisementsCollection
-            .orderBy('endDate')
+            .orderBy('endDate', descending: true)
             .startAfter([_lastDocumentActiveAdver.data()['endDate']])
             .where('uidCompany', isEqualTo: uidCompany)
             .where('endDate', isGreaterThan: '')
@@ -95,7 +95,7 @@ class CompanyAdvertisements with ChangeNotifier {
         }
       } else if (fetch) {
         advertisements = await _advertisementsCollection
-            .orderBy('endDate')
+            .orderBy('endDate', descending: true)
             .startAfter([_lastDocumentFinishedAdver.data()['endDate']])
             .where('uidCompany', isEqualTo: uidCompany)
             .where('endDate', isEqualTo: '')
@@ -173,12 +173,12 @@ class CompanyAdvertisements with ChangeNotifier {
     @required String title,
     @required String type,
   }) async {
-    try {
-      DocumentReference doc = _advertisementsCollection.doc();
-      String endDate = DateTime.now().add(Duration(days: 7)).toIso8601String();
-      // Sprawdza typ nowego ogloszenia i dodaje jego dane do bazy danych oraz do providera.
-      if (type == 'Trucker') {
-        await doc.set({
+    DocumentReference doc = _advertisementsCollection.doc();
+    String endDate = DateTime.now().add(Duration(days: 7)).toIso8601String();
+    // Sprawdza typ nowego ogloszenia i dodaje jego dane do bazy danych oraz do providera.
+    if (type == 'Trucker') {
+      await doc.set(
+        {
           'uidCompany': companyUid,
           'companyData': {
             'logoUrl': companyInfo.logoUrl,
@@ -195,22 +195,11 @@ class CompanyAdvertisements with ChangeNotifier {
           'status': true,
           'title': title,
           'type': type,
-        });
-        _activeAdvertisement.putIfAbsent(
-            doc.id,
-            () => Advertisement(
-                  advertisementUid: doc.id,
-                  companyUid: companyUid,
-                  companyInfo: companyInfo,
-                  title: title,
-                  requirements: requirements,
-                  description: description,
-                  type: type,
-                  endDate: endDate,
-                ));
-        notifyListeners();
-      } else if (type == 'Forwarder') {
-        await doc.set({
+        },
+      );
+    } else if (type == 'Forwarder') {
+      await doc.set(
+        {
           'uidCompany': companyUid,
           'companyData': {
             'logoUrl': companyInfo.logoUrl,
@@ -228,7 +217,16 @@ class CompanyAdvertisements with ChangeNotifier {
           'status': true,
           'title': title,
           'type': type,
-        });
+        },
+      );
+    } else {
+      print(
+        'Problem from adding new Advertisement.  -- company/providers/adverisement.dart',
+      );
+    }
+
+    try {
+      if (type == 'Trucker') {
         _activeAdvertisement.putIfAbsent(
             doc.id,
             () => Advertisement(
@@ -242,9 +240,20 @@ class CompanyAdvertisements with ChangeNotifier {
                   endDate: endDate,
                 ));
         notifyListeners();
-      } else {
-        print(
-            'Problem from adding new Advertisement.  -- company/providers/adverisement.dart');
+      } else if (type == 'Forwarder') {
+        _activeAdvertisement.putIfAbsent(
+            doc.id,
+            () => Advertisement(
+                  advertisementUid: doc.id,
+                  companyUid: companyUid,
+                  companyInfo: companyInfo,
+                  title: title,
+                  requirements: requirements,
+                  description: description,
+                  type: type,
+                  endDate: endDate,
+                ));
+        notifyListeners();
       }
     } catch (err) {
       print(err);

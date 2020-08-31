@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:truckmanagement_app/models/adventisement.dart'
-    as model;
+import 'package:truckmanagement_app/models/adventisement.dart' as model;
 import 'package:truckmanagement_app/widgets/userPage/company/models/company_Employees.dart';
 import 'package:truckmanagement_app/widgets/userPage/company/pages/advertisement/addNew.dart';
 import 'package:truckmanagement_app/widgets/userPage/company/providers/advetisement.dart';
@@ -16,6 +15,8 @@ class Advertisement extends StatefulWidget {
 }
 
 class _AdvertisementState extends State<Advertisement> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
   @override
   bool _isData = false;
   ScrollController _scrollController = ScrollController();
@@ -97,9 +98,26 @@ class _AdvertisementState extends State<Advertisement> {
         IconButton(
           color: Theme.of(context).buttonColor,
           icon: Icon(Icons.add_circle_outline),
-          onPressed: () {
+          onPressed: () async {
             print('Add new advertisement.');
-            Navigator.of(context).pushNamed(AddAdvertisement.routeName);
+            final Map<String, Object> result = await Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) {
+                  return AddAdvertisement();
+                },
+              ),
+            );
+            if (result['view'] == true) {
+              _scaffoldKey.currentState.showSnackBar(
+                SnackBar(
+                  content: Text(
+                    result['text'],
+                    textAlign: TextAlign.center,
+                  ),
+                  backgroundColor: Theme.of(context).canvasColor,
+                ),
+              );
+            }
           },
         ),
       ],
@@ -139,6 +157,7 @@ class _AdvertisementState extends State<Advertisement> {
     }
 
     return Scaffold(
+      key: _scaffoldKey,
       appBar: appBar,
       body: Container(
         child: Column(

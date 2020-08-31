@@ -14,6 +14,8 @@ class NewAdvertisementTrucker extends StatefulWidget {
 class _NewAdvertisementTruckerState extends State<NewAdvertisementTrucker> {
   final _formKey = GlobalKey<FormState>();
 
+  bool _loading = false;
+
   Advertisement _advertisement;
 
   @override
@@ -175,34 +177,64 @@ class _NewAdvertisementTruckerState extends State<NewAdvertisementTrucker> {
                     },
                   ),
                 ),
-                RaisedButton(
-                  color: Theme.of(context).accentColor,
-                  onPressed: () {
-                    if (_advertisement.companyUid == null) {
-                      return;
-                    }
-                    _advertisement = Advertisement(
-                      advertisementUid: _advertisement.advertisementUid,
-                      companyUid: _advertisement.companyUid,
-                      companyInfo: _advertisement.companyInfo,
-                      title: _advertisement.title,
-                      requirements: _advertisement.requirements,
-                      description: _advertisement.description,
-                      endDate: _advertisement.endDate,
-                      type: _advertisement.type,
-                    );
-                    if (_formKey.currentState.validate()) {
-                      _formKey.currentState.save();
-                      Provider.of<CompanyAdvertisements>(context, listen: false)
-                          .addAdvertisement(
-                        companyUid: _advertisement.companyUid,
-                        companyInfo: _advertisement.companyInfo,
-                        description: _advertisement.description,
-                        requirements: _advertisement.requirements,
-                        title: _advertisement.title,
-                        type: _advertisement.type,
-                      );
-                      /*
+                _loading
+                    ? Center(
+                        child: CircularProgressIndicator(),
+                      )
+                    : RaisedButton(
+                        color: Theme.of(context).accentColor,
+                        onPressed: () async {
+                          if (_advertisement.companyUid == null) {
+                            return;
+                          }
+                          _advertisement = Advertisement(
+                            advertisementUid: _advertisement.advertisementUid,
+                            companyUid: _advertisement.companyUid,
+                            companyInfo: _advertisement.companyInfo,
+                            title: _advertisement.title,
+                            requirements: _advertisement.requirements,
+                            description: _advertisement.description,
+                            endDate: _advertisement.endDate,
+                            type: _advertisement.type,
+                          );
+                          if (_formKey.currentState.validate()) {
+                            _formKey.currentState.save();
+
+                            setState(() {
+                              _loading = true;
+                            });
+
+                            await Provider.of<CompanyAdvertisements>(context,
+                                    listen: false)
+                                .addAdvertisement(
+                              companyUid: _advertisement.companyUid,
+                              companyInfo: _advertisement.companyInfo,
+                              description: _advertisement.description,
+                              requirements: _advertisement.requirements,
+                              title: _advertisement.title,
+                              type: _advertisement.type,
+                            );
+
+                            try {
+                              Navigator.of(context).pop({
+                                'view': true,
+                                'text': _advertisement.title,
+                              });
+                              setState(() {
+                                _loading = false;
+                              });
+                            } catch (err) {
+                              Scaffold.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text('Problem.'),
+                                  backgroundColor: Theme.of(context).errorColor,
+                                ),
+                              );
+                              setState(() {
+                                _loading = false;
+                              });
+                            }
+                            /*
                       Navigator.of(context).push(
                         MaterialPageRoute(builder: (ctx) {
                           return PreviewAdvertisementTrucker(
@@ -215,13 +247,13 @@ class _NewAdvertisementTruckerState extends State<NewAdvertisementTrucker> {
                       );
                       */
 
-                    }
-                  },
-                  child: Text(
-                    'Dodaj Ogłoszenie',
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                ),
+                          }
+                        },
+                        child: Text(
+                          'Dodaj Ogłoszenie',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ),
               ],
             ),
           ),

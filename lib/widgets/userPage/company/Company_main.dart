@@ -40,7 +40,7 @@ class CompanyMain extends StatelessWidget {
           '/Application/': (ctx) => Application(userUid: companyData.uid,),
           // Advertisement
           '/advertisement/': (ctx) => Advertisement(),
-          '/advertisement/AddAdvertisement': (ctx) => AddAdvertisement(),
+          //'/advertisement/AddAdvertisement': (ctx) => AddAdvertisement(),
 
           // Chat
           Chats.routeName: (ctx) => StreamProvider<List<PeerChat>>.value(

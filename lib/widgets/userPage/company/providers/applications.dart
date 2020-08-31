@@ -29,7 +29,7 @@ class Applications with ChangeNotifier {
       // pobiera moje aplikacje na ogloszenia
       if (_applications.isEmpty) {
         await _applicationCollection
-            .orderBy('dateSendApplication')
+            .orderBy('dateSendApplication', descending: true)
             .where('uidCompany', isEqualTo: uidCompany)
             .limit(_perPage)
             .get()
