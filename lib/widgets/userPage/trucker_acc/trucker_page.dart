@@ -6,6 +6,7 @@ import 'package:truckmanagement_app/services/auth.dart';
 import 'package:truckmanagement_app/widgets/chat/chats.dart';
 import 'package:truckmanagement_app/widgets/userPage/trucker_acc/trucker_search_company.dart';
 import 'package:truckmanagement_app/widgets/userPage/trucker_acc/widgets/truckerPage/loading.dart';
+import 'package:truckmanagement_app/widgets/userPage/trucker_acc/widgets/truckerPage/map.dart';
 import 'package:truckmanagement_app/widgets/userPage/trucker_acc/widgets/truckerPage/unloading.dart';
 import 'widgets/drawer.dart';
 
@@ -239,10 +240,7 @@ class TruckerPage extends StatelessWidget {
                   topLeft: Radius.circular(16),
                   topRight: Radius.circular(16),
                 ),
-                child: FittedBox(
-                  fit: BoxFit.fill,
-                  child: Image.asset('images/maps.JPG'),
-                ),
+                child: TruckerMap(),
               ),
             ),
           ),
