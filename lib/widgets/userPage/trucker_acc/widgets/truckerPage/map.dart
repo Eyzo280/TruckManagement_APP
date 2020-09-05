@@ -12,33 +12,36 @@ class TruckerMap extends StatefulWidget {
 class _TruckerMapState extends State<TruckerMap> {
   Completer<GoogleMapController> _controller = Completer();
 
-  CameraPosition _cameraPosition = CameraPosition(
-    target: LatLng(37.42796133580664, -122.085749655962),
-    zoom: 14.4746,
-  );
+  CameraPosition _cameraPosition = null;
 
   @override
   void didChangeDependencies() async {
-    final locDat = await Location().getLocation();
+    await Location().getLocation().catchError((err) {
+      print(err);
+    }).then((val) {
+      setState(() {
+        _cameraPosition = CameraPosition(
+          target: LatLng(val.latitude, val.longitude),
+          zoom: 15,
+        );
+      });
+      print(val.longitude);
+    });
 
-    _cameraPosition = CameraPosition(
-      target: LatLng(locDat.latitude, locDat.longitude),
-      zoom: _cameraPosition.zoom,
-    );
-
-    print(locDat.longitude);
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
-    return GoogleMap(
-      mapType: MapType.hybrid,
-      initialCameraPosition: _cameraPosition,
-      onMapCreated: (GoogleMapController controller) {
-        _controller.complete(controller);
-      },
-    );
+    return _cameraPosition == null
+        ? Center(child: CircularProgressIndicator())
+        : GoogleMap(
+            mapType: MapType.hybrid,
+            initialCameraPosition: _cameraPosition,
+            onMapCreated: (GoogleMapController controller) {
+              _controller.complete(controller);
+            },
+          );
   }
 }
