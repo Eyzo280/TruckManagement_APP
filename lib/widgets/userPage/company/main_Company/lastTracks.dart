@@ -13,71 +13,66 @@ class LastTracksCompanyMain extends StatelessWidget {
       ),
       child: Card(
         margin: EdgeInsets.all(0),
-        elevation: 5,
+        elevation: 15,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.zero,
+          borderRadius: BorderRadius.all(
+            Radius.circular(15),
+          ),
         ),
-        child: Container(
-          padding: EdgeInsets.all(5),
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.centerLeft,
-              stops: [0.001, 0.2],
-              colors: [
-                Theme.of(context).textTheme.display1.color,
-                Theme.of(context).textTheme.display2.color,
+        child: FlatButton(
+          padding: EdgeInsets.all(0),
+          onPressed: () {},
+          child: Container(
+            padding: EdgeInsets.all(5),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: <Widget>[
+                Flexible(
+                  child: FittedBox(
+                    child: Column(
+                      children: <Widget>[
+                        Image.asset(
+                          'icons/flags/png/pl.png',
+                          package: 'country_icons',
+                        ),
+                        Icon(
+                          Icons.arrow_downward,
+                          color: Theme.of(context).textTheme.body1.color,
+                        ),
+                        Image.asset(
+                          'icons/flags/png/nl.png',
+                          package: 'country_icons',
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Flexible(
+                  child: FittedBox(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Text('Zysk'),
+                        Text(
+                          '3250',
+                          style: TextStyle(
+                            fontWeight: FontWeight.normal,
+                          ),
+                        ),
+                        Text('Kierowca'),
+                        Text(
+                          'Stasiek W.',
+                          style: TextStyle(
+                            fontWeight: FontWeight.normal,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               ],
             ),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: <Widget>[
-              Flexible(
-                child: FittedBox(
-                  child: Column(
-                    children: <Widget>[
-                      Image.asset(
-                        'icons/flags/png/pl.png',
-                        package: 'country_icons',
-                      ),
-                      Icon(
-                        Icons.arrow_downward,
-                        color: Theme.of(context).textTheme.body1.color,
-                      ),
-                      Image.asset(
-                        'icons/flags/png/nl.png',
-                        package: 'country_icons',
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Flexible(
-                child: FittedBox(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      Text('Zysk'),
-                      Text(
-                        '3250',
-                        style: TextStyle(
-                          fontWeight: FontWeight.normal,
-                        ),
-                      ),
-                      Text('Kierowca'),
-                      Text(
-                        'Stasiek W.',
-                        style: TextStyle(
-                          fontWeight: FontWeight.normal,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
           ),
         ),
       ),
@@ -90,30 +85,28 @@ class LastTracksCompanyMain extends StatelessWidget {
       flex: 3,
       fit: FlexFit.tight,
       child: Container(
-          margin: EdgeInsets.only(top: 10),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Flexible(
-                flex: 1,
-                child: Text(
-                  'Ostatnie Kursy',
-                  style: TextStyle(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Flexible(
+            flex: 1,
+            child: Text(
+              'Ostatnie Kursy',
+              style: Theme.of(context).textTheme.bodyText1.copyWith(
                     fontSize: 25,
-                    fontWeight: FontWeight.bold,
                   ),
-                ),
-              ),
-              Flexible(
-                flex: 2,
-                fit: FlexFit.tight,
-                child: Container(
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: 3,
-                    itemBuilder: (context, index) {
-                      return
-                          /*
+            ),
+          ),
+          Flexible(
+            flex: 2,
+            fit: FlexFit.tight,
+            child: Container(
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: 3,
+                itemBuilder: (context, index) {
+                  return
+                      /*
                       Container(
                         color: Colors.grey,
                         height: double.infinity,
@@ -136,13 +129,13 @@ class LastTracksCompanyMain extends StatelessWidget {
                         ),
                       );
                       */
-                          track(context: context);
-                    },
-                  ),
-                ),
+                      track(context: context);
+                },
               ),
-            ],
-          )),
+            ),
+          ),
+        ],
+      )),
     );
   }
 }

@@ -26,33 +26,10 @@ class CompanyPage extends StatelessWidget {
       appBar: AppBar(
         title: Text(companyData.nameCompany),
         centerTitle: true,
-        flexibleSpace: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.centerRight,
-              end: Alignment.centerLeft,
-              stops: [0.001, 1],
-              colors: [
-                Theme.of(context).textTheme.display1.color,
-                Theme.of(context).textTheme.display2.color,
-              ],
-            ),
-          ),
-        ),
+        elevation: 0,
       ),
       drawer: DrawerCompanyMain(),
       body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.centerRight,
-            end: Alignment.centerLeft,
-            stops: [0.001, 1],
-            colors: [
-              Theme.of(context).textTheme.display1.color,
-              Theme.of(context).textTheme.display2.color,
-            ],
-          ),
-        ),
         height: double.infinity,
         width: double.infinity,
         child: Column(

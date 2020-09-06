@@ -28,7 +28,10 @@ class TopBodyCompanyMain extends StatelessWidget {
           },
           child: Text(
             name,
-            style: TextStyle(color: Theme.of(context).textTheme.button.color),
+            style: Theme.of(context)
+                .textTheme
+                .bodyText1
+                .copyWith(color: Colors.black),
           ),
         ),
       ),
@@ -39,192 +42,204 @@ class TopBodyCompanyMain extends StatelessWidget {
   Widget build(BuildContext context) {
     List topBodyWidgets = [
       // Management
-      Container(
-        width: double.infinity,
-        child: Column(
-          children: <Widget>[
-            Flexible(
-              flex: 1,
-              fit: FlexFit.tight,
-              child: Center(
-                child: Text(
-                  'Zarzadzanie',
-                  style: TextStyle(
-                    fontSize: 25,
-                    fontWeight: FontWeight.bold,
+      ClipRRect(
+        borderRadius: BorderRadius.all(Radius.circular(15)),
+        child: Container(
+          color: Theme.of(context).accentColor,
+          width: double.infinity,
+          child: Column(
+            children: <Widget>[
+              Flexible(
+                flex: 1,
+                fit: FlexFit.tight,
+                child: Center(
+                  child: Text(
+                    'Zarzadzanie',
+                    style: Theme.of(context).textTheme.bodyText1.copyWith(
+                          color: Colors.white,
+                          fontSize: 25,
+                        ),
                   ),
                 ),
               ),
-            ),
-            Flexible(
-              flex: 3,
-              fit: FlexFit.tight,
-              child: Container(
-                width: double.infinity,
-                // color: Colors.white,
-                child: Column(
-                  children: <Widget>[
-                    Flexible(
-                      fit: FlexFit.tight,
-                      child: Row(
-                        children: <Widget>[
-                          buttons(
-                              context: context,
-                              page: 'TruckerLook',
-                              name: 'Kierowcy'),
-                          buttons(
-                              context: context,
-                              page: 'TruckerLook',
-                              name: 'Spedytorzy'),
-                        ],
+              Flexible(
+                flex: 3,
+                fit: FlexFit.tight,
+                child: Container(
+                  width: double.infinity,
+                  // color: Colors.white,
+                  child: Column(
+                    children: <Widget>[
+                      Flexible(
+                        fit: FlexFit.tight,
+                        child: Row(
+                          children: <Widget>[
+                            buttons(
+                                context: context,
+                                page: 'TruckerLook',
+                                name: 'Kierowcy'),
+                            buttons(
+                                context: context,
+                                page: 'TruckerLook',
+                                name: 'Spedytorzy'),
+                          ],
+                        ),
                       ),
-                    ),
-                    Flexible(
-                      fit: FlexFit.tight,
-                      child: Row(
-                        children: <Widget>[
-                          buttons(
-                              context: context,
-                              page: 'TruckerLook',
-                              name: 'Ciezarowki'),
-                          buttons(
-                              context: context,
-                              page: 'TracksManagement',
-                              name: 'Kursy'),
-                        ],
+                      Flexible(
+                        fit: FlexFit.tight,
+                        child: Row(
+                          children: <Widget>[
+                            buttons(
+                                context: context,
+                                page: 'TruckerLook',
+                                name: 'Ciezarowki'),
+                            buttons(
+                                context: context,
+                                page: 'TracksManagement',
+                                name: 'Kursy'),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
       // Stats
-      Container(
-        width: double.infinity,
-        child: Column(
-          children: <Widget>[
-            Flexible(
-              flex: 1,
-              fit: FlexFit.tight,
-              child: Center(
-                child: Text(
-                  'Statystyki',
-                  style: TextStyle(
-                    fontSize: 25,
-                    fontWeight: FontWeight.bold,
+      ClipRRect(
+        borderRadius: BorderRadius.all(Radius.circular(15)),
+        child: Container(
+          color: Theme.of(context).accentColor,
+          width: double.infinity,
+          child: Column(
+            children: <Widget>[
+              Flexible(
+                flex: 1,
+                fit: FlexFit.tight,
+                child: Center(
+                  child: Text(
+                    'Statystyki',
+                    style: Theme.of(context).textTheme.bodyText1.copyWith(
+                          color: Colors.white,
+                          fontSize: 25,
+                        ),
                   ),
                 ),
               ),
-            ),
-            Flexible(
-              flex: 3,
-              fit: FlexFit.tight,
-              child: Container(
-                width: double.infinity,
-                // color: Colors.white,
-                child: Column(
-                  children: <Widget>[
-                    Flexible(
-                      fit: FlexFit.tight,
-                      child: Row(
-                        children: <Widget>[
-                          buttons(
-                              context: context,
-                              page: 'TruckerLook',
-                              name: 'Kierowcy'),
-                          buttons(
-                              context: context,
-                              page: 'TruckerLook',
-                              name: 'Spedytorzy'),
-                        ],
+              Flexible(
+                flex: 3,
+                fit: FlexFit.tight,
+                child: Container(
+                  width: double.infinity,
+                  // color: Colors.white,
+                  child: Column(
+                    children: <Widget>[
+                      Flexible(
+                        fit: FlexFit.tight,
+                        child: Row(
+                          children: <Widget>[
+                            buttons(
+                                context: context,
+                                page: 'TruckerLook',
+                                name: 'Kierowcy'),
+                            buttons(
+                                context: context,
+                                page: 'TruckerLook',
+                                name: 'Spedytorzy'),
+                          ],
+                        ),
                       ),
-                    ),
-                    Flexible(
-                      fit: FlexFit.tight,
-                      child: Row(
-                        children: <Widget>[
-                          buttons(
-                              context: context,
-                              page: 'TruckerLook',
-                              name: 'Ciezarowki'),
-                          buttons(
-                              context: context,
-                              page: 'TruckerLook',
-                              name: 'Kursy'),
-                        ],
+                      Flexible(
+                        fit: FlexFit.tight,
+                        child: Row(
+                          children: <Widget>[
+                            buttons(
+                                context: context,
+                                page: 'TruckerLook',
+                                name: 'Ciezarowki'),
+                            buttons(
+                                context: context,
+                                page: 'TruckerLook',
+                                name: 'Kursy'),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
       // Chart
-      Container(
-        width: double.infinity,
-        child: Column(
-          children: <Widget>[
-            Flexible(
-              flex: 1,
-              fit: FlexFit.tight,
-              child: Center(
-                child: Text(
-                  'Wykresy',
-                  style: TextStyle(
-                    fontSize: 25,
-                    fontWeight: FontWeight.bold,
+      ClipRRect(
+        borderRadius: BorderRadius.all(Radius.circular(15)),
+        child: Container(
+          color: Theme.of(context).accentColor,
+          width: double.infinity,
+          child: Column(
+            children: <Widget>[
+              Flexible(
+                flex: 1,
+                fit: FlexFit.tight,
+                child: Center(
+                  child: Text(
+                    'Wykresy',
+                    style: Theme.of(context).textTheme.bodyText1.copyWith(
+                          color: Colors.white,
+                          fontSize: 25,
+                        ),
                   ),
                 ),
               ),
-            ),
-            Flexible(
-              flex: 3,
-              fit: FlexFit.tight,
-              child: Container(
-                width: double.infinity,
-                // color: Colors.white,
-                child: Column(
-                  children: <Widget>[
-                    Flexible(
-                      fit: FlexFit.tight,
-                      child: Row(
-                        children: <Widget>[
-                          buttons(
-                              context: context,
-                              page: 'TruckerLook',
-                              name: 'Kierowcy'),
-                          buttons(
-                              context: context,
-                              page: 'TruckerLook',
-                              name: 'Spedytorzy'),
-                        ],
+              Flexible(
+                flex: 3,
+                fit: FlexFit.tight,
+                child: Container(
+                  width: double.infinity,
+                  // color: Colors.white,
+                  child: Column(
+                    children: <Widget>[
+                      Flexible(
+                        fit: FlexFit.tight,
+                        child: Row(
+                          children: <Widget>[
+                            buttons(
+                                context: context,
+                                page: 'TruckerLook',
+                                name: 'Kierowcy'),
+                            buttons(
+                                context: context,
+                                page: 'TruckerLook',
+                                name: 'Spedytorzy'),
+                          ],
+                        ),
                       ),
-                    ),
-                    Flexible(
-                      fit: FlexFit.tight,
-                      child: Row(
-                        children: <Widget>[
-                          buttons(
-                              context: context,
-                              page: 'TruckerLook',
-                              name: 'Ciezarowki'),
-                          buttons(
-                              context: context,
-                              page: 'TruckerLook',
-                              name: 'Kursy'),
-                        ],
+                      Flexible(
+                        fit: FlexFit.tight,
+                        child: Row(
+                          children: <Widget>[
+                            buttons(
+                                context: context,
+                                page: 'TruckerLook',
+                                name: 'Ciezarowki'),
+                            buttons(
+                                context: context,
+                                page: 'TruckerLook',
+                                name: 'Kursy'),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     ];
