@@ -97,12 +97,25 @@ class ItemAdvertisement extends StatelessWidget {
                   );
                 }
               } else if (selectedValue == 'Edytuj') {
-                Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (context) {
-                  return EditAdvertisement(
-                    advertisement: advertisement,
+                final Map<String, Object> result =
+                    await Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) {
+                    return EditAdvertisement(
+                      advertisement: advertisement,
+                    );
+                  }),
+                );
+                if (result['view'] == true) {
+                  Scaffold.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        'Zapisano zmiany w ${result['text']}',
+                        textAlign: TextAlign.center,
+                      ),
+                      backgroundColor: Theme.of(context).canvasColor,
+                    ),
                   );
-                }));
+                }
               } else if (selectedValue == 'Usun') {
                 showDialog<void>(
                   context: context,
@@ -110,7 +123,7 @@ class ItemAdvertisement extends StatelessWidget {
                   builder: (BuildContext ctx) {
                     return AlertDialog(
                       title: Center(
-                        child: Text('Czy usunąć tytul?'),
+                        child: Text('Czy usunąć ${advertisement.title}?'),
                       ),
                       actions: <Widget>[
                         FlatButton(
@@ -153,8 +166,7 @@ class ItemAdvertisement extends StatelessWidget {
                     .whenComplete(
                       () => Scaffold.of(context).showSnackBar(
                         SnackBar(
-                          content: Text(
-                              'Zakonczono ${advertisement.title}'),
+                          content: Text('Zakonczono ${advertisement.title}'),
                           backgroundColor: Theme.of(context).primaryColor,
                         ),
                       ),

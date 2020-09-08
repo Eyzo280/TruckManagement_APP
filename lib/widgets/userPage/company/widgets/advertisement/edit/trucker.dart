@@ -16,6 +16,8 @@ class EditAdvertisement extends StatefulWidget {
 class _EditAdvertisementState extends State<EditAdvertisement> {
   final _formKey = GlobalKey<FormState>();
 
+  bool _loading = false;
+
   Advertisement editData; // zmienione dane do zapisu
 
   @override
@@ -272,23 +274,53 @@ class _EditAdvertisementState extends State<EditAdvertisement> {
                       },
                     ),
                   ),
-                  RaisedButton(
-                    color: Theme.of(context).accentColor,
-                    onPressed: () {
-                      if (_formKey.currentState.validate()) {
-                        _formKey.currentState.save();
-                        Provider.of<CompanyAdvertisements>(context,
-                                listen: false)
-                            .editAdversitsement(
-                          advUid: editData.advertisementUid,
-                          companyInfo: editData.companyInfo,
-                          description: editData.description,
-                          requirements: editData.requirements,
-                          title: editData.title,
-                          type: editData.type,
-                        );
-                      }
-                      /*
+                  _loading
+                      ? Center(
+                          child: CircularProgressIndicator(),
+                        )
+                      : RaisedButton(
+                          color: Theme.of(context).accentColor,
+                          onPressed: () {
+                            if (_formKey.currentState.validate()) {
+                              _formKey.currentState.save();
+
+                              setState(() {
+                                _loading = true;
+                              });
+
+                              Provider.of<CompanyAdvertisements>(context,
+                                      listen: false)
+                                  .editAdversitsement(
+                                advUid: editData.advertisementUid,
+                                companyInfo: editData.companyInfo,
+                                description: editData.description,
+                                requirements: editData.requirements,
+                                title: editData.title,
+                                type: editData.type,
+                              );
+
+                              try {
+                                Navigator.of(context).pop({
+                                  'view': true,
+                                  'text': editData.title,
+                                });
+                                setState(() {
+                                  _loading = false;
+                                });
+                              } catch (err) {
+                                Scaffold.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text('Problem.'),
+                                    backgroundColor:
+                                        Theme.of(context).errorColor,
+                                  ),
+                                );
+                                setState(() {
+                                  _loading = false;
+                                });
+                              }
+                            }
+                            /*
                       if (widget.advertisement.companyUid == null) {
                         return;
                       }
@@ -329,12 +361,12 @@ class _EditAdvertisementState extends State<EditAdvertisement> {
 
                       }
                       */
-                    },
-                    child: Text(
-                      'Zapisz zmiany',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                  ),
+                          },
+                          child: Text(
+                            'Zapisz zmiany',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ),
                 ],
               ),
             ),

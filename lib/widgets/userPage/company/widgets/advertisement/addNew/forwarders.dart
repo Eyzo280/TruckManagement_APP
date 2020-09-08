@@ -15,6 +15,8 @@ class _NewAdvertisementForwardersState
     extends State<NewAdvertisementForwarders> {
   final _formKey = GlobalKey<FormState>();
 
+  bool _loading = false;
+
   Advertisement _advertisement;
 
   @override
@@ -203,40 +205,70 @@ class _NewAdvertisementForwardersState
                     },
                   ),
                 ),
-                RaisedButton(
-                  color: Theme.of(context).accentColor,
-                  onPressed: () {
-                    if (company.uid == null) {
-                      return;
-                    }
-                    _advertisement = Advertisement(
-                      advertisementUid: _advertisement.advertisementUid,
-                      companyUid: company.uid,
-                      companyInfo: _advertisement.companyInfo,
-                      title: _advertisement.title,
-                      requirements: _advertisement.requirements,
-                      description: _advertisement.description,
-                      endDate: _advertisement.endDate,
-                      type: _advertisement.type,
-                    );
-                    if (_formKey.currentState.validate()) {
-                      _formKey.currentState.save();
-                      Provider.of<CompanyAdvertisements>(context, listen: false)
-                          .addAdvertisement(
-                        companyUid: _advertisement.companyUid,
-                        companyInfo: _advertisement.companyInfo,
-                        description: _advertisement.description,
-                        requirements: _advertisement.requirements,
-                        title: _advertisement.title,
-                        type: _advertisement.type,
-                      );
-                    }
-                  },
-                  child: Text(
-                    'Dodaj Ogłoszenie',
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                ),
+                _loading
+                    ? Center(
+                        child: CircularProgressIndicator(),
+                      )
+                    : RaisedButton(
+                        color: Theme.of(context).accentColor,
+                        onPressed: () {
+                          if (company.uid == null) {
+                            return;
+                          }
+                          _advertisement = Advertisement(
+                            advertisementUid: _advertisement.advertisementUid,
+                            companyUid: company.uid,
+                            companyInfo: _advertisement.companyInfo,
+                            title: _advertisement.title,
+                            requirements: _advertisement.requirements,
+                            description: _advertisement.description,
+                            endDate: _advertisement.endDate,
+                            type: _advertisement.type,
+                          );
+                          if (_formKey.currentState.validate()) {
+                            _formKey.currentState.save();
+
+                            setState(() {
+                              _loading = true;
+                            });
+
+                            Provider.of<CompanyAdvertisements>(context,
+                                    listen: false)
+                                .addAdvertisement(
+                              companyUid: _advertisement.companyUid,
+                              companyInfo: _advertisement.companyInfo,
+                              description: _advertisement.description,
+                              requirements: _advertisement.requirements,
+                              title: _advertisement.title,
+                              type: _advertisement.type,
+                            );
+
+                            try {
+                              Navigator.of(context).pop({
+                                'view': true,
+                                'text': _advertisement.title,
+                              });
+                              setState(() {
+                                _loading = false;
+                              });
+                            } catch (err) {
+                              Scaffold.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text('Problem.'),
+                                  backgroundColor: Theme.of(context).errorColor,
+                                ),
+                              );
+                              setState(() {
+                                _loading = false;
+                              });
+                            }
+                          }
+                        },
+                        child: Text(
+                          'Dodaj Ogłoszenie',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ),
               ],
             ),
           ),
