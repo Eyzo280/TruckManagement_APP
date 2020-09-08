@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:truckmanagement_app/widgets/userPage/company/models/company_Employees.dart';
 import 'package:truckmanagement_app/widgets/userPage/company/pages/management/truckers.dart';
+import 'package:truckmanagement_app/widgets/userPage/company/pages/truckers.dart';
 
 class TopBodyCompanyMain extends StatelessWidget {
   final CompanyData companyData;
@@ -23,7 +24,7 @@ class TopBodyCompanyMain extends StatelessWidget {
                 Border.all(color: Color.fromRGBO(55, 71, 79, 0.5), width: 1)),
         child: FlatButton(
           onPressed: () {
-            Navigator.of(context).pushNamed('/${page}');
+            Navigator.of(context).pushNamed(page);
             print(name);
           },
           child: Text(
@@ -76,7 +77,7 @@ class TopBodyCompanyMain extends StatelessWidget {
                           children: <Widget>[
                             buttons(
                                 context: context,
-                                page: 'TruckerLook',
+                                page: Truckers.routeName,
                                 name: 'Kierowcy'),
                             buttons(
                                 context: context,

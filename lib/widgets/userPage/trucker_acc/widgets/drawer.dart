@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:truckmanagement_app/widgets/userPage/trucker_acc/screens/myAppliactions.dart';
+import 'package:truckmanagement_app/widgets/userPage/trucker_acc/screens/settings.dart';
 import '../screens/advertisements.dart';
 
 class DrawerTrucker extends StatelessWidget {
@@ -90,7 +91,9 @@ class DrawerTrucker extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.settings),
             title: Text('Settings'),
-            onTap: () {},
+            onTap: () {
+              Navigator.of(context).pushNamed(Settings.routeName);
+            },
           ),
         ],
       ),

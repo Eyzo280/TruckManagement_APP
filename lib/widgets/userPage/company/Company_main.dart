@@ -16,6 +16,7 @@ import 'package:truckmanagement_app/widgets/userPage/company/pages/search_Driver
 import 'package:truckmanagement_app/widgets/userPage/company/pages/tracks/Active/preview.dart';
 import 'package:truckmanagement_app/widgets/userPage/company/pages/tracks/Finished/preview.dart';
 import 'package:truckmanagement_app/widgets/userPage/company/pages/tracks/select_Preview.dart';
+import 'package:truckmanagement_app/widgets/userPage/company/pages/truckers.dart';
 import 'package:truckmanagement_app/widgets/userPage/company/services/database_company.dart';
 import './providers/applications.dart' as providers;
 import 'pages/advertisement/advertisement.dart';
@@ -41,6 +42,13 @@ class CompanyMain extends StatelessWidget {
           // Advertisement
           '/advertisement/': (ctx) => Advertisement(),
           //'/advertisement/AddAdvertisement': (ctx) => AddAdvertisement(),
+
+          // Management
+          '/Truckers/': (ctx) => Truckers(),
+
+
+
+          
 
           // Chat
           Chats.routeName: (ctx) => StreamProvider<List<PeerChat>>.value(
