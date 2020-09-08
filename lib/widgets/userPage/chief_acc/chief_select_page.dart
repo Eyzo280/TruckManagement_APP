@@ -47,7 +47,7 @@ class ChiefSelectPage extends StatelessWidget {
             }),
         title: Center(child: Text('Wybor Firmy')),
         centerTitle: true,
-        flexibleSpace: appBarLook(context: context),
+        backgroundColor: Theme.of(context).primaryColor,
         actions: <Widget>[
           Container(
             margin: EdgeInsets.only(right: 30),
@@ -61,7 +61,6 @@ class ChiefSelectPage extends StatelessWidget {
         ],
       ),
       body: Container(
-        decoration: bodyLook(context: context),
         width: double.infinity,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -80,6 +79,7 @@ class ChiefSelectPage extends StatelessWidget {
                     ),
                   );
                 },
+                color: Theme.of(context).canvasColor,
                 child: Text('Glowny Panel'),
               ),
             ),
@@ -92,11 +92,11 @@ class ChiefSelectPage extends StatelessWidget {
                         height: 500, // trzeba ustawic responsywnosc itp
                         child: ListView.builder(
                           itemCount: user.companys.length,
-                          itemBuilder: (context, index) {
+                          itemBuilder: (ctx, index) {
                             return RaisedButton(
                               onPressed: () {
                                 //openPageCompany(context, user.companys[index][key]);
-                                Navigator.of(context).pushNamed(
+                                Navigator.of(ctx).pushNamed(
                                   CompanyMain.routeName,
                                   arguments: {
                                     'uid': user.companys[index].keys.first
@@ -104,6 +104,7 @@ class ChiefSelectPage extends StatelessWidget {
                                   },
                                 );
                               },
+                              color: Theme.of(context).canvasColor,
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceAround,
@@ -144,6 +145,7 @@ class ChiefSelectPage extends StatelessWidget {
     final Chief user = Provider.of<UserData>(context).data;
     // final uidCompanys = Provider.of<List<ChiefUidCompanys>>(context) ?? [];
     return MaterialApp(
+      theme: basicTheme(),
       routes: {
         '/chief/': (ctx) => ChiefMainPage(),
         '/company/': (ctx) {

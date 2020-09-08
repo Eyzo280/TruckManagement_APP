@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
 
-class LastTracksCompanyMain extends StatelessWidget {
+class LastTracksCompanyMain extends StatefulWidget {
+  @override
+  _LastTracksCompanyMainState createState() => _LastTracksCompanyMainState();
+}
+
+class _LastTracksCompanyMainState extends State<LastTracksCompanyMain> {
+  double _leftMove = 0;
+
   Widget track({@required context}) {
     return Container(
       height: double.infinity,
@@ -80,57 +87,83 @@ class LastTracksCompanyMain extends StatelessWidget {
   }
 
   @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    _leftMove = MediaQuery.of(context).size.width;
+
+    Future.delayed(Duration.zero).then((value) {
+      setState(() {
+        _leftMove = 0;
+      });
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Flexible(
       flex: 3,
       fit: FlexFit.tight,
       child: Container(
-          child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Flexible(
-            flex: 1,
-            child: Text(
-              'Ostatnie Kursy',
-              style: Theme.of(context).textTheme.bodyText1.copyWith(
-                    fontSize: 25,
-                  ),
-            ),
-          ),
-          Flexible(
-            flex: 2,
-            fit: FlexFit.tight,
+          child: Stack(
+        children: [
+          AnimatedPositioned(
+            duration: Duration(seconds: 1),
+            curve: Curves.easeIn,
+            left: _leftMove,
             child: Container(
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: 3,
-                itemBuilder: (context, index) {
-                  return
-                      /*
-                      Container(
-                        color: Colors.grey,
-                        height: double.infinity,
-                        width: MediaQuery.of(context).size.width * 0.35,
-                        margin: EdgeInsets.all(10),
-                        padding: EdgeInsets.all(10),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            /*
-                            Text('Zlecone przez:'),
-                            Icon(Icons.people),
-                            Text('Fracht: 8000'),
-                            */
-                            Text('Warszawa - Krakow'),
-                            FittedBox(child: Text('Zlecone przez: Damian W')),
-                            FittedBox(child: Text('Kierowca: Wladymir S')),
-                          ],
-                        ),
-                      );
-                      */
-                      track(context: context);
-                },
+              height: 150,
+              width: MediaQuery.of(context).size.width,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Flexible(
+                    flex: 1,
+                    child: Text(
+                      'Ostatnie Kursy',
+                      style: Theme.of(context).textTheme.bodyText1.copyWith(
+                            fontSize: 25,
+                          ),
+                    ),
+                  ),
+                  Flexible(
+                    flex: 2,
+                    fit: FlexFit.tight,
+                    child: Container(
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: 3,
+                        itemBuilder: (context, index) {
+                          return
+                              /*
+                              Container(
+                                color: Colors.grey,
+                                height: double.infinity,
+                                width: MediaQuery.of(context).size.width * 0.35,
+                                margin: EdgeInsets.all(10),
+                                padding: EdgeInsets.all(10),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    /*
+                                    Text('Zlecone przez:'),
+                                    Icon(Icons.people),
+                                    Text('Fracht: 8000'),
+                                    */
+                                    Text('Warszawa - Krakow'),
+                                    FittedBox(child: Text('Zlecone przez: Damian W')),
+                                    FittedBox(child: Text('Kierowca: Wladymir S')),
+                                  ],
+                                ),
+                              );
+                              */
+                              track(context: context);
+                        },
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),

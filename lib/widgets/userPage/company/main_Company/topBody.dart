@@ -4,10 +4,17 @@ import 'package:truckmanagement_app/widgets/userPage/company/models/company_Empl
 import 'package:truckmanagement_app/widgets/userPage/company/pages/management/truckers.dart';
 import 'package:truckmanagement_app/widgets/userPage/company/pages/truckers.dart';
 
-class TopBodyCompanyMain extends StatelessWidget {
+class TopBodyCompanyMain extends StatefulWidget {
   final CompanyData companyData;
 
   TopBodyCompanyMain({@required this.companyData});
+
+  @override
+  _TopBodyCompanyMainState createState() => _TopBodyCompanyMainState();
+}
+
+class _TopBodyCompanyMainState extends State<TopBodyCompanyMain> {
+  double _opacity = 0.0;
 
   Widget buttons({
     @required BuildContext context,
@@ -37,6 +44,16 @@ class TopBodyCompanyMain extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration.zero).then((value) {
+      setState(() {
+        _opacity = 1.0;
+      });
+    });
   }
 
   @override
@@ -256,14 +273,18 @@ class TopBodyCompanyMain extends StatelessWidget {
     return Flexible(
       flex: 5,
       fit: FlexFit.tight,
-      child: Center(
-        child: Container(
-            padding: EdgeInsets.only(
-              top: 5,
-              bottom: 10,
-            ),
-            width: double.infinity,
-            child: chartSlider),
+      child: AnimatedOpacity(
+        opacity: _opacity,
+        duration: Duration(seconds: 1),
+        child: Center(
+          child: Container(
+              padding: EdgeInsets.only(
+                top: 5,
+                bottom: 10,
+              ),
+              width: double.infinity,
+              child: chartSlider),
+        ),
       ),
     );
   }
