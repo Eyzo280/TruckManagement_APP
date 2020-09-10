@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:truckmanagement_app/widgets/userPage/trucker_acc/widgets/settings/user.dart';
 
 class Settings extends StatelessWidget {
   static const routeName = '/Settings/';
@@ -12,30 +13,7 @@ class Settings extends StatelessWidget {
       ),
       body: ListView(
         children: [
-          Card(
-            margin: EdgeInsets.all(10),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-            ),
-            elevation: 10,
-            child: ListTile(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-              ),
-              onTap: () {},
-              contentPadding: EdgeInsets.all(15),
-              leading: Text('Avatar'),
-              title: Text(
-                'Stefan',
-                style: TextStyle(fontSize: 20),
-              ),
-              subtitle: Text(
-                'Edit Profile',
-                style: TextStyle(fontSize: 15),
-              ),
-              trailing: Icon(Icons.keyboard_arrow_right),
-            ),
-          )
+          SettingsUser(),
         ],
       ),
     );

@@ -20,7 +20,15 @@ class DrawerTrucker extends StatelessWidget {
         children: <Widget>[
           DrawerHeader(
             decoration: BoxDecoration(
-              color: Colors.blue,
+              gradient: LinearGradient(
+                begin: Alignment.centerRight,
+                end: Alignment.centerLeft,
+                stops: [0.001, 1],
+                colors: [
+                  Theme.of(context).primaryColor,
+                  Theme.of(context).canvasColor,
+                ],
+              ),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -41,31 +49,29 @@ class DrawerTrucker extends StatelessWidget {
                 Container(
                   width: MediaQuery.of(context).size.height * 0.1,
                   height: MediaQuery.of(context).size.height * 0.1,
-                  decoration: BoxDecoration(
+                  /*decoration: BoxDecoration(
                       image: DecorationImage(
                           image:
                               NetworkImage('https://i.imgur.com/BoN9kdC.png'),
                           fit: BoxFit.fill),
-                      shape: BoxShape.circle),
+                      shape: BoxShape.circle),*/
                 ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.01,
-                ),
-                Text('ID: ${uid}'),
               ],
             ),
           ),
           ListTile(
             leading: Icon(Icons.add_box),
             title: Text('Szukaj Firmy'),
-            onTap: () {
+            onTap:
+                null /* () {
               //openSearchCompany(context, user);
-            },
+            }*/
+            ,
           ),
           ListTile(
             leading: Icon(Icons.notifications),
             title: Text('Zaproszenia'),
-            onTap: () {},
+            onTap: null /* () {}*/,
           ),
           ListTile(
             leading: Icon(Icons.search),
@@ -84,9 +90,11 @@ class DrawerTrucker extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.chat),
             title: Text('Chat'),
-            onTap: () {
+            onTap:
+                null /* () {
               //_openChats(context, user.driverUid);
-            },
+            }*/
+            ,
           ),
           ListTile(
             leading: Icon(Icons.settings),
